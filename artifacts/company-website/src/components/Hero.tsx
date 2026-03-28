@@ -50,7 +50,7 @@ export function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="w-full max-w-2xl flex flex-col gap-6 sm:gap-8"
           >
-            <h1 className="text-[1.85rem] sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.15] tracking-tight text-foreground">
+            <h1 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-6xl font-black leading-[1.15] tracking-tight text-foreground">
               AIを組織に実装し<br />
               持続可能な社会を創る
             </h1>
