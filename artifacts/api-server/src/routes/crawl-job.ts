@@ -29,7 +29,7 @@ const SKIP_EXT = [".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".css", ".js
 const SKIP_URL_PATTERNS = [
   "wikipedia", "facebook.com", "twitter.com", "instagram.com", "linkedin.com",
   "youtube.com", "amazon.co.jp", "amazon.com", "rakuten.co.jp",
-  "search.yahoo", "naver.com", "google.com", "google.co.jp",
+  "search.yahoo", "yahoo.co.jp", "naver.com", "google.com", "google.co.jp",
   "appstore", "play.google", "maps.google", "translate.google",
   "duckduckgo", "bing.com", "microsoft.com", "lycorp", "mlit.go.jp",
   "pref.", "city.", "town.", "go.jp", "yimg", "s.yimg", "baseconnect",
