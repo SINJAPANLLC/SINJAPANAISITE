@@ -108,7 +108,7 @@ export function DownloadLeadSection() {
   const load = async () => {
     setLoading(true); setError(null);
     try {
-      const data = await fetch("/api/download-leads", { headers: { "x-admin-token": TOKEN() } }).then(r => r.json());
+      const data = await fetch("/api/download-leads", { headers: { "x-admin-token": TOKEN() } }).then(r => r.ok ? r.json() : []);
       setLeads(data);
     } catch { setError("データの取得に失敗しました"); }
     finally { setLoading(false); }

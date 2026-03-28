@@ -15,7 +15,7 @@ export function NewsSection() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await fetch("/api/news", { headers: { "x-admin-token": ADMIN_TOKEN() } }).then(r => r.json());
+      const data = await fetch("/api/news", { headers: { "x-admin-token": ADMIN_TOKEN() } }).then(r => r.ok ? r.json() : []);
       setItems(data);
     } finally { setLoading(false); }
   };

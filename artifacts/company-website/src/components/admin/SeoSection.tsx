@@ -28,7 +28,7 @@ export function SeoSection() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await fetch("/api/columns").then(r => r.json());
+      const data = await fetch("/api/columns").then(r => r.ok ? r.json() : []);
       setColumns(data);
     } finally { setLoading(false); }
   };

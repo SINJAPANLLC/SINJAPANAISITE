@@ -24,7 +24,7 @@ export function UserLogSection() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await fetch("/api/track", { headers: { "x-admin-token": TOKEN() } }).then(r => r.json());
+      const data = await fetch("/api/track", { headers: { "x-admin-token": TOKEN() } }).then(r => r.ok ? r.json() : []);
       setLogs(data);
     } catch {} finally { setLoading(false); }
   };
