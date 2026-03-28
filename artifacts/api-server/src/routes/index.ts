@@ -10,6 +10,7 @@ import crawlEmailsRouter from "./crawl-emails";
 import crawlGoogleRouter from "./crawl-google";
 import crawlLeadsRouter from "./crawl-leads";
 import crawlJobRouter from "./crawl-job";
+import crawlSchedulerRouter from "./crawl-scheduler";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use(crawlEmailsRouter);
 router.use(crawlGoogleRouter);
 router.use(crawlLeadsRouter);
 router.use(crawlJobRouter);
+router.use(crawlSchedulerRouter);
 
 export default router;

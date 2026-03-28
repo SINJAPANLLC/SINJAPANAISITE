@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { customerStore } from "@/hooks/use-admin-data";
-import { Mail, Copy, Loader2, Sparkles, Eye, Send, Globe, Plus, Trash2, Search } from "lucide-react";
+import { Mail, Copy, Loader2, Sparkles, Eye, Send, Globe, Plus, Trash2, Search, Clock, CalendarClock, PlayCircle } from "lucide-react";
 
 const TOKEN = () => import.meta.env.VITE_ADMIN_PASSWORD || "";
 
@@ -209,6 +209,39 @@ export function EmailSection() {
   const [crawlJobStatus, setCrawlJobStatus] = useState<"idle" | "running" | "done" | "error">("idle");
   const [crawlJobPhase, setCrawlJobPhase] = useState("");
   const [crawlJobProgress, setCrawlJobProgress] = useState({ sitesScanned: 0, sitesTotal: 0, emailsFound: 0, currentSite: "" });
+
+  // Auto-crawl scheduler
+  const [schedulerStatus, setSchedulerStatus] = useState<{
+    enabled: boolean; isRunning: boolean; lastRunAt: number | null;
+    lastRunQueries: string[]; lastRunEmailsFound: number;
+    nextQueryIndex: number; queriesPerRun: number; totalQueries: number; nextRunAt: number;
+  } | null>(null);
+  const [showScheduler, setShowScheduler] = useState(false);
+  const [schedulerRunning, setSchedulerRunning] = useState(false);
+
+  const fetchSchedulerStatus = async () => {
+    try {
+      const r = await fetch("/api/crawl-scheduler/status", { headers: { "x-admin-token": TOKEN() } });
+      if (r.ok) setSchedulerStatus(await r.json());
+    } catch {}
+  };
+
+  const toggleScheduler = async (enable: boolean) => {
+    await fetch(`/api/crawl-scheduler/${enable ? "enable" : "disable"}`, {
+      method: "POST", headers: { "x-admin-token": TOKEN() },
+    });
+    await fetchSchedulerStatus();
+  };
+
+  const runSchedulerNow = async () => {
+    setSchedulerRunning(true);
+    await fetch("/api/crawl-scheduler/run-now", { method: "POST", headers: { "x-admin-token": TOKEN() } });
+    await fetchSchedulerStatus();
+    setSchedulerRunning(false);
+    setTimeout(fetchSchedulerStatus, 5000);
+  };
+
+  useEffect(() => { fetchSchedulerStatus(); }, []);
 
   useEffect(() => {
     Promise.all([
@@ -434,14 +467,20 @@ export function EmailSection() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="text-lg font-black">メール営業</h2>
-        <div className="flex gap-2">
-          <button onClick={() => { setShowCrawl(v => !v); setCrawlMode("url"); }}
+        <div className="flex gap-2 flex-wrap">
+          <button onClick={() => { setShowCrawl(v => !v); setCrawlMode("url"); setShowScheduler(false); }}
             className={`flex items-center gap-2 text-xs font-bold px-3 py-2 border transition-colors ${showCrawl && crawlMode === "url" ? "border-white/30 text-white bg-white/10" : "border-white/10 text-gray-500 hover:text-white"}`}>
             <Globe className="w-3.5 h-3.5" /> メールクロール
           </button>
-          <button onClick={() => { setShowCrawl(v => crawlMode === "google" ? !v : true); setCrawlMode("google"); }}
+          <button onClick={() => { setShowCrawl(v => crawlMode === "google" ? !v : true); setCrawlMode("google"); setShowScheduler(false); }}
             className={`flex items-center gap-2 text-xs font-bold px-3 py-2 border transition-colors ${showCrawl && crawlMode === "google" ? "border-white/30 text-white bg-white/10" : "border-white/10 text-gray-500 hover:text-white"}`}>
-            <Search className="w-3.5 h-3.5" /> Googleクロール
+            <Search className="w-3.5 h-3.5" /> ディープクロール
+          </button>
+          <button onClick={() => { setShowScheduler(v => !v); setShowCrawl(false); }}
+            className={`flex items-center gap-2 text-xs font-bold px-3 py-2 border transition-colors ${showScheduler ? "border-green-500/50 text-green-400 bg-green-500/10" : "border-white/10 text-gray-500 hover:text-white"}`}>
+            <CalendarClock className="w-3.5 h-3.5" />
+            自動クロール
+            {schedulerStatus?.enabled && <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block" />}
           </button>
         </div>
       </div>
@@ -492,7 +531,7 @@ export function EmailSection() {
           ) : (
             <>
               <p className="text-[10px] text-gray-500 tracking-widest uppercase font-bold">— 業種・地域を入力して中小法人のメールをディープ収集</p>
-              <p className="text-[10px] text-gray-600">Yahoo検索3ページ分・最大40サイトをバックグラウンドでクロール。見つかり次第DBに自動保存。</p>
+              <p className="text-[10px] text-gray-600">3種クエリ自動展開・各5ページ・最大80サイトをバックグラウンドでクロール。見つかり次第DBに自動保存。</p>
               <div className="flex gap-2">
                 <input value={googleQuery} onChange={e => setGoogleQuery(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && startDeepCrawl()}
@@ -547,6 +586,70 @@ export function EmailSection() {
               )}
             </>
           )}
+        </div>
+      )}
+
+      {/* Auto-crawl scheduler panel */}
+      {showScheduler && (
+        <div className="border border-green-500/20 bg-green-500/5 p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] text-green-400 tracking-widest uppercase font-bold">— 毎日自動クロール スケジューラー</p>
+            <div className="flex items-center gap-2">
+              <span className={`text-[10px] font-bold ${schedulerStatus?.isRunning ? "text-blue-400 animate-pulse" : schedulerStatus?.enabled ? "text-green-400" : "text-gray-500"}`}>
+                {schedulerStatus?.isRunning ? "● 実行中" : schedulerStatus?.enabled ? "● 有効" : "○ 停止中"}
+              </span>
+              <button
+                onClick={() => toggleScheduler(!schedulerStatus?.enabled)}
+                className={`text-[10px] font-bold px-3 py-1 border transition-colors ${schedulerStatus?.enabled ? "border-red-500/30 text-red-400 hover:bg-red-500/10" : "border-green-500/30 text-green-400 hover:bg-green-500/10"}`}>
+                {schedulerStatus?.enabled ? "停止" : "有効化"}
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="border border-white/10 bg-white/3 p-2">
+              <p className="text-[10px] text-gray-500 mb-1">クエリ総数</p>
+              <p className="text-sm font-black text-white">{schedulerStatus?.totalQueries ?? "–"}</p>
+            </div>
+            <div className="border border-white/10 bg-white/3 p-2">
+              <p className="text-[10px] text-gray-500 mb-1">1日の実行数</p>
+              <p className="text-sm font-black text-white">{schedulerStatus?.queriesPerRun ?? "–"} クエリ</p>
+            </div>
+            <div className="border border-white/10 bg-white/3 p-2">
+              <p className="text-[10px] text-gray-500 mb-1">次回実行</p>
+              <p className="text-sm font-black text-white">
+                {schedulerStatus?.nextRunAt ? new Date(schedulerStatus.nextRunAt).toLocaleString("ja-JP", { hour: "2-digit", minute: "2-digit" }) : "–"}
+              </p>
+            </div>
+          </div>
+
+          {schedulerStatus?.lastRunAt && (
+            <div className="border border-white/10 bg-white/3 p-3 flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-gray-500">前回実行</p>
+                <p className="text-[10px] text-gray-400">{new Date(schedulerStatus.lastRunAt).toLocaleString("ja-JP")}</p>
+              </div>
+              <p className="text-[10px] text-green-400 font-bold">→ {schedulerStatus.lastRunEmailsFound}件 メール取得</p>
+              {schedulerStatus.lastRunQueries.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {schedulerStatus.lastRunQueries.map((q, i) => (
+                    <span key={i} className="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 text-gray-400">{q}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] text-gray-600">毎朝3時(JST)に自動実行 · 全{schedulerStatus?.totalQueries ?? 100}クエリをローテーション · 約{(schedulerStatus?.queriesPerRun ?? 5) * 80}件/日の収集見込み</p>
+            <button
+              onClick={runSchedulerNow}
+              disabled={schedulerRunning || schedulerStatus?.isRunning}
+              className="flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 border border-white/20 text-white hover:bg-white/5 disabled:opacity-40 transition-colors whitespace-nowrap">
+              {schedulerRunning ? <Loader2 className="w-3 h-3 animate-spin" /> : <PlayCircle className="w-3 h-3" />}
+              今すぐ実行
+            </button>
+          </div>
         </div>
       )}
 

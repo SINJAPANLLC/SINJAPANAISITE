@@ -4,7 +4,7 @@ import { db, crawlLeadsTable } from "@workspace/db";
 
 const router = Router();
 
-const adminAuth = (req: any, res: any): boolean => {
+export const adminAuth = (req: any, res: any): boolean => {
   const secret = req.headers["x-admin-token"];
   if (!secret || secret !== process.env.VITE_ADMIN_PASSWORD) {
     res.status(401).json({ error: "Unauthorized" });
@@ -209,39 +209,56 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function runCrawlJob(job: CrawlJob, query: string) {
-  try {
-    job.phase = "Yahoo検索中 (1/3ページ)";
+function generateQueryVariations(query: string): string[] {
+  const q = query.trim();
+  return [
+    `${q} お問い合わせ メール`,
+    `${q} 会社 連絡先 メールアドレス`,
+    `${q} 企業 問い合わせ先`,
+  ];
+}
 
-    const allUrls: string[] = [];
+async function collectUrlsForJob(queries: string[], job: CrawlJob): Promise<string[]> {
+  const allUrls: string[] = [];
+  const variations = queries;
 
-    for (let page = 1; page <= 3; page++) {
-      job.phase = `Yahoo検索中 (${page}/3ページ)`;
+  for (let vi = 0; vi < variations.length; vi++) {
+    const variant = variations[vi];
+    for (let page = 1; page <= 5; page++) {
+      job.phase = `検索中 (バリエーション${vi + 1}/${variations.length} · ${page}/5P)`;
       const start = (page - 1) * 20 + 1;
-      const yahooUrl = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(query + " お問い合わせ メール")}&n=20&b=${start}`;
-
+      const yahooUrl = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(variant)}&n=20&b=${start}`;
       const html = await fetchPage(yahooUrl, 15000);
       if (html) {
         const pageUrls = extractUrlsFromYahoo(html);
         allUrls.push(...pageUrls);
-        logger.info({ page, urlsFound: pageUrls.length }, "Yahoo page crawled");
+        logger.info({ variant, page, urlsFound: pageUrls.length }, "Yahoo page crawled");
       }
-
-      if (page < 3) await sleep(1500);
+      if (page < 5) await sleep(1200);
     }
+    if (vi < variations.length - 1) await sleep(2000);
+  }
 
-    // Deduplicate by domain, cap at 40 sites
-    const seenDomains = new Set<string>();
-    const targetUrls: string[] = [];
-    for (const u of allUrls) {
-      try {
-        const domain = new URL(u).hostname;
-        if (!seenDomains.has(domain) && targetUrls.length < 40) {
-          seenDomains.add(domain);
-          targetUrls.push(u);
-        }
-      } catch {}
-    }
+  // Deduplicate by domain, cap at 80 sites
+  const seenDomains = new Set<string>();
+  const targetUrls: string[] = [];
+  for (const u of allUrls) {
+    try {
+      const domain = new URL(u).hostname;
+      if (!seenDomains.has(domain) && targetUrls.length < 80) {
+        seenDomains.add(domain);
+        targetUrls.push(u);
+      }
+    } catch {}
+  }
+  return targetUrls;
+}
+
+async function runCrawlJob(job: CrawlJob, query: string) {
+  try {
+    job.phase = "検索クエリ生成中";
+    const variations = generateQueryVariations(query);
+    const targetUrls = await collectUrlsForJob(variations, job);
 
     job.progress.sitesTotal = targetUrls.length;
     job.phase = "サイトクロール中";
@@ -375,3 +392,19 @@ router.get("/crawl-job/:id", (req, res) => {
 });
 
 export default router;
+
+/** Called by crawl-scheduler — runs a silent crawl and returns emails found */
+export async function runSilentCrawl(query: string): Promise<number> {
+  const dummyJob: CrawlJob = {
+    id: "scheduler-" + Date.now(),
+    status: "running",
+    query,
+    phase: "開始中",
+    progress: { sitesScanned: 0, sitesTotal: 0, emailsFound: 0, currentSite: "" },
+    startedAt: Date.now(),
+  };
+  jobs.set(dummyJob.id, dummyJob);
+  await runCrawlJob(dummyJob, query);
+  jobs.delete(dummyJob.id);
+  return dummyJob.progress.emailsFound;
+}
