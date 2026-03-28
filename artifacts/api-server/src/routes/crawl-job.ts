@@ -408,3 +408,91 @@ export async function runSilentCrawl(query: string): Promise<number> {
   jobs.delete(dummyJob.id);
   return dummyJob.progress.emailsFound;
 }
+
+/**
+ * Targeted crawl — stops as soon as `targetCount` NEW emails are inserted into DB.
+ * Returns the newly found leads: { email, company }[]
+ */
+export async function runLimitedCrawl(
+  query: string,
+  targetCount: number = 10,
+): Promise<{ email: string; company: string }[]> {
+  const collected: { email: string; company: string }[] = [];
+  const seenEmails = new Set<string>();
+
+  // Build URL pool from one variation
+  const variation = `${query.trim()} お問い合わせ メール`;
+  const allUrls: string[] = [];
+  for (let page = 1; page <= 5; page++) {
+    const start = (page - 1) * 20 + 1;
+    const yahooUrl = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(variation)}&n=20&b=${start}`;
+    const html = await fetchPage(yahooUrl, 15000);
+    if (html) allUrls.push(...extractUrlsFromYahoo(html));
+    if (allUrls.length > 200) break;
+    await sleep(1000);
+  }
+
+  // Deduplicate by domain
+  const seenDomains = new Set<string>();
+  const sites: string[] = [];
+  for (const u of allUrls) {
+    try {
+      const domain = new URL(u).hostname;
+      if (!seenDomains.has(domain)) { seenDomains.add(domain); sites.push(u); }
+    } catch {}
+    if (sites.length >= 60) break;
+  }
+
+  // Process sites until targetCount reached
+  for (const siteUrl of sites) {
+    if (collected.length >= targetCount) break;
+
+    try {
+      const pageHtml = await fetchPage(siteUrl, 10000);
+      if (!pageHtml) { await sleep(400); continue; }
+
+      const company = extractCompanyName(pageHtml, siteUrl);
+      const emails = extractEmailsFromHtml(pageHtml);
+      const fresh = emails.filter(e => !seenEmails.has(e.toLowerCase()));
+
+      if (fresh.length === 0) {
+        // Try subpages
+        const subpages = extractSubpages(siteUrl, pageHtml);
+        for (const subUrl of subpages.slice(0, 5)) {
+          if (collected.length >= targetCount) break;
+          await sleep(600);
+          const subHtml = await fetchPage(subUrl, 8000);
+          if (!subHtml) continue;
+          const subEmails = extractEmailsFromHtml(subHtml).filter(e => !seenEmails.has(e.toLowerCase()));
+          for (const e of subEmails) {
+            if (collected.length >= targetCount) break;
+            const inserted = await db.insert(crawlLeadsTable).values({
+              email: e.toLowerCase(), company: company || null, name: null, source: subUrl,
+            }).onConflictDoNothing().returning();
+            if (inserted.length > 0) {
+              seenEmails.add(e.toLowerCase());
+              collected.push({ email: e.toLowerCase(), company: company || e });
+            }
+          }
+        }
+      } else {
+        for (const e of fresh) {
+          if (collected.length >= targetCount) break;
+          const inserted = await db.insert(crawlLeadsTable).values({
+            email: e.toLowerCase(), company: company || null, name: null, source: siteUrl,
+          }).onConflictDoNothing().returning();
+          if (inserted.length > 0) {
+            seenEmails.add(e.toLowerCase());
+            collected.push({ email: e.toLowerCase(), company: company || e });
+          }
+        }
+      }
+    } catch (err) {
+      logger.warn({ siteUrl, err }, "Limited crawl: site error");
+    }
+
+    await sleep(800);
+  }
+
+  return collected;
+}

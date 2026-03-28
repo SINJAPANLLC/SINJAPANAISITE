@@ -210,11 +210,13 @@ export function EmailSection() {
   const [crawlJobPhase, setCrawlJobPhase] = useState("");
   const [crawlJobProgress, setCrawlJobProgress] = useState({ sitesScanned: 0, sitesTotal: 0, emailsFound: 0, currentSite: "" });
 
+  type AutoRunRecord = { runAt: number; query: string; leadsCollected: number; emailsSent: number; label: string };
   // Auto-crawl scheduler
   const [schedulerStatus, setSchedulerStatus] = useState<{
     enabled: boolean; isRunning: boolean; lastRunAt: number | null;
     lastRunQueries: string[]; lastRunEmailsFound: number;
     nextQueryIndex: number; queriesPerRun: number; totalQueries: number; nextRunAt: number;
+    history: AutoRunRecord[]; totalEmailsSent: number; leadsPerRun: number;
   } | null>(null);
   const [showScheduler, setShowScheduler] = useState(false);
   const [schedulerRunning, setSchedulerRunning] = useState(false);
@@ -592,60 +594,77 @@ export function EmailSection() {
       {/* Auto-crawl scheduler panel */}
       {showScheduler && (
         <div className="border border-green-500/20 bg-green-500/5 p-4 flex flex-col gap-3">
+          {/* Header */}
           <div className="flex items-center justify-between">
-            <p className="text-[10px] text-green-400 tracking-widest uppercase font-bold">— 毎日自動クロール スケジューラー</p>
+            <p className="text-[10px] text-green-400 tracking-widest uppercase font-bold">— 自動収集 &amp; メール送信スケジューラー</p>
             <div className="flex items-center gap-2">
               <span className={`text-[10px] font-bold ${schedulerStatus?.isRunning ? "text-blue-400 animate-pulse" : schedulerStatus?.enabled ? "text-green-400" : "text-gray-500"}`}>
                 {schedulerStatus?.isRunning ? "● 実行中" : schedulerStatus?.enabled ? "● 有効" : "○ 停止中"}
               </span>
-              <button
-                onClick={() => toggleScheduler(!schedulerStatus?.enabled)}
+              <button onClick={() => toggleScheduler(!schedulerStatus?.enabled)}
                 className={`text-[10px] font-bold px-3 py-1 border transition-colors ${schedulerStatus?.enabled ? "border-red-500/30 text-red-400 hover:bg-red-500/10" : "border-green-500/30 text-green-400 hover:bg-green-500/10"}`}>
                 {schedulerStatus?.enabled ? "停止" : "有効化"}
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="border border-white/10 bg-white/3 p-2">
-              <p className="text-[10px] text-gray-500 mb-1">クエリ総数</p>
-              <p className="text-sm font-black text-white">{schedulerStatus?.totalQueries ?? "–"}</p>
+          {/* Schedule info */}
+          <div className="border border-white/10 bg-black/20 p-3 flex flex-col gap-2">
+            <p className="text-[10px] text-gray-500 font-bold">実行スケジュール</p>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              {["朝 9:00", "昼 12:00", "夕 17:00"].map(t => (
+                <div key={t} className="border border-green-500/20 bg-green-500/5 py-2">
+                  <p className="text-xs font-black text-green-300">{t}</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">毎日 JST</p>
+                </div>
+              ))}
             </div>
+            <p className="text-[10px] text-gray-600">各回: 新規リスト{schedulerStatus?.leadsPerRun ?? 10}件を自動収集 → 「初回アプローチ」メールを全件自動送信</p>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-2 text-center">
             <div className="border border-white/10 bg-white/3 p-2">
-              <p className="text-[10px] text-gray-500 mb-1">1日の実行数</p>
-              <p className="text-sm font-black text-white">{schedulerStatus?.queriesPerRun ?? "–"} クエリ</p>
+              <p className="text-[10px] text-gray-500 mb-1">総送信数</p>
+              <p className="text-lg font-black text-green-400">{schedulerStatus?.totalEmailsSent ?? 0}</p>
             </div>
             <div className="border border-white/10 bg-white/3 p-2">
               <p className="text-[10px] text-gray-500 mb-1">次回実行</p>
               <p className="text-sm font-black text-white">
-                {schedulerStatus?.nextRunAt ? new Date(schedulerStatus.nextRunAt).toLocaleString("ja-JP", { hour: "2-digit", minute: "2-digit" }) : "–"}
+                {schedulerStatus?.nextRunAt ? new Date(schedulerStatus.nextRunAt).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" }) : "–"}
               </p>
+            </div>
+            <div className="border border-white/10 bg-white/3 p-2">
+              <p className="text-[10px] text-gray-500 mb-1">クエリ残り</p>
+              <p className="text-sm font-black text-white">{schedulerStatus ? schedulerStatus.totalQueries - (schedulerStatus.nextQueryIndex % schedulerStatus.totalQueries) : "–"}</p>
             </div>
           </div>
 
-          {schedulerStatus?.lastRunAt && (
-            <div className="border border-white/10 bg-white/3 p-3 flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] text-gray-500">前回実行</p>
-                <p className="text-[10px] text-gray-400">{new Date(schedulerStatus.lastRunAt).toLocaleString("ja-JP")}</p>
+          {/* History */}
+          {schedulerStatus?.history && schedulerStatus.history.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="text-[10px] text-gray-500 font-bold">実行履歴</p>
+              <div className="max-h-40 overflow-y-auto flex flex-col gap-1">
+                {schedulerStatus.history.map((r, i) => (
+                  <div key={i} className="flex items-center justify-between border border-white/10 bg-white/3 px-3 py-1.5 text-[10px]">
+                    <span className="text-gray-500">{new Date(r.runAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                    <span className="text-gray-400 mx-2 flex-1 truncate">[{r.label}] {r.query}</span>
+                    <span className="text-green-400 font-bold whitespace-nowrap">+{r.leadsCollected}件 / 送信{r.emailsSent}通</span>
+                  </div>
+                ))}
               </div>
-              <p className="text-[10px] text-green-400 font-bold">→ {schedulerStatus.lastRunEmailsFound}件 メール取得</p>
-              {schedulerStatus.lastRunQueries.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-1">
-                  {schedulerStatus.lastRunQueries.map((q, i) => (
-                    <span key={i} className="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 text-gray-400">{q}</span>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <p className="text-[10px] text-gray-600">毎朝3時(JST)に自動実行 · 全{schedulerStatus?.totalQueries ?? 100}クエリをローテーション · 約{(schedulerStatus?.queriesPerRun ?? 5) * 80}件/日の収集見込み</p>
-            <button
-              onClick={runSchedulerNow}
-              disabled={schedulerRunning || schedulerStatus?.isRunning}
-              className="flex items-center gap-1.5 text-[10px] font-bold px-3 py-1.5 border border-white/20 text-white hover:bg-white/5 disabled:opacity-40 transition-colors whitespace-nowrap">
+          {!schedulerStatus?.history?.length && (
+            <p className="text-[10px] text-gray-600 text-center py-2">まだ実行履歴がありません。「今すぐ実行」でテストできます。</p>
+          )}
+
+          {/* Actions */}
+          <div className="flex items-center justify-between pt-1">
+            <p className="text-[10px] text-gray-600">1日3回 × {schedulerStatus?.leadsPerRun ?? 10}件 = 最大{(schedulerStatus?.leadsPerRun ?? 10) * 3}件/日 を自動収集・送信</p>
+            <button onClick={runSchedulerNow} disabled={schedulerRunning || schedulerStatus?.isRunning}
+              className="flex items-center gap-1.5 text-[10px] font-bold px-4 py-1.5 border border-white/20 text-white hover:bg-white/5 disabled:opacity-40 transition-colors whitespace-nowrap">
               {schedulerRunning ? <Loader2 className="w-3 h-3 animate-spin" /> : <PlayCircle className="w-3 h-3" />}
               今すぐ実行
             </button>
