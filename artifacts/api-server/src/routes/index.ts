@@ -8,6 +8,7 @@ import sendEmailRouter from "./send-email";
 import trackRouter from "./track";
 import crawlEmailsRouter from "./crawl-emails";
 import crawlGoogleRouter from "./crawl-google";
+import crawlLeadsRouter from "./crawl-leads";
 
 const router: IRouter = Router();
 
@@ -20,5 +21,6 @@ router.use(sendEmailRouter);
 router.use(trackRouter);
 router.use(crawlEmailsRouter);
 router.use(crawlGoogleRouter);
+router.use(crawlLeadsRouter);
 
 export default router;

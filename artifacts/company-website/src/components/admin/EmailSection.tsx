@@ -43,7 +43,7 @@ const TEMPLATES = [
   },
 ];
 
-type ContactEntry = { name: string; company: string; email: string };
+type ContactEntry = { id?: number; name: string; company: string; email: string };
 
 function buildHtml(name: string, company: string, subject: string, body: string) {
   const bodyLines = body.split("\n");
@@ -176,17 +176,8 @@ type CrawlMode = "url" | "google";
 export function EmailSection() {
   const [contacts, setContacts] = useState<ContactEntry[]>([]);
   const [dlLeads, setDlLeads] = useState<ContactEntry[]>([]);
-  const LS_KEY = "sj_crawl_leads";
-  const [crawlContacts, setCrawlContactsRaw] = useState<ContactEntry[]>(() => {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch { return []; }
-  });
-  const setCrawlContacts = (updater: ContactEntry[] | ((prev: ContactEntry[]) => ContactEntry[])) => {
-    setCrawlContactsRaw(prev => {
-      const next = typeof updater === "function" ? updater(prev) : updater;
-      try { localStorage.setItem(LS_KEY, JSON.stringify(next)); } catch {}
-      return next;
-    });
-  };
+  const [crawlContacts, setCrawlContacts] = useState<ContactEntry[]>([]);
+  const [crawlLeadsLoading, setCrawlLeadsLoading] = useState(true);
   const [loadingContacts, setLoadingContacts] = useState(true);
 
   const [templateIdx, setTemplateIdx] = useState(0);
@@ -231,6 +222,16 @@ export function EmailSection() {
       .then(([c, d]) => { setContacts(c); setDlLeads(d); })
       .catch(() => {})
       .finally(() => setLoadingContacts(false));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/crawl-leads", { headers: { "x-admin-token": TOKEN() } })
+      .then(r => r.ok ? r.json() : { leads: [] })
+      .then(data => setCrawlContacts((data.leads ?? []).map((l: ContactEntry & { id: number }) => ({
+        id: l.id, name: l.name || "担当者", company: l.company || l.email, email: l.email,
+      }))))
+      .catch(() => {})
+      .finally(() => setCrawlLeadsLoading(false));
   }, []);
 
   const customers = customerStore.getAll().map(c => ({ name: c.name, company: c.company, email: c.email }));
@@ -309,24 +310,61 @@ export function EmailSection() {
     finally { setCrawling(false); }
   };
 
-  const addCrawledEmail = (email: string, company: string) => {
+  const addCrawledEmail = async (email: string, company: string) => {
     if (crawlContacts.some(c => c.email === email)) return;
-    setCrawlContacts(prev => [...prev, { name: "担当者", company: company || email, email }]);
+    try {
+      const res = await fetch("/api/crawl-leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-token": TOKEN() },
+        body: JSON.stringify({ email, company: company || email, name: "担当者" }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const inserted = data.leads?.[0];
+        if (inserted) setCrawlContacts(prev => [...prev, { id: inserted.id, name: "担当者", company: company || email, email }]);
+      }
+    } catch {}
     setRecipientTab("crawl");
   };
 
-  const addAllCrawled = (leads: { email: string; company: string }[], fallbackSource: string) => {
+  const addAllCrawled = async (leads: { email: string; company: string }[], fallbackSource: string) => {
     const existing = new Set(crawlContacts.map(c => c.email));
-    const newOnes = leads
-      .filter(l => !existing.has(l.email))
-      .map(l => ({ name: "担当者", company: l.company || fallbackSource, email: l.email } as ContactEntry));
-    setCrawlContacts(prev => [...prev, ...newOnes]);
+    const newOnes = leads.filter(l => !existing.has(l.email))
+      .map(l => ({ email: l.email, company: l.company || fallbackSource, name: "担当者" }));
+    if (newOnes.length === 0) { setRecipientTab("crawl"); return; }
+    try {
+      const res = await fetch("/api/crawl-leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-token": TOKEN() },
+        body: JSON.stringify(newOnes),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const inserted = (data.leads ?? []).map((l: ContactEntry & { id: number }) => ({
+          id: l.id, name: "担当者", company: l.company || fallbackSource, email: l.email,
+        }));
+        setCrawlContacts(prev => [...prev, ...inserted]);
+      }
+    } catch {}
     setRecipientTab("crawl");
   };
 
-  // URL crawl helpers (string[]-based, keep separate)
   const addAllCrawledUrls = (emails: string[], source: string) => {
     addAllCrawled(emails.map(e => ({ email: e, company: source })), source);
+  };
+
+  const deleteCrawlLead = async (entry: ContactEntry) => {
+    if (entry.id) {
+      try { await fetch(`/api/crawl-leads/${entry.id}`, { method: "DELETE", headers: { "x-admin-token": TOKEN() } }); }
+      catch {}
+    }
+    setCrawlContacts(prev => prev.filter(x => x.email !== entry.email));
+  };
+
+  const clearAllCrawlLeads = async () => {
+    if (!confirm("クロールリードを全削除しますか？")) return;
+    try { await fetch("/api/crawl-leads", { method: "DELETE", headers: { "x-admin-token": TOKEN() } }); } catch {}
+    setCrawlContacts([]);
   };
 
   // Google crawl
@@ -516,7 +554,7 @@ export function EmailSection() {
               </p>
               <div className="flex gap-2 items-center">
                 {recipientTab === "crawl" && crawlContacts.length > 0 && (
-                  <button onClick={() => { if (confirm("クロールリードを全削除しますか？")) setCrawlContacts([]); }}
+                  <button onClick={clearAllCrawlLeads}
                     className="flex items-center gap-1 text-[10px] text-gray-600 hover:text-red-400 transition-colors">
                     <Trash2 className="w-3 h-3" /> 全クリア
                   </button>
@@ -535,10 +573,10 @@ export function EmailSection() {
 
             {/* List */}
             <div className="border border-white/10 max-h-60 overflow-y-auto">
-              {loadingContacts && recipientTab !== "crawl" && (
+              {((recipientTab !== "crawl" && loadingContacts) || (recipientTab === "crawl" && crawlLeadsLoading)) && (
                 <div className="flex justify-center p-6"><Loader2 className="w-4 h-4 animate-spin text-gray-600" /></div>
               )}
-              {!loadingContacts && currentList.length === 0 && (
+              {!loadingContacts && !crawlLeadsLoading && currentList.length === 0 && (
                 <p className="text-xs text-gray-600 p-4 text-center">
                   {recipientTab === "crawl" ? "クロールしてリードを追加してください" : "連絡先がありません"}
                 </p>
@@ -557,7 +595,7 @@ export function EmailSection() {
                   <div className="flex items-center gap-1 flex-shrink-0">
                     {sent.has(a.email) && <span className="text-[10px] text-green-400">送済</span>}
                     {recipientTab === "crawl" && (
-                      <button onClick={() => setCrawlContacts(prev => prev.filter(x => x.email !== a.email))}
+                      <button onClick={() => deleteCrawlLead(a)}
                         className="text-gray-600 hover:text-red-400"><Trash2 className="w-3 h-3" /></button>
                     )}
                   </div>
