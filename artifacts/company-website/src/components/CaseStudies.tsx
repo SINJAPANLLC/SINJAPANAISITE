@@ -3,19 +3,37 @@ import { ArrowRight } from "lucide-react";
 
 const CASES = [
   {
+    industry: "運送業",
+    company: "大手物流会社",
+    title: "配送ルート最適化AIで燃料コストを年間15%削減",
+    tags: ["AI開発", "最適化", "コスト削減"],
+  },
+  {
+    industry: "人材業",
+    company: "人材紹介会社",
+    title: "AIマッチングエンジン導入で成約率が2.3倍に向上",
+    tags: ["AI導入", "マッチング", "LLM"],
+  },
+  {
+    industry: "建設業",
+    company: "総合建設会社",
+    title: "現場の安全管理AIで労働災害リスクを50%低減",
+    tags: ["AI開発", "画像認識", "安全管理"],
+  },
+  {
     industry: "製造業",
     company: "大手製造メーカー",
     title: "生産ラインの異常検知AIで不良品率を60%削減",
-    tags: ["AI開発", "画像認識", "品質管理"],
+    tags: ["AI開発", "品質管理", "画像認識"],
   },
   {
-    industry: "金融",
+    industry: "金融業",
     company: "地方銀行",
     title: "AIチャットボット導入でオペレーター対応工数を40%削減",
     tags: ["AI導入", "LLM", "業務効率化"],
   },
   {
-    industry: "小売",
+    industry: "小売業",
     company: "ECプラットフォーム",
     title: "需要予測AIで在庫ロスを年間2億円削減",
     tags: ["AI開発", "需要予測", "在庫最適化"],
