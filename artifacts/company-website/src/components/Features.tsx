@@ -21,14 +21,11 @@ const FEATURES = [
 
 export function Features() {
   return (
-    <section id="features" className="py-24 bg-background relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="features" className="py-24 bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold tracking-widest text-accent uppercase mb-3 drop-shadow-[0_0_8px_rgba(139,92,246,0.8)]">Why Choose Us</h2>
-          <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gradient">SIN JAPAN AIが選ばれる理由</h3>
+          <h2 className="text-sm font-bold tracking-widest text-accent uppercase mb-3">Why Choose Us</h2>
+          <h3 className="text-3xl md:text-4xl font-bold mb-6">NEXUS.AIが選ばれる理由</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -41,12 +38,11 @@ export function Features() {
               transition={{ delay: index * 0.2, duration: 0.6 }}
               className="flex flex-col items-center text-center group"
             >
-              <div className="w-24 h-24 rounded-2xl glass-panel flex items-center justify-center mb-8 border border-primary/20 group-hover:border-primary/60 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-all duration-500 relative">
-                <div className="absolute inset-0 bg-primary/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <feature.icon className="w-10 h-10 text-primary drop-shadow-[0_0_8px_rgba(59,130,246,0.6)] group-hover:scale-110 transition-transform duration-500 relative z-10" />
+              <div className="w-20 h-20 rounded-3xl bg-secondary flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary transition-all duration-300 shadow-lg">
+                <feature.icon className="w-10 h-10 text-foreground group-hover:text-primary-foreground transition-colors duration-300" />
               </div>
-              <h4 className="text-xl font-bold mb-4 text-white group-hover:text-primary transition-colors">{feature.title}</h4>
-              <p className="text-foreground/70 leading-relaxed font-light">
+              <h4 className="text-xl font-bold mb-4">{feature.title}</h4>
+              <p className="text-muted-foreground leading-relaxed">
                 {feature.description}
               </p>
             </motion.div>
