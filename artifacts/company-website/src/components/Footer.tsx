@@ -28,12 +28,12 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-sm tracking-wider">企業情報</h4>
+            <h4 className="font-bold mb-4 text-sm tracking-wider">会社概要</h4>
             <ul className="space-y-3 text-sm text-muted-foreground font-medium">
-              <li>〒106-0032</li>
-              <li>東京都港区六本木1-2-3</li>
-              <li>ネクサスビル 20F</li>
-              <li>info@sinjapanai.example.com</li>
+              <li><span className="text-gray-400 mr-2">社名</span>SIN JAPAN AI株式会社</li>
+              <li><span className="text-gray-400 mr-2">設立</span>2024年</li>
+              <li><span className="text-gray-400 mr-2">所在地</span>東京都港区</li>
+              <li><span className="text-gray-400 mr-2">Mail</span>info@sinjapanai.com</li>
             </ul>
           </div>
 

@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 
 const MAIN_NAV_LINKS = [
   { label: "事業概要", href: "#services" },
-  { label: "会社概要", href: "#about" },
+  { label: "導入事例", href: "#cases" },
   { label: "お知らせ", href: "#news" },
-  { label: "導入事例", href: "#stats" },
-  { label: "パートナー", href: "#partner" },
+  { label: "パートナー", href: "#partners" },
   { label: "お問い合わせ", href: "#contact" },
+  { label: "会社概要", href: "#about" },
 ];
 
 export function Navbar() {

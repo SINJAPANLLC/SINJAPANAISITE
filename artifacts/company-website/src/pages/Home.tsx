@@ -4,6 +4,9 @@ import { LogoSlider } from "@/components/LogoSlider";
 import { Services } from "@/components/Services";
 import { Features } from "@/components/Features";
 import { Stats } from "@/components/Stats";
+import { CaseStudies } from "@/components/CaseStudies";
+import { News } from "@/components/News";
+import { Partners } from "@/components/Partners";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
@@ -17,6 +20,9 @@ export default function Home() {
         <Services />
         <Features />
         <Stats />
+        <CaseStudies />
+        <News />
+        <Partners />
         <Contact />
       </main>
       <Footer />
