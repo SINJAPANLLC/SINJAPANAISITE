@@ -1,53 +1,71 @@
 export function Footer() {
   return (
-    <footer id="about" className="bg-[#f8f9fa] border-t border-border pt-16 pb-8">
+    <footer id="about" className="bg-gray-950 text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          
-          <div className="md:col-span-2">
-            <a href="#" className="flex items-center mb-6 inline-flex">
+
+        {/* Main */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 py-16 border-b border-white/10">
+
+          {/* Logo & tagline */}
+          <div className="md:col-span-5">
+            <a href="#" className="inline-flex mb-6">
               <img
                 src={`${import.meta.env.BASE_URL}images/logo.jpg`}
                 alt="SIN JAPAN AI"
-                className="h-8 w-auto object-contain"
+                className="h-8 w-auto object-contain brightness-0 invert"
               />
             </a>
-            <p className="text-sm text-muted-foreground max-w-sm leading-relaxed font-medium">
-              最先端のAI技術で、企業のデジタルトランスフォーメーションを推進し、新たな価値を創造します。
+            <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
+              AIを組織に実装し、<br />持続可能な社会を創る。
             </p>
           </div>
 
-          <div>
-            <h4 className="font-bold mb-4 text-sm tracking-wider">コンテンツ</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground font-medium">
-              <li><a href="#services" className="hover:text-primary transition-colors">サービス</a></li>
-              <li><a href="#features" className="hover:text-primary transition-colors">私たちの強み</a></li>
-              <li><a href="#stats" className="hover:text-primary transition-colors">実績</a></li>
-              <li><a href="#contact" className="hover:text-primary transition-colors">お問い合わせ</a></li>
+          {/* Nav */}
+          <div className="md:col-span-3">
+            <h4 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-5">サービス</h4>
+            <ul className="flex flex-col gap-3 text-sm text-gray-400">
+              <li><a href="#services" className="hover:text-white transition-colors">事業概要</a></li>
+              <li><a href="#cases" className="hover:text-white transition-colors">導入事例</a></li>
+              <li><a href="#news" className="hover:text-white transition-colors">お知らせ</a></li>
+              <li><a href="#partners" className="hover:text-white transition-colors">パートナー</a></li>
+              <li><a href="#contact" className="hover:text-white transition-colors">お問い合わせ</a></li>
             </ul>
           </div>
 
-          <div>
-            <h4 className="font-bold mb-4 text-sm tracking-wider">会社概要</h4>
-            <ul className="space-y-3 text-sm text-muted-foreground font-medium">
-              <li><span className="text-gray-400 mr-2">社名</span>SIN JAPAN AI株式会社</li>
-              <li><span className="text-gray-400 mr-2">設立</span>2024年</li>
-              <li><span className="text-gray-400 mr-2">所在地</span>東京都港区</li>
-              <li><span className="text-gray-400 mr-2">Mail</span>info@sinjapanai.com</li>
+          {/* Company */}
+          <div className="md:col-span-4">
+            <h4 className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-5">会社概要</h4>
+            <ul className="flex flex-col gap-3 text-sm text-gray-400">
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">社名</span>
+                <span>SIN JAPAN AI株式会社</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">設立</span>
+                <span>2024年</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">所在地</span>
+                <span>東京都港区</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">Mail</span>
+                <span>info@sinjapanai.com</span>
+              </li>
             </ul>
           </div>
 
         </div>
-        
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground font-medium">
-            © {new Date().getFullYear()} SIN JAPAN AI, Inc. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-xs text-muted-foreground font-medium">
-            <a href="#" className="hover:text-primary transition-colors">プライバシーポリシー</a>
-            <a href="#" className="hover:text-primary transition-colors">利用規約</a>
+
+        {/* Bottom bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 text-xs text-gray-600">
+          <p>© {new Date().getFullYear()} SIN JAPAN AI, Inc. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-gray-400 transition-colors">プライバシーポリシー</a>
+            <a href="#" className="hover:text-gray-400 transition-colors">利用規約</a>
           </div>
         </div>
+
       </div>
     </footer>
   );
