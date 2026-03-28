@@ -33,9 +33,9 @@ export function Navbar() {
           {/* Logo */}
           <a href="#" className="flex items-center group">
             <img
-              src={`${import.meta.env.BASE_URL}images/logo-sinjapan.jpg`}
-              alt="SIN JAPAN AI"
-              className="h-8 w-auto object-contain"
+              src={`${import.meta.env.BASE_URL}images/logo-sinjapan-live.png`}
+              alt="SIN JAPAN AI LIVE"
+              className="h-10 w-auto object-contain rounded"
             />
           </a>
 
