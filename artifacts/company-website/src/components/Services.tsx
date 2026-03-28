@@ -1,106 +1,90 @@
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Bot, Code, LineChart, Target } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const SERVICES = [
   {
-    id: "generative-ai",
-    title: "生成AI導入支援",
-    description: "ChatGPT等をはじめとする最新のLLMを活用し、社内業務の自動化・効率化を実現するシステムを構築します。",
-    icon: Bot,
-    color: "bg-blue-500",
-    gradient: "from-blue-50 to-indigo-50/50",
-    iconColor: "text-blue-600"
+    id: "ai-introduction",
+    number: "01",
+    title: "AI導入",
+    subtitle: "AI Implementation",
+    description:
+      "企業の業務プロセスを分析し、最適なAIソリューションを選定・導入します。生成AI・LLMの活用から社内業務の自動化まで、現場に根付くAI実装を一貫してサポートします。",
+    items: ["現状分析・課題整理", "AIツール選定・導入設計", "社内展開・定着支援", "効果測定・改善"],
   },
   {
-    id: "system-dev",
-    title: "AIシステム開発",
-    description: "お客様の課題に合わせた独自のAIモデルの開発から、既存システムへのAI組み込みまで、一気通貫でサポートします。",
-    icon: Code,
-    color: "bg-indigo-500",
-    gradient: "from-indigo-50 to-purple-50/50",
-    iconColor: "text-indigo-600"
+    id: "ai-development",
+    number: "02",
+    title: "AI開発",
+    subtitle: "AI Development",
+    description:
+      "お客様固有の課題に対して、オーダーメイドのAIシステムを開発します。独自モデルの構築から既存システムへのAI組み込みまで、技術力で価値を創出します。",
+    items: ["要件定義・アーキテクチャ設計", "カスタムAIモデル開発", "API・システム連携開発", "保守・継続的改善"],
   },
-  {
-    id: "data-analytics",
-    title: "データ分析・活用",
-    description: "社内に眠る膨大なデータを可視化・分析。機械学習を用いた予測モデルにより、データドリブンな意思決定を支援します。",
-    icon: LineChart,
-    color: "bg-purple-500",
-    gradient: "from-purple-50 to-pink-50/50",
-    iconColor: "text-purple-600"
-  },
-  {
-    id: "consulting",
-    title: "AI戦略コンサルティング",
-    description: "AIを経営戦略にどう組み込むか。ロードマップの策定から組織のAIリテラシー向上まで、専門家が伴走します。",
-    icon: Target,
-    color: "bg-rose-500",
-    gradient: "from-rose-50 to-orange-50/50",
-    iconColor: "text-rose-600"
-  }
 ];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-};
 
 export function Services() {
   return (
-    <section id="services" className="py-24 bg-white border-t border-border">
+    <section id="services" className="py-24 bg-white border-t border-gray-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold tracking-widest text-primary uppercase mb-3">Our Services</h2>
-          <h3 className="text-3xl md:text-4xl font-bold mb-6">ビジネスを加速させるAIソリューション</h3>
-          <p className="text-muted-foreground text-lg">
-            企業の抱える様々な課題に対して、最適なAI技術を選定し、確実な価値提供をお約束します。
-          </p>
+
+        {/* Section Header */}
+        <div className="mb-16">
+          <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-3">Our Services</p>
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900">事業概要</h2>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {SERVICES.map((service) => (
-            <motion.div key={service.id} variants={itemVariants}>
-              <Card className="group overflow-hidden border border-gray-100 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative h-full">
-                <div className={`absolute top-0 left-0 w-full h-1 ${service.color}`} />
-                <CardContent className={`p-10 bg-gradient-to-br ${service.gradient} h-full flex flex-col`}>
-                  <div className="mb-8">
-                    <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-gray-100/50">
-                      <service.icon className={`w-8 h-8 ${service.iconColor}`} />
-                    </div>
-                  </div>
-                  <h4 className="text-2xl font-bold mb-4 text-gray-900">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {SERVICES.map((service, i) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              viewport={{ once: true }}
+              className="group border border-gray-200 bg-white hover:bg-gray-950 transition-colors duration-300 p-10 flex flex-col gap-8 cursor-pointer"
+            >
+              {/* Number + Title */}
+              <div className="flex items-start justify-between">
+                <div>
+                  <span className="text-xs font-bold tracking-[0.15em] text-gray-400 group-hover:text-gray-500 transition-colors">
+                    {service.number}
+                  </span>
+                  <h3 className="text-3xl font-black text-gray-900 group-hover:text-white transition-colors mt-1">
                     {service.title}
-                  </h4>
-                  <p className="text-gray-600 mb-8 leading-relaxed font-medium flex-1">
-                    {service.description}
+                  </h3>
+                  <p className="text-xs tracking-widest text-gray-400 group-hover:text-gray-500 transition-colors mt-1 uppercase">
+                    {service.subtitle}
                   </p>
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center text-sm font-bold text-gray-900 hover:text-gray-600 transition-colors mt-auto"
-                  >
-                    詳しく見る
-                    <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </CardContent>
-              </Card>
+                </div>
+                <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 mt-2 flex-shrink-0" />
+              </div>
+
+              {/* Description */}
+              <p className="text-gray-600 group-hover:text-gray-300 transition-colors leading-relaxed text-sm">
+                {service.description}
+              </p>
+
+              {/* Item List */}
+              <ul className="flex flex-col gap-2 mt-auto">
+                {service.items.map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm text-gray-500 group-hover:text-gray-400 transition-colors">
+                    <span className="w-1 h-1 rounded-full bg-gray-400 group-hover:bg-gray-500 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              {/* Bottom Link */}
+              <a
+                href="#contact"
+                className="text-xs font-bold tracking-wider text-gray-900 group-hover:text-white transition-colors border-b border-gray-200 group-hover:border-gray-600 pb-0.5 self-start"
+              >
+                お問い合わせ →
+              </a>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
