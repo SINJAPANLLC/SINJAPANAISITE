@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, Mail, Medal, Trophy } from "lucide-react";
+import { Download, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Hero() {
@@ -52,48 +52,6 @@ export function Hero() {
 
         </div>
 
-        {/* Badges Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-16 md:mt-24 pb-8"
-        >
-          <div className="border-t border-gray-200 pt-8 flex flex-col md:flex-row flex-wrap items-center justify-center gap-8 md:gap-12">
-            {/* Badge 1 */}
-            <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded border border-gray-100 shadow-sm">
-              <div className="w-8 h-8 bg-yellow-50 flex items-center justify-center">
-                <Medal className="w-4 h-4 text-yellow-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-[10px] font-bold text-gray-500">SIN JAPAN AI AGENT</p>
-                <p className="text-xs font-black text-gray-900">業界主要アワード W受賞!</p>
-              </div>
-            </div>
-            
-            {/* Badge 2 */}
-            <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded border border-gray-100 shadow-sm">
-              <div className="w-8 h-8 bg-red-50 flex items-center justify-center">
-                <Trophy className="w-4 h-4 text-red-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-[9px] font-bold text-red-600">AI PRODUCTS NEXT AI TREND 2026</p>
-                <p className="text-xs font-black text-gray-900">AIエージェント部門</p>
-              </div>
-            </div>
-
-            {/* Badge 3 */}
-            <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded border border-gray-100 shadow-sm">
-              <div className="w-8 h-8 bg-blue-50 flex items-center justify-center">
-                <Trophy className="w-4 h-4 text-blue-600" />
-              </div>
-              <div className="text-left">
-                <p className="text-[9px] font-bold text-blue-600">ITreview Grid Award 2026 Winter</p>
-                <p className="text-xs font-black text-gray-900">Leader AIエージェント部門</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
