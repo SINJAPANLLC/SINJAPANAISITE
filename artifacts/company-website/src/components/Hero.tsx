@@ -97,16 +97,6 @@ export function Hero() {
               </svg>
             </div>
             
-            {/* Center Logo Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-56 h-32 bg-white/95 backdrop-blur-sm shadow-xl flex items-center justify-center px-6">
-                <img
-                  src={`${import.meta.env.BASE_URL}images/logo.jpg`}
-                  alt="SIN JAPAN AI"
-                  className="w-full h-auto object-contain"
-                />
-              </div>
-            </div>
           </motion.div>
 
         </div>
