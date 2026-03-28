@@ -1,0 +1,50 @@
+
+}root@srv1087935:~#ls /etc/letsencrypt/live/ | grep sinjapanaii
+app.sinjapanailive.site
+sinjapanai.com
+sinjapanailive.site
+root@srv1087935:~# cat > /etc/nginx/sites-available/sinjapanaisite << 'EOF'
+server {
+    listen 80;
+    server_name sinjapanai.site www.sinjapanai.site;
+    root /opt/sinjapanaisite/artifacts/company-website/dist/public;
+    index index.html;
+    location /api/ {
+        proxy_pass http://127.0.0.1:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+EOF
+
+ln -s /etc/nginx/sites-available/sinjapanaisite /etc/nginx/sites-enabled/sinjapanaisite
+nginx -t && systemctl reload nginx
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+root@srv1087935:~# certbot --nginx -d sinjapanai.site -d www.sinjapanai.site
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Requesting a certificate for sinjapanai.site and www.sinjapanai.site
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/sinjapanai.site/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/sinjapanai.site/privkey.pem
+This certificate expires on 2026-06-26.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for sinjapanai.site to /etc/nginx/sites-enabled/sinjapanaisite
+Successfully deployed certificate for www.sinjapanai.site to /etc/nginx/sites-enabled/sinjapanaisite
+Congratulations! You have successfully enabled HTTPS on https://sinjapanai.site and https://www.sinjapanai.site
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+root@srv1087935:~# 
