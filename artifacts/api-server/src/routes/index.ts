@@ -9,6 +9,7 @@ import trackRouter from "./track";
 import crawlEmailsRouter from "./crawl-emails";
 import crawlGoogleRouter from "./crawl-google";
 import crawlLeadsRouter from "./crawl-leads";
+import crawlJobRouter from "./crawl-job";
 
 const router: IRouter = Router();
 
@@ -22,5 +23,6 @@ router.use(trackRouter);
 router.use(crawlEmailsRouter);
 router.use(crawlGoogleRouter);
 router.use(crawlLeadsRouter);
+router.use(crawlJobRouter);
 
 export default router;

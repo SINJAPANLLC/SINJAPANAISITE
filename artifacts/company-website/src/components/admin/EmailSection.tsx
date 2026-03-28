@@ -202,13 +202,13 @@ export function EmailSection() {
   const [crawlError, setCrawlError] = useState("");
   const [crawlSourceLabel, setCrawlSourceLabel] = useState("");
 
-  // Google crawl
+  // Google crawl (deep background job)
   const [googleQuery, setGoogleQuery] = useState("");
-  const [googleCrawling, setGoogleCrawling] = useState(false);
-  const [googleResult, setGoogleResult] = useState<{ email: string; company: string }[]>([]);
   const [googleError, setGoogleError] = useState("");
-  const [googleSitesScanned, setGoogleSitesScanned] = useState(0);
-  const [googleMessage, setGoogleMessage] = useState("");
+  const [crawlJobId, setCrawlJobId] = useState<string | null>(null);
+  const [crawlJobStatus, setCrawlJobStatus] = useState<"idle" | "running" | "done" | "error">("idle");
+  const [crawlJobPhase, setCrawlJobPhase] = useState("");
+  const [crawlJobProgress, setCrawlJobProgress] = useState({ sitesScanned: 0, sitesTotal: 0, emailsFound: 0, currentSite: "" });
 
   useEffect(() => {
     Promise.all([
@@ -233,6 +233,40 @@ export function EmailSection() {
       .catch(() => {})
       .finally(() => setCrawlLeadsLoading(false));
   }, []);
+
+  const reloadCrawlLeads = async () => {
+    const r = await fetch("/api/crawl-leads", { headers: { "x-admin-token": TOKEN() } });
+    if (!r.ok) return;
+    const data = await r.json();
+    setCrawlContacts((data.leads ?? []).map((l: ContactEntry & { id: number }) => ({
+      id: l.id, name: l.name || "担当者", company: l.company || l.email, email: l.email,
+    })));
+  };
+
+  useEffect(() => {
+    if (!crawlJobId || crawlJobStatus !== "running") return;
+    const poll = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/crawl-job/${crawlJobId}`, {
+          headers: { "x-admin-token": TOKEN() },
+        });
+        if (!res.ok) return;
+        const job = await res.json();
+        setCrawlJobPhase(job.phase || "");
+        setCrawlJobProgress({ ...job.progress });
+        if (job.status === "done" || job.status === "error") {
+          setCrawlJobStatus(job.status);
+          clearInterval(poll);
+          if (job.status === "done") {
+            await reloadCrawlLeads();
+            setRecipientTab("crawl");
+          }
+          if (job.status === "error") setGoogleError(job.error || "クロール失敗");
+        }
+      } catch {}
+    }, 3000);
+    return () => clearInterval(poll);
+  }, [crawlJobId, crawlJobStatus]);
 
   const customers = customerStore.getAll().map(c => ({ name: c.name, company: c.company, email: c.email }));
 
@@ -367,24 +401,24 @@ export function EmailSection() {
     setCrawlContacts([]);
   };
 
-  // Google crawl
-  const doGoogleCrawl = async () => {
-    if (!googleQuery.trim()) return;
-    setGoogleCrawling(true); setGoogleResult([]); setGoogleError(""); setGoogleSitesScanned(0); setGoogleMessage("");
+  // Google deep crawl (background job)
+  const startDeepCrawl = async () => {
+    if (!googleQuery.trim() || crawlJobStatus === "running") return;
+    setGoogleError("");
+    setCrawlJobStatus("running");
+    setCrawlJobPhase("開始中");
+    setCrawlJobProgress({ sitesScanned: 0, sitesTotal: 0, emailsFound: 0, currentSite: "" });
+    setCrawlJobId(null);
     try {
-      const res = await fetch("/api/crawl-google", {
+      const res = await fetch("/api/crawl-job/start", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-token": TOKEN() },
         body: JSON.stringify({ query: googleQuery.trim() }),
       });
       const data = await res.json();
-      if (!res.ok) { setGoogleError(data.error || "エラー"); return; }
-      const leads = data.leads as { email: string; company: string }[] | undefined;
-      setGoogleResult(leads || (data.emails || []).map((e: string) => ({ email: e, company: "" })));
-      setGoogleSitesScanned(data.sitesScanned || 0);
-      setGoogleMessage(data.message || "");
-    } catch { setGoogleError("ネットワークエラー"); }
-    finally { setGoogleCrawling(false); }
+      if (!res.ok) { setGoogleError(data.error || "エラー"); setCrawlJobStatus("error"); return; }
+      setCrawlJobId(data.jobId);
+    } catch { setGoogleError("ネットワークエラー"); setCrawlJobStatus("error"); }
   };
 
   const html = preview ? buildHtml(preview.name, preview.company, tpl.subject, getBody(preview)) : "";
@@ -457,61 +491,59 @@ export function EmailSection() {
             </>
           ) : (
             <>
-              <p className="text-[10px] text-gray-500 tracking-widest uppercase font-bold">— 業種・地域を入力して中小法人のメールを自動収集</p>
-              <p className="text-[10px] text-gray-600">例: 「神奈川 運送業」「東京 製造業 中小企業」「大阪 建設会社」</p>
+              <p className="text-[10px] text-gray-500 tracking-widest uppercase font-bold">— 業種・地域を入力して中小法人のメールをディープ収集</p>
+              <p className="text-[10px] text-gray-600">Yahoo検索3ページ分・最大40サイトをバックグラウンドでクロール。見つかり次第DBに自動保存。</p>
               <div className="flex gap-2">
-                <input value={googleQuery} onChange={e => setGoogleQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && doGoogleCrawl()}
+                <input value={googleQuery} onChange={e => setGoogleQuery(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && startDeepCrawl()}
                   placeholder="例: 神奈川 運送業 / 東京 製造業 / 大阪 建設会社"
-                  className="flex-1 bg-white/5 border border-white/10 text-sm text-white px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600" />
-                <button onClick={doGoogleCrawl} disabled={googleCrawling || !googleQuery.trim()}
-                  className="flex items-center gap-2 text-xs font-bold px-4 py-2 bg-white text-gray-900 hover:bg-gray-100 disabled:opacity-50 transition-colors">
-                  {googleCrawling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-                  {googleCrawling ? "収集中…" : "収集開始"}
+                  disabled={crawlJobStatus === "running"}
+                  className="flex-1 bg-white/5 border border-white/10 text-sm text-white px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600 disabled:opacity-50" />
+                <button onClick={startDeepCrawl}
+                  disabled={crawlJobStatus === "running" || !googleQuery.trim()}
+                  className="flex items-center gap-2 text-xs font-bold px-4 py-2 bg-white text-gray-900 hover:bg-gray-100 disabled:opacity-50 transition-colors whitespace-nowrap">
+                  {crawlJobStatus === "running" ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
+                  {crawlJobStatus === "running" ? "収集中…" : "ディープ収集"}
                 </button>
               </div>
-              {googleCrawling && (
-                <p className="text-[10px] text-gray-500 animate-pulse">企業サイトを順次クロールしています（20〜40秒かかります）…</p>
-              )}
-              {googleError && <p className="text-xs text-red-400">{googleError}</p>}
-              {googleMessage && !googleCrawling && (
-                <p className="text-[10px] text-yellow-500">{googleMessage}</p>
-              )}
-              {!googleCrawling && googleSitesScanned > 0 && (
-                <p className="text-[10px] text-gray-500">{googleSitesScanned}サイトをスキャン → {googleResult.length}件のメールアドレスを検出</p>
-              )}
-              {googleResult.length > 0 && (
-                <div className="flex flex-col gap-2">
+
+              {crawlJobStatus === "running" && (
+                <div className="flex flex-col gap-2 border border-white/10 bg-white/3 p-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-[10px] text-green-400 font-bold">✓ {googleResult.length}件検出</p>
-                    <button onClick={() => addAllCrawled(googleResult, googleQuery.trim())}
-                      className="text-[10px] text-white hover:text-gray-300 flex items-center gap-1 border border-white/20 px-2 py-0.5">
-                      <Plus className="w-3 h-3" />全て追加
-                    </button>
+                    <p className="text-[10px] text-blue-400 font-bold animate-pulse">● {crawlJobPhase}</p>
+                    <p className="text-[10px] text-green-400 font-bold">{crawlJobProgress.emailsFound}件取得済</p>
                   </div>
-                  <div className="max-h-48 overflow-y-auto border border-white/10 divide-y divide-white/5">
-                    {googleResult.map(({ email, company }) => {
-                      const added = crawlContacts.some(c => c.email === email);
-                      return (
-                        <div key={email} className="flex items-center justify-between px-3 py-1.5 gap-2">
-                          <div className="flex flex-col min-w-0 flex-1">
-                            <span className="text-[10px] text-gray-400 truncate">{company || "—"}</span>
-                            <span className="text-xs text-gray-300 font-mono truncate">{email}</span>
-                          </div>
-                          <button onClick={() => addCrawledEmail(email, company)} disabled={added}
-                            className={`text-[10px] px-2 py-0.5 flex-shrink-0 border transition-colors ${added ? "border-white/10 text-gray-600 cursor-default" : "border-white/20 text-white hover:bg-white/5"}`}>
-                            {added ? "追加済" : "追加"}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  {crawlJobProgress.sitesTotal > 0 && (
+                    <>
+                      <div className="w-full bg-white/10 h-1.5">
+                        <div
+                          className="bg-white h-1.5 transition-all duration-500"
+                          style={{ width: `${Math.round((crawlJobProgress.sitesScanned / crawlJobProgress.sitesTotal) * 100)}%` }}
+                        />
+                      </div>
+                      <p className="text-[10px] text-gray-500">
+                        {crawlJobProgress.sitesScanned} / {crawlJobProgress.sitesTotal} サイト完了
+                        {crawlJobProgress.currentSite && <span className="ml-2 text-gray-600 truncate">— {crawlJobProgress.currentSite}</span>}
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
-              {!googleCrawling && googleResult.length === 0 && googleSitesScanned > 0 && !googleError && (
-                <p className="text-[10px] text-gray-600">メールアドレスが見つかりませんでした。別のキーワードで試してください。</p>
+
+              {crawlJobStatus === "done" && (
+                <div className="flex items-center gap-2">
+                  <p className="text-[10px] text-green-400 font-bold">
+                    ✓ 完了　{crawlJobProgress.sitesScanned}サイトをスキャン → {crawlJobProgress.emailsFound}件をDBに保存
+                  </p>
+                  <button onClick={() => { setCrawlJobStatus("idle"); setCrawlJobId(null); }}
+                    className="text-[10px] text-gray-500 hover:text-white border border-white/10 px-2 py-0.5">リセット</button>
+                </div>
               )}
-              {!googleCrawling && googleSitesScanned === 0 && !googleError && !googleMessage && (
-                <p className="text-[10px] text-gray-600">※ 業種・地域・会社名などのキーワードで検索。ヒットした企業サイトを自動クロールします</p>
+
+              {googleError && <p className="text-xs text-red-400">{googleError}</p>}
+
+              {crawlJobStatus === "idle" && !googleError && (
+                <p className="text-[10px] text-gray-600">※ バックグラウンドで動作するため、ブラウザを閉じても続きます（VPS上で実行）。完了時に自動でリストを更新します。</p>
               )}
             </>
           )}
