@@ -1,0 +1,24 @@
+packages:
+  "framer-motion": "For premium scroll animations, hero section effects, and smooth transitions"
+  "react-hook-form": "For robust contact form state management"
+  "@hookform/resolvers": "For Zod schema validation integration with react-hook-form"
+
+images:
+  - path: "artifacts/company-website/public/images/hero-bg.png"
+    description: "Abstract high-tech background with glowing neural network nodes, soft light leaks, and dark deep blue cyberspace theme. Premium corporate AI aesthetic."
+    aspect_ratio: "16:9"
+  - path: "artifacts/company-website/public/images/service-1.png"
+    description: "Abstract generative AI visualization, glowing neural network or brain structure, dark background, cyan and purple glowing accents"
+    aspect_ratio: "16:9"
+  - path: "artifacts/company-website/public/images/service-2.png"
+    description: "Abstract system development visualization, futuristic code interface or digital streams intersecting, dark tech background"
+    aspect_ratio: "16:9"
+  - path: "artifacts/company-website/public/images/service-3.png"
+    description: "Abstract data analytics visualization, glowing data points, modern analytical charts and grids floating in deep space"
+    aspect_ratio: "16:9"
+  - path: "artifacts/company-website/public/images/service-4.png"
+    description: "Abstract business strategy visualization, futuristic geometric structure with glowing interconnecting lines and nodes"
+    aspect_ratio: "16:9"
+
+notes:
+  - "The site is a pure frontend landing page; contact form mutations are mocked to simulate a successful API submission."
