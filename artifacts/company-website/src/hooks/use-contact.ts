@@ -10,14 +10,32 @@ export const contactFormSchema = z.object({
 
 export type ContactFormValues = z.infer<typeof contactFormSchema>;
 
+const STORAGE_KEY = "sin_japan_contacts";
+
+export function saveContact(data: ContactFormValues) {
+  const existing = getContacts();
+  const newEntry = {
+    ...data,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([newEntry, ...existing]));
+  return newEntry;
+}
+
+export function getContacts() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
 export function useSubmitContact() {
   return useMutation({
     mutationFn: async (data: ContactFormValues) => {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // Simulate successful response
-      return { success: true, data };
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return saveContact(data);
     },
   });
 }

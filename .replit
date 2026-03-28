@@ -24,3 +24,9 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+VITE_ADMIN_EMAIL = "info@sinjapan.jp"
+VITE_ADMIN_PASSWORD = "Kazuya8008"
