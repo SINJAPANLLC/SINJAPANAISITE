@@ -8,13 +8,6 @@ export function Footer() {
 
           {/* Logo & tagline */}
           <div className="md:col-span-5">
-            <a href="#" className="inline-flex mb-6">
-              <img
-                src={`${import.meta.env.BASE_URL}images/logo.jpg`}
-                alt="SIN JAPAN AI"
-                className="h-8 w-auto object-contain"
-              />
-            </a>
             <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
               AIを組織に実装し、<br />持続可能な社会を創る。
             </p>
