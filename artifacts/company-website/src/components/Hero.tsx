@@ -83,7 +83,7 @@ export function Hero() {
                   <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
                   <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
                 </svg>
-                <div className="text-center">
+                <div className="flex items-baseline gap-1">
                   <span className="text-5xl md:text-6xl font-black text-gray-900">500</span>
                   <span className="text-xl font-bold text-gray-900">社以上</span>
                 </div>
@@ -116,7 +116,7 @@ export function Hero() {
                   <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
                   <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
                 </svg>
-                <div className="text-center">
+                <div className="flex items-baseline gap-1">
                   <span className="text-5xl md:text-6xl font-black text-gray-900">100</span>
                   <span className="text-xl font-bold text-gray-900">%</span>
                 </div>
