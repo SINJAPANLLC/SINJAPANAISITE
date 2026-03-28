@@ -6,6 +6,7 @@ import newsRouter from "./news";
 import columnsRouter from "./columns";
 import sendEmailRouter from "./send-email";
 import trackRouter from "./track";
+import crawlEmailsRouter from "./crawl-emails";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(newsRouter);
 router.use(columnsRouter);
 router.use(sendEmailRouter);
 router.use(trackRouter);
+router.use(crawlEmailsRouter);
 
 export default router;

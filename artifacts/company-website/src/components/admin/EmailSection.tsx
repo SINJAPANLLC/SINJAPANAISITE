@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { customerStore } from "@/hooks/use-admin-data";
-import { Mail, Copy, Loader2, Sparkles, Eye, Send, X } from "lucide-react";
+import { Mail, Copy, Loader2, Sparkles, Eye, Send, X, Globe, Plus, Trash2 } from "lucide-react";
 
 const TOKEN = () => import.meta.env.VITE_ADMIN_PASSWORD || "";
 
@@ -28,72 +28,160 @@ const TEMPLATES = [
 type ContactEntry = { name: string; company: string; email: string };
 
 function buildHtml(name: string, company: string, subject: string, body: string) {
-  // Strip the first 2 lines (company + name header) from the body for the greeting section
   const bodyLines = body.split("\n");
-  const bodyMain = bodyLines.slice(2).join("\n").trim();
+  const bodyMain = bodyLines.slice(2).join("\n").trim().replace(/\n/g, "<br>");
   return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${subject}</title>
+<!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
 </head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;">
-<div style="max-width:600px;margin:0 auto;padding:24px 16px;">
+<body style="margin:0;padding:0;background:#0d0d0d;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<span style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${subject} — 合同会社SIN JAPAN</span>
 
-  <!-- Top accent bar -->
-  <div style="height:4px;background:linear-gradient(90deg,#111827 0%,#374151 100%);"></div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0d0d0d;min-height:100vh;">
+<tr><td align="center" style="padding:32px 16px;">
 
-  <!-- Header -->
-  <div style="background:#111827;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
-    <div>
-      <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.2em;color:#6b7280;text-transform:uppercase;">合同会社 SIN JAPAN</p>
-      <p style="margin:4px 0 0;font-size:13px;font-weight:700;color:#9ca3af;">AI導入支援・AI開発</p>
-    </div>
-    <div style="width:36px;height:36px;background:#374151;display:flex;align-items:center;justify-content:center;">
-      <span style="font-size:16px;font-weight:900;color:#fff;">S</span>
-    </div>
-  </div>
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
 
-  <!-- White card -->
-  <div style="background:#fff;padding:32px 28px;">
-    <!-- Subject line -->
-    <p style="margin:0 0 24px;font-size:11px;font-weight:700;letter-spacing:.15em;color:#9ca3af;text-transform:uppercase;padding-bottom:16px;border-bottom:1px solid #f3f4f6;">Message</p>
-    <h1 style="margin:0 0 20px;font-size:18px;font-weight:900;color:#111827;line-height:1.4;">${subject}</h1>
+  <!-- ===== HEADER ===== -->
+  <tr>
+    <td style="background:#000000;padding:0;border-top:none;">
+      <!-- Accent line: cyan + blue gradient via 2 cells -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td width="80" style="height:3px;background:#00e5ff;font-size:0;line-height:0;">&nbsp;</td>
+          <td style="height:3px;background:linear-gradient(90deg,#00e5ff,#0066ff);font-size:0;line-height:0;">&nbsp;</td>
+        </tr>
+      </table>
+      <!-- Logo row -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:0;">
+        <tr>
+          <td style="padding:22px 32px 22px 32px;">
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="padding-right:12px;vertical-align:middle;">
+                  <!-- S mark -->
+                  <div style="width:44px;height:44px;background:#00e5ff;text-align:center;line-height:44px;font-size:22px;font-weight:900;color:#000;font-family:Arial,sans-serif;letter-spacing:-.02em;">S</div>
+                </td>
+                <td style="vertical-align:middle;">
+                  <p style="margin:0;font-size:16px;font-weight:900;color:#ffffff;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;letter-spacing:.05em;">SIN JAPAN AI</p>
+                  <p style="margin:2px 0 0;font-size:10px;font-weight:400;color:#555;font-family:Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;">AI INTEGRATION &amp; DEVELOPMENT</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td align="right" style="padding:22px 32px 22px 0;vertical-align:middle;">
+            <p style="margin:0;font-size:10px;color:#333;font-family:Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;">合同会社</p>
+            <p style="margin:2px 0 0;font-size:11px;font-weight:700;color:#444;font-family:Arial,sans-serif;">SIN JAPAN</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
-    <!-- Recipient -->
-    <div style="background:#f9fafb;border-left:3px solid #111827;padding:12px 16px;margin-bottom:24px;">
-      <p style="margin:0;font-size:13px;color:#374151;font-weight:700;">${company}</p>
-      <p style="margin:2px 0 0;font-size:14px;font-weight:700;color:#111827;">${name}&nbsp;様</p>
-    </div>
+  <!-- ===== SUBJECT BANNER ===== -->
+  <tr>
+    <td style="background:#00e5ff;padding:10px 32px;">
+      <p style="margin:0;font-size:12px;font-weight:900;color:#000;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;letter-spacing:.03em;">${subject}</p>
+    </td>
+  </tr>
 
-    <!-- Body -->
-    <div style="font-size:14px;color:#374151;line-height:1.9;white-space:pre-wrap;">${bodyMain}</div>
+  <!-- ===== BODY ===== -->
+  <tr>
+    <td style="background:#ffffff;padding:40px 32px 32px;">
 
-    <!-- CTA -->
-    <div style="margin-top:32px;text-align:center;">
-      <a href="mailto:info@sinjapanai.site" style="display:inline-block;background:#111827;color:#fff;font-size:13px;font-weight:700;padding:12px 28px;text-decoration:none;letter-spacing:.05em;">お問い合わせはこちら</a>
-    </div>
-  </div>
+      <!-- Recipient -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+        <tr>
+          <td width="4" style="background:#00e5ff;">&nbsp;</td>
+          <td style="background:#f4f4f4;padding:14px 18px;">
+            <p style="margin:0;font-size:12px;font-weight:700;color:#666;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${company}</p>
+            <p style="margin:4px 0 0;font-size:16px;font-weight:900;color:#000;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${name}&nbsp;<span style="font-size:13px;font-weight:400;">様</span></p>
+          </td>
+        </tr>
+      </table>
 
-  <!-- Footer -->
-  <div style="background:#1f2937;padding:20px 28px;">
-    <p style="margin:0 0 2px;font-size:12px;font-weight:900;color:#fff;">合同会社SIN JAPAN</p>
-    <p style="margin:0;font-size:11px;color:#6b7280;line-height:1.9;">
-      〒241-0105 神奈川県愛甲郡愛川町中津7287<br>
-      Tel: 050-5526-9906&nbsp;|&nbsp;Fax: 046-212-2326<br>
-      info@sinjapanai.site&nbsp;|&nbsp;sinjapanai.site
-    </p>
-  </div>
-  <p style="margin:12px 0 0;font-size:10px;color:#9ca3af;text-align:center;">このメールは合同会社SIN JAPANより送信されています。</p>
+      <!-- Body text -->
+      <p style="margin:0 0 28px;font-size:14px;line-height:2;color:#333;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${bodyMain}</p>
 
-</div>
+      <!-- CTA -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+        <tr>
+          <td style="background:#000;padding:14px 36px;text-align:center;">
+            <a href="mailto:info@sinjapanai.site" style="font-size:13px;font-weight:900;color:#ffffff;text-decoration:none;font-family:Arial,sans-serif;letter-spacing:.08em;display:block;">お問い合わせはこちら&nbsp;→</a>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Divider -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:36px;">
+        <tr>
+          <td width="80" style="height:1px;background:#00e5ff;font-size:0;">&nbsp;</td>
+          <td style="height:1px;background:#eee;font-size:0;">&nbsp;</td>
+        </tr>
+      </table>
+
+      <!-- Sender sig -->
+      <table cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;">
+        <tr>
+          <td>
+            <p style="margin:0;font-size:13px;font-weight:900;color:#000;font-family:Arial,'Hiragino Kaku Gothic ProN',sans-serif;">合同会社SIN JAPAN</p>
+            <p style="margin:4px 0 0;font-size:12px;color:#888;font-family:Arial,sans-serif;line-height:1.8;">
+              代表社員 大谷 和哉<br>
+              TEL: 050-5526-9906&nbsp;&nbsp;|&nbsp;&nbsp;FAX: 046-212-2326<br>
+              <a href="mailto:info@sinjapanai.site" style="color:#00a0c0;text-decoration:none;">info@sinjapanai.site</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://sinjapanai.site" style="color:#00a0c0;text-decoration:none;">sinjapanai.site</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+
+  <!-- ===== FOOTER ===== -->
+  <tr>
+    <td style="background:#111;padding:20px 32px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <p style="margin:0;font-size:11px;color:#555;font-family:Arial,sans-serif;line-height:1.8;">
+              〒241-0105 神奈川県愛甲郡愛川町中津7287<br>
+              このメールは合同会社SIN JAPANより送信されています。
+            </p>
+          </td>
+          <td align="right" style="vertical-align:top;">
+            <p style="margin:0;font-size:9px;color:#333;font-family:Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;">SIN JAPAN</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Bottom accent line -->
+  <tr>
+    <td style="padding:0;font-size:0;line-height:0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="height:2px;background:#00e5ff;width:80px;font-size:0;">&nbsp;</td>
+          <td style="height:2px;background:#0066ff;font-size:0;">&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
 </body>
 </html>`;
 }
 
 export function EmailSection() {
   const [contacts, setContacts] = useState<ContactEntry[]>([]);
+  const [crawlContacts, setCrawlContacts] = useState<ContactEntry[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [templateIdx, setTemplateIdx] = useState(0);
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -105,6 +193,13 @@ export function EmailSection() {
   const [sent, setSent] = useState<Set<string>>(new Set());
   const [copied, setCopied] = useState(false);
 
+  // Crawl state
+  const [crawlUrl, setCrawlUrl] = useState("");
+  const [crawling, setCrawling] = useState(false);
+  const [crawlResult, setCrawlResult] = useState<string[]>([]);
+  const [crawlError, setCrawlError] = useState("");
+  const [showCrawl, setShowCrawl] = useState(false);
+
   useEffect(() => {
     fetch("/api/contacts", { headers: { "x-admin-token": TOKEN() } })
       .then(r => r.ok ? r.json() : [])
@@ -114,8 +209,12 @@ export function EmailSection() {
   }, []);
 
   const customers = customerStore.getAll();
-  const contactEmails = new Set(contacts.map(c => c.email));
-  const all: ContactEntry[] = [...contacts, ...customers.filter(c => !contactEmails.has(c.email)).map(c => ({ name: c.name, company: c.company, email: c.email }))];
+  const contactEmails = new Set([...contacts, ...crawlContacts].map(c => c.email));
+  const all: ContactEntry[] = [
+    ...contacts,
+    ...crawlContacts,
+    ...customers.filter(c => !contactEmails.has(c.email)).map(c => ({ name: c.name, company: c.company, email: c.email })),
+  ];
 
   const tpl = TEMPLATES[templateIdx];
   const toggleAll = () => setSelected(selected.size === all.length ? new Set() : new Set(all.map(a => a.email)));
@@ -150,11 +249,125 @@ export function EmailSection() {
     } finally { setSending(null); }
   };
 
+  const doCrawl = async () => {
+    if (!crawlUrl.trim()) return;
+    setCrawling(true);
+    setCrawlResult([]);
+    setCrawlError("");
+    try {
+      const res = await fetch("/api/crawl-emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-token": TOKEN() },
+        body: JSON.stringify({ url: crawlUrl.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setCrawlError(data.error || "エラーが発生しました"); return; }
+      setCrawlResult(data.emails || []);
+    } catch { setCrawlError("ネットワークエラー"); }
+    finally { setCrawling(false); }
+  };
+
+  const addCrawledEmail = (email: string) => {
+    if (crawlContacts.some(c => c.email === email)) return;
+    const entry: ContactEntry = { name: "担当者", company: new URL(crawlUrl.startsWith("http") ? crawlUrl : `https://${crawlUrl}`).hostname, email };
+    setCrawlContacts(prev => [...prev, entry]);
+  };
+
+  const addAllCrawled = () => {
+    const existing = new Set([...contacts, ...crawlContacts].map(c => c.email));
+    const newOnes = crawlResult
+      .filter(e => !existing.has(e))
+      .map(email => ({ name: "担当者", company: new URL(crawlUrl.startsWith("http") ? crawlUrl : `https://${crawlUrl}`).hostname, email } as ContactEntry));
+    setCrawlContacts(prev => [...prev, ...newOnes]);
+  };
+
+  const removeCrawlContact = (email: string) => setCrawlContacts(prev => prev.filter(c => c.email !== email));
+
   const html = preview ? buildHtml(preview.name, preview.company, getSubject(), getBody(preview)) : "";
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-black">メール営業</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-black">メール営業</h2>
+        <button
+          onClick={() => setShowCrawl(v => !v)}
+          className={`flex items-center gap-2 text-xs font-bold px-3 py-2 border transition-colors ${showCrawl ? "border-cyan-400/50 text-cyan-400 bg-cyan-400/5" : "border-white/10 text-gray-500 hover:text-white"}`}
+        >
+          <Globe className="w-3.5 h-3.5" /> メールクロール
+        </button>
+      </div>
+
+      {/* Crawl panel */}
+      {showCrawl && (
+        <div className="border border-cyan-400/20 bg-cyan-400/3 p-4 flex flex-col gap-3">
+          <p className="text-[10px] text-cyan-400/70 tracking-widest uppercase font-bold">— ウェブサイトからメールアドレスを抽出</p>
+          <div className="flex gap-2">
+            <input
+              value={crawlUrl}
+              onChange={e => setCrawlUrl(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && doCrawl()}
+              placeholder="https://example.co.jp または example.co.jp"
+              className="flex-1 bg-white/5 border border-white/10 text-sm text-white px-3 py-2 outline-none focus:border-cyan-400/50 placeholder-gray-600"
+            />
+            <button
+              onClick={doCrawl}
+              disabled={crawling || !crawlUrl.trim()}
+              className="flex items-center gap-2 text-xs font-bold px-4 py-2 bg-cyan-400 text-black hover:bg-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {crawling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
+              {crawling ? "クロール中…" : "クロール"}
+            </button>
+          </div>
+
+          {crawlError && <p className="text-xs text-red-400">{crawlError}</p>}
+
+          {crawlResult.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-gray-400">{crawlResult.length}件のメールアドレスを検出</p>
+                <button onClick={addAllCrawled} className="text-[10px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1"><Plus className="w-3 h-3" />全て追加</button>
+              </div>
+              <div className="max-h-40 overflow-y-auto border border-white/10 divide-y divide-white/5">
+                {crawlResult.map(email => {
+                  const added = crawlContacts.some(c => c.email === email);
+                  return (
+                    <div key={email} className="flex items-center justify-between px-3 py-1.5">
+                      <span className="text-xs text-gray-300 font-mono">{email}</span>
+                      <button
+                        onClick={() => addCrawledEmail(email)}
+                        disabled={added}
+                        className={`text-[10px] px-2 py-0.5 border transition-colors ${added ? "border-green-400/30 text-green-400 cursor-default" : "border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/5"}`}
+                      >
+                        {added ? "追加済" : "追加"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {crawlResult.length === 0 && !crawling && crawlUrl && !crawlError && (
+            <p className="text-xs text-gray-600">URLを入力してクロールボタンを押してください</p>
+          )}
+
+          {/* Crawl-added contacts */}
+          {crawlContacts.length > 0 && (
+            <div>
+              <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-1">クロール追加済み（{crawlContacts.length}件）</p>
+              <div className="flex flex-col gap-1">
+                {crawlContacts.map(c => (
+                  <div key={c.email} className="flex items-center justify-between bg-white/3 border border-white/5 px-3 py-1.5">
+                    <span className="text-xs text-gray-400 font-mono">{c.email}</span>
+                    <button onClick={() => removeCrawlContact(c.email)} className="text-gray-600 hover:text-red-400"><Trash2 className="w-3 h-3" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="grid grid-cols-5 gap-6">
         {/* Left: template + list */}
         <div className="col-span-2 flex flex-col gap-4">
@@ -190,6 +403,7 @@ export function EmailSection() {
                     <p className="text-[10px] text-gray-500 truncate">{a.email}</p>
                   </div>
                   {sent.has(a.email) && <span className="text-[10px] text-green-400 flex-shrink-0">送信済</span>}
+                  {crawlContacts.some(c => c.email === a.email) && <span className="text-[10px] text-cyan-400/70 flex-shrink-0">CRL</span>}
                 </label>
               ))}
             </div>
@@ -233,7 +447,7 @@ export function EmailSection() {
               )}
 
               {mode === "preview" && (
-                <iframe srcDoc={html} className="w-full min-h-[320px] bg-white border border-white/10" title="preview" />
+                <iframe srcDoc={html} className="w-full min-h-[380px] bg-white border border-white/10" title="preview" />
               )}
 
               <div className="flex gap-3 pt-2">
