@@ -104,6 +104,25 @@ export const adminNewsStore = {
   },
 };
 
+// Agencies
+export type Agency = {
+  id: string; company: string; contact: string; email: string; phone: string;
+  region: string; commissionRate: number; dealCount: number;
+  status: "active" | "inactive" | "trial"; notes: string; createdAt: string;
+};
+export const agencyStore = {
+  getAll: (): Agency[] => getStore("sj_agencies"),
+  add: (d: Omit<Agency, "id" | "createdAt">): Agency => {
+    const item = { ...d, id: uid(), createdAt: new Date().toISOString() };
+    setStore("sj_agencies", [item, ...agencyStore.getAll()]);
+    return item;
+  },
+  update: (id: string, d: Partial<Agency>) => {
+    setStore("sj_agencies", agencyStore.getAll().map(a => a.id === id ? { ...a, ...d } : a));
+  },
+  delete: (id: string) => setStore("sj_agencies", agencyStore.getAll().filter(a => a.id !== id)),
+};
+
 // Visitor Log
 export type VisitorLog = {
   id: string; path: string; title: string; userAgent: string; referrer: string; ts: number;

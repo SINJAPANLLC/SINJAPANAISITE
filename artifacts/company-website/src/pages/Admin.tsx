@@ -11,7 +11,8 @@ import { UserLogSection } from "@/components/admin/UserLogSection";
 import { NewsSection } from "@/components/admin/NewsSection";
 import { ContactSection } from "@/components/admin/ContactSection";
 import { DownloadLeadSection } from "@/components/admin/DownloadLeadSection";
-import { Loader2, LogOut, TrendingUp, Users, FileText, Receipt, Search, Mail, Activity, Bell, MessageSquare, Download } from "lucide-react";
+import { AgencySection } from "@/components/admin/AgencySection";
+import { Loader2, LogOut, TrendingUp, Users, FileText, Receipt, Search, Mail, Activity, Bell, MessageSquare, Download, Handshake } from "lucide-react";
 
 const NAV = [
   { key: "revenue",   label: "収益",          Icon: TrendingUp },
@@ -24,6 +25,7 @@ const NAV = [
   { key: "news",      label: "お知らせ",       Icon: Bell },
   { key: "contact",   label: "お問い合わせ",   Icon: MessageSquare },
   { key: "downloads", label: "資料DLリード",   Icon: Download },
+  { key: "agency",    label: "代理店管理",     Icon: Handshake },
 ] as const;
 
 type NavKey = typeof NAV[number]["key"];
@@ -98,6 +100,7 @@ function Dashboard() {
       case "news":      return <NewsSection />;
       case "contact":   return <ContactSection />;
       case "downloads": return <DownloadLeadSection />;
+      case "agency":    return <AgencySection />;
     }
   };
 
