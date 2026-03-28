@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Hexagon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
@@ -31,11 +31,12 @@ export function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
-            <Hexagon className="w-8 h-8 text-primary group-hover:text-accent transition-colors duration-300" />
-            <span className="text-xl font-bold tracking-tighter">
-              NEXUS<span className="text-primary">.AI</span>
-            </span>
+          <a href="#" className="flex items-center group">
+            <img
+              src={`${import.meta.env.BASE_URL}images/logo-sinjapan.jpg`}
+              alt="SIN JAPAN AI"
+              className="h-8 w-auto object-contain"
+            />
           </a>
 
           {/* Desktop Nav */}

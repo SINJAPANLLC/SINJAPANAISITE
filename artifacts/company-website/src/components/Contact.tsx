@@ -68,7 +68,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">メールでのお問い合わせ</p>
-                  <p className="font-medium">contact@nexus-ai.example.com</p>
+                  <p className="font-medium">contact@sinjapan.work</p>
                 </div>
               </div>
             </div>
@@ -104,7 +104,7 @@ export function Contact() {
                     <div className="relative">
                       <Building2 className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
                       <Input 
-                        placeholder="株式会社NEXUS" 
+                        placeholder="株式会社〇〇" 
                         className="pl-10 h-12"
                         {...form.register("company")}
                       />
