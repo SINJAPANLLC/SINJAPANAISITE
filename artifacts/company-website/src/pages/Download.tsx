@@ -51,19 +51,6 @@ export default function Download() {
             </p>
           </div>
 
-          {/* Preview card */}
-          <div className="bg-gray-900 text-white p-6 mb-8 flex items-center gap-5">
-            <div className="w-20 h-28 bg-white/10 border border-white/20 flex flex-col items-center justify-center gap-2 flex-shrink-0">
-              <FileText className="w-6 h-6 text-gray-400" />
-              <span className="text-[9px] text-gray-500 font-bold tracking-widest">PDF</span>
-            </div>
-            <div>
-              <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-1">Document</p>
-              <p className="font-black text-lg mb-1">合同会社SIN JAPAN<br />会社・サービス紹介資料</p>
-              <p className="text-xs text-gray-400">2026年版 / 全8ページ / AI・DX支援サービス概要</p>
-            </div>
-          </div>
-
           {/* Form */}
           <form onSubmit={submit} className="bg-white border border-gray-100 p-8 flex flex-col gap-6">
             <p className="text-xs font-bold text-gray-400 tracking-widest uppercase border-b border-gray-100 pb-4">お客様情報</p>
