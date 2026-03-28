@@ -12,7 +12,7 @@ export function Footer() {
               <img
                 src={`${import.meta.env.BASE_URL}images/logo.jpg`}
                 alt="SIN JAPAN AI"
-                className="h-8 w-auto object-contain brightness-0 invert"
+                className="h-8 w-auto object-contain"
               />
             </a>
             <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
@@ -73,8 +73,8 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 text-xs text-gray-600">
           <p>© {new Date().getFullYear()} 合同会社SIN JAPAN. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-gray-400 transition-colors">プライバシーポリシー</a>
-            <a href="#" className="hover:text-gray-400 transition-colors">利用規約</a>
+            <a href="/privacy" className="hover:text-gray-400 transition-colors">プライバシーポリシー</a>
+            <a href="/terms" className="hover:text-gray-400 transition-colors">利用規約</a>
           </div>
         </div>
 
