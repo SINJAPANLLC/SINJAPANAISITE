@@ -17,12 +17,13 @@ export function Hero() {
             className="max-w-2xl flex flex-col gap-8"
           >
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-foreground">
-              <span className="whitespace-nowrap">AIを組織に実装し、</span><br />
+              <span className="whitespace-nowrap">AIを組織に実装し</span><br />
               <span className="whitespace-nowrap">持続可能な社会を創る</span>
             </h1>
             
             <p className="text-base md:text-lg text-gray-600 leading-relaxed font-medium border-l-4 border-black pl-4">
-              SIN JAPAN AIは、AIコンサルティング、AIシステム開発まで、企業のAI実装を一気通貫で伴走支援します。
+              SIN JAPAN AIは、AIコンサルティング、AIシステム開発まで<br />
+              企業のAI実装を一気通貫で伴走支援します。
             </p>
 
             <div className="flex flex-col gap-4 w-full max-w-md pt-4">
