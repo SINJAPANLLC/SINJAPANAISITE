@@ -105,11 +105,13 @@ export function Footer() {
             <ul className="flex flex-col gap-3 text-sm text-gray-400">
               {[
                 ["label.name",    t("footer.name")],
+                ["label.ceo",     "大谷 和哉"],
                 ["label.founded", t("footer.founded")],
                 ["label.address", t("footer.address")],
                 ["label.tel",     t("footer.tel")],
                 ["label.fax",     t("footer.fax")],
                 ["label.mail",    "info@sinjapan.jp"],
+                ["label.web",     "sinjapan.work"],
                 ["label.license", "関自貨第560号 / 14-ユ-302475"],
               ].map(([labelKey, val]) => (
                 <li key={labelKey} className="flex gap-4">

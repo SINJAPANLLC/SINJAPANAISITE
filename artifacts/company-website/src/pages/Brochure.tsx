@@ -164,7 +164,8 @@ export default function Brochure() {
               <div className="text-right text-xs text-gray-600 font-mono leading-relaxed">
                 <p>2026年3月</p>
                 <p>Ver. 1.0</p>
-                <p className="mt-1">info@sinjapan.jp</p>
+                <p className="mt-1">sinjapan.work</p>
+                <p>info@sinjapan.jp</p>
               </div>
             </div>
           </div>
@@ -202,7 +203,7 @@ export default function Brochure() {
                     ["社名", "合同会社SIN JAPAN"],
                     ["英文社名", "SIN JAPAN LLC"],
                     ["設立", "2024年"],
-                    ["代表", "—"],
+                    ["代表", "大谷 和哉"],
                     ["所在地", "神奈川県愛甲郡愛川町中津7287"],
                     ["TEL", "050-5526-9906 / 046-212-2325"],
                     ["FAX", "046-212-2326"],
@@ -402,7 +403,7 @@ export default function Brochure() {
                   ["Tel", "050-5526-9906 / 046-212-2325"],
                   ["Fax", "046-212-2326"],
                   ["Mail", "info@sinjapan.jp"],
-                  ["Web", "sinjapan.jp"],
+                  ["Web", "sinjapan.work"],
                   ["所在地", "神奈川県愛甲郡愛川町中津7287"],
                   ["許認可", "関自貨第560号 / 14-ユ-302475"],
                 ].map(([k, v]) => (
@@ -420,7 +421,7 @@ export default function Brochure() {
                   <div>
                     <p className="text-xs font-black mb-1">Webフォーム</p>
                     <p className="text-xs text-gray-400 leading-relaxed">サイトのお問い合わせフォームより、「無料相談希望」とご記入のうえ送信ください。</p>
-                    <p className="text-xs font-bold mt-2 text-gray-300">sinjapan.jp/#contact</p>
+                    <p className="text-xs font-bold mt-2 text-gray-300">sinjapan.work/#contact</p>
                   </div>
                   <div className="border-t border-white/5 pt-5">
                     <p className="text-xs font-black mb-1">お電話</p>
