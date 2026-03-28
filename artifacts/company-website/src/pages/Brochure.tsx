@@ -12,10 +12,8 @@ const SERVICES = [
     description: "企業の業務プロセスを分析し、最適なAIソリューションを選定・導入します。生成AI・LLMの活用から社内業務の自動化まで、現場に根付くAI実装を一貫してサポートします。",
     items: ["現状分析・課題整理", "AIツール選定・導入設計", "社内展開・定着支援", "効果測定・改善"],
     detail: "既製のAIツールを貴社の業務フローに最適な形で組み合わせます。ChatGPT Enterprise・Microsoft Copilot・Google Workspace AIなどのエンタープライズ向けツールから、業務特化型SaaSまで幅広く対応。導入後の定着支援と効果測定まで責任を持ってサポートします。",
-    suitable: ["AIを試してみたいが何から始めるべきかわからない", "特定業務の効率化を早期に実現したい", "社内にAIエンジニアがいない", "まずは低コストでROIを確認したい"],
+    suitable: ["AIを試してみたいが何から始めるべきかわからない", "特定業務の効率化を早期に実現したい", "社内にAIエンジニアがいない", "まずはROIを確認してから本格導入したい"],
     tools: ["ChatGPT Enterprise", "Microsoft Copilot", "Google Workspace AI", "Notion AI", "Salesforce Einstein", "HubSpot AI"],
-    price: "月額 ¥300,000〜",
-    period: "3〜6ヶ月",
   },
   {
     number: "02",
@@ -26,8 +24,6 @@ const SERVICES = [
     detail: "GPT-4・Claude・Geminiなどの最新LLMをベースに、貴社専用のファインチューニングやRAG（検索拡張生成）システムを構築します。既存の基幹システムとのシームレスな連携も得意領域です。アジャイル開発で素早く成果を出しながら、継続的に改善します。",
     suitable: ["競合優位性となるAIシステムを自社で保有したい", "既存システムにAI機能を追加したい", "独自データを活用した高精度モデルが必要", "長期的にAI資産を蓄積したい"],
     tools: ["GPT-4 / Claude / Gemini", "LangChain / LlamaIndex", "Pinecone / Chroma (ベクトルDB)", "AWS / GCP / Azure", "FastAPI / Next.js", "PostgreSQL / MongoDB"],
-    price: "¥2,000,000〜（要件による）",
-    period: "3ヶ月〜1年",
   },
 ];
 
@@ -140,7 +136,7 @@ const FLOW = [
 const FAQ = [
   {
     q: "費用の目安を教えてください",
-    a: "AI導入支援は月額30万円〜、AI開発は要件により200万円〜が目安です。初回のご相談・見積は無料ですので、まずはお気軽にご相談ください。予算に応じたスコープ調整も柔軟に対応します。",
+    a: "費用はご要望・業務規模・システム構成によって異なります。初回のご相談・お見積りは無料ですので、まずはお気軽にご連絡ください。予算に応じたスコープ調整も柔軟に対応します。",
   },
   {
     q: "社内にエンジニアやAI人材がいなくても大丈夫ですか？",
@@ -156,7 +152,7 @@ const FAQ = [
   },
   {
     q: "どのくらいの期間で成果が出ますか？",
-    a: "AI導入支援では最短1〜2ヶ月で初期成果が確認できるケースが多いです。AI開発は3ヶ月でPoCを完了し、6ヶ月で本番稼働が標準的なスケジュールです。スコープや複雑さによって異なります。",
+    a: "プロジェクトの規模・スコープによって異なりますが、できる限り早期に成果を出せるよう全力でサポートします。スケジュールはヒアリング後に具体的にご提案します。",
   },
   {
     q: "途中でスコープを変更できますか？",
@@ -425,15 +421,9 @@ export default function Brochure() {
                     ))}
                   </ul>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4">
-                      <p className="text-[9px] text-gray-400 font-bold tracking-wider mb-1">目安費用</p>
-                      <p className="text-sm font-black">{s.price}</p>
-                    </div>
-                    <div className="bg-gray-50 p-4">
-                      <p className="text-[9px] text-gray-400 font-bold tracking-wider mb-1">標準期間</p>
-                      <p className="text-sm font-black">{s.period}</p>
-                    </div>
+                  <div className="bg-gray-50 p-4">
+                    <p className="text-[9px] text-gray-400 font-bold tracking-wider mb-1">費用・期間</p>
+                    <p className="text-sm text-gray-600">ご要望・規模に応じて個別にお見積りします。まずはお気軽にご相談ください。</p>
                   </div>
                 </div>
 
@@ -620,33 +610,27 @@ export default function Brochure() {
               {
                 title: "AI業務自動化（書類処理・入力）",
                 scenario: "月間500時間の書類処理業務をAIで自動化",
-                cost: "¥500,000〜（導入費）+ 月額¥30万〜",
                 savings: [
                   ["人件費削減（500h × ¥3,000）", "月 ¥1,500,000"],
                   ["ミス・修正コスト削減", "月 ¥200,000"],
                   ["処理スピード向上による機会損失削減", "月 ¥300,000"],
                 ],
                 monthly: "月 ¥1,700,000",
-                roi: "約0.3ヶ月で回収",
               },
               {
                 title: "AIチャットボット（カスタマーサポート）",
                 scenario: "月間3,000件の問い合わせ対応を60%自動化",
-                cost: "¥1,500,000〜（開発費）+ 月額¥15万〜",
                 savings: [
                   ["オペレーター削減（2〜3名分）", "月 ¥600,000"],
                   ["深夜・休日対応コスト削減", "月 ¥200,000"],
                   ["対応品質向上による顧客維持", "月 ¥300,000"],
                 ],
                 monthly: "月 ¥1,100,000",
-                roi: "約1.4ヶ月で回収",
               },
             ].map(roi => (
               <div key={roi.title} className="border border-gray-100 p-8">
                 <h3 className="text-base font-black mb-2">{roi.title}</h3>
                 <p className="text-xs text-gray-500 mb-4 pb-4 border-b border-gray-100">{roi.scenario}</p>
-                <p className="text-[9px] text-gray-400 font-bold tracking-wider mb-2">初期・月額費用目安</p>
-                <p className="text-xs font-bold text-gray-700 mb-5">{roi.cost}</p>
                 <p className="text-[9px] text-gray-400 font-bold tracking-wider mb-3">想定削減効果</p>
                 <div className="flex flex-col gap-2 mb-5">
                   {roi.savings.map(([item, val]) => (
@@ -656,15 +640,9 @@ export default function Brochure() {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gray-50 p-4 text-center">
-                    <p className="text-[9px] text-gray-400 mb-1">月間削減合計</p>
-                    <p className="text-sm font-black">{roi.monthly}</p>
-                  </div>
-                  <div className="bg-gray-950 text-white p-4 text-center">
-                    <p className="text-[9px] text-gray-500 mb-1">投資回収</p>
-                    <p className="text-sm font-black text-gray-200">{roi.roi}</p>
-                  </div>
+                <div className="bg-gray-950 text-white p-4 text-center">
+                  <p className="text-[9px] text-gray-500 mb-1">月間削減効果合計（試算）</p>
+                  <p className="text-sm font-black text-gray-200">{roi.monthly}</p>
                 </div>
               </div>
             ))}
