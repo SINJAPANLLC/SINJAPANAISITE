@@ -38,7 +38,7 @@ export function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15, duration: 0.5 }}
-              className="bg-[#f8f9fa] p-10 flex flex-col gap-6 group hover:bg-white transition-colors duration-300"
+              className="bg-[#f8f9fa] p-6 sm:p-10 flex flex-col gap-6 group hover:bg-white transition-colors duration-300"
             >
               {/* Number */}
               <span className="text-xs font-bold tracking-[0.2em] text-gray-400">{feature.num}</span>

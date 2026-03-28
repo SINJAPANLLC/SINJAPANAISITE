@@ -38,7 +38,7 @@ export function Hero() {
   const stat2 = useCountUp(100, 1400);
 
   return (
-    <section className="relative pt-28 pb-10 md:pt-36 md:pb-16 bg-[#f8f9fa] min-h-screen flex flex-col justify-center overflow-hidden">
+    <section className="relative pt-28 pb-10 md:pt-36 md:pb-16 bg-[#f8f9fa] min-h-screen flex flex-col justify-center">
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
         <div className="flex items-center flex-1">
@@ -48,19 +48,18 @@ export function Hero() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-2xl flex flex-col gap-8"
+            className="w-full max-w-2xl flex flex-col gap-6 sm:gap-8"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-foreground">
-              <span className="whitespace-nowrap">AIを組織に実装し</span><br />
-              <span className="whitespace-nowrap">持続可能な社会を創る</span>
+            <h1 className="text-[1.85rem] sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.15] tracking-tight text-foreground">
+              AIを組織に実装し<br />
+              持続可能な社会を創る
             </h1>
             
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed font-medium border-l-4 border-black pl-4">
-              SIN JAPAN AIは、AIコンサルティング、AIシステム開発まで<br />
-              企業のAI実装を一気通貫で伴走支援します。
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed font-medium border-l-4 border-black pl-4">
+              SIN JAPAN AIは、AIコンサルティング、AIシステム開発まで、企業のAI実装を一気通貫で伴走支援します。
             </p>
 
-            <div className="flex flex-col gap-4 w-full max-w-md pt-4">
+            <div className="flex flex-col gap-4 w-full max-w-md pt-2 sm:pt-4">
               <Button
                 asChild
                 size="lg"

@@ -56,9 +56,7 @@ export function Contact() {
             className="lg:col-span-2 flex flex-col gap-8"
           >
             <p className="text-sm text-gray-500 leading-relaxed">
-              AI導入のご相談、サービスに関するご質問など、<br />
-              お気軽にお問い合わせください。<br />
-              専任担当者が丁寧にご対応いたします。
+              AI導入のご相談、サービスに関するご質問など、お気軽にお問い合わせください。専任担当者が丁寧にご対応いたします。
             </p>
 
             <div className="flex flex-col gap-6">

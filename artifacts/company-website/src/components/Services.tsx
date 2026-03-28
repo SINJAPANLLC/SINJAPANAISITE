@@ -42,7 +42,7 @@ export function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
               viewport={{ once: true }}
-              className="group border border-gray-200 bg-white hover:bg-gray-950 transition-colors duration-300 p-10 flex flex-col gap-8 cursor-pointer"
+              className="group border border-gray-200 bg-white hover:bg-gray-950 transition-colors duration-300 p-6 sm:p-10 flex flex-col gap-6 sm:gap-8 cursor-pointer"
             >
               {/* Number + Title */}
               <div className="flex items-start justify-between">
