@@ -46,14 +46,9 @@ export function CaseStudies() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-16">
-          <div>
-            <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-3">Case Studies</p>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900">導入事例</h2>
-          </div>
-          <a href="#contact" className="hidden md:flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors">
-            全件を見る <ArrowRight className="w-4 h-4" />
-          </a>
+        <div className="mb-16">
+          <p className="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-3">Case Studies</p>
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900">導入事例</h2>
         </div>
 
         {/* Cases */}
