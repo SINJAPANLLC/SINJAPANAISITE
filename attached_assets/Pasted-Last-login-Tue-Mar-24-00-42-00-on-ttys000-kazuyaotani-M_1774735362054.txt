@@ -1,0 +1,735 @@
+Last login: Tue Mar 24 00:42:00 on ttys000
+kazuyaotani@Mac ~ % ssh root@212.85.24.206
+root@212.85.24.206's password: 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-88-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Sat Mar 28 21:58:56 UTC 2026
+
+  System load:  0.02                Processes:             153
+  Usage of /:   15.6% of 192.69GB   Users logged in:       0
+  Memory usage: 26%                 IPv4 address for eth0: 212.85.24.206
+  Swap usage:   0%                  IPv6 address for eth0: 2a02:4780:59:cc86::1
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+21 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+13 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+1 updates could not be installed automatically. For more details,
+see /var/log/unattended-upgrades/unattended-upgrades.log
+
+*** System restart required ***
+Last login: Sat Mar 28 10:44:30 2026 from 59.132.57.148
+root@srv1087935:~# pm2 list
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 22 │ aiagent            │ fork     │ 19   │ online    │ 0%       │ 319.5mb  │
+│ 20 │ keimatch           │ fork     │ 4    │ online    │ 0%       │ 404.7mb  │
+│ 3  │ menz-esthe-town    │ fork     │ 0    │ online    │ 0%       │ 144.2mb  │
+│ 34 │ onlyu              │ fork     │ 84   │ online    │ 0%       │ 125.7mb  │
+│ 37 │ sinjapan-crm-api   │ fork     │ 0    │ online    │ 0%       │ 134.1mb  │
+│ 1  │ sinjapan-manager   │ fork     │ 0    │ online    │ 0%       │ 62.2mb   │
+│ 2  │ sinjapan-onlinesc… │ fork     │ 0    │ online    │ 0%       │ 103.3mb  │
+│ 25 │ sinjapanai         │ fork     │ 0    │ online    │ 0%       │ 112.2mb  │
+│ 30 │ sinjapanailive-api │ fork     │ 0    │ online    │ 0%       │ 117.3mb  │
+│ 38 │ tramatch           │ fork     │ 0    │ online    │ 0%       │ 212.1mb  │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@srv1087935:~# ss -tlnp | grep LISTEN
+LISTEN 0      511          0.0.0.0:443        0.0.0.0:*    users:(("nginx",pid=1482820,fd=6),("nginx",pid=1482819,fd=6),("nginx",pid=1482818,fd=6),("nginx",pid=1482817,fd=6),("nginx",pid=1452481,fd=6))               
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=1482820,fd=5),("nginx",pid=1482819,fd=5),("nginx",pid=1482818,fd=5),("nginx",pid=1482817,fd=5),("nginx",pid=1452481,fd=5))               
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=1282254,fd=3),("systemd",pid=1,fd=225))                                                                                                   
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=1425115,fd=17))                                                                                                                
+LISTEN 0      200        127.0.0.1:5432       0.0.0.0:*    users:(("postgres",pid=1428839,fd=7))                                                                                                                        
+LISTEN 0      511          0.0.0.0:20000      0.0.0.0:*    users:(("node",pid=1069101,fd=18))                                                                                                                           
+LISTEN 0      511          0.0.0.0:3009       0.0.0.0:*    users:(("node /var/www/a",pid=1393644,fd=20))                                                                                                                
+LISTEN 0      511          0.0.0.0:3001       0.0.0.0:*    users:(("node",pid=1485722,fd=20))                                                                                                                           
+LISTEN 0      511          0.0.0.0:5050       0.0.0.0:*    users:(("node /var/www/t",pid=1484066,fd=19))                                                                                                                
+LISTEN 0      511          0.0.0.0:5002       0.0.0.0:*    users:(("node /var/www/s",pid=1068713,fd=19))                                                                                                                
+LISTEN 0      511          0.0.0.0:5003       0.0.0.0:*    users:(("node /var/www/s",pid=1068719,fd=19))                                                                                                                
+LISTEN 0      2048         0.0.0.0:5000       0.0.0.0:*    users:(("python",pid=1255326,fd=6))                                                                                                                          
+LISTEN 0      2048         0.0.0.0:5006       0.0.0.0:*    users:(("python",pid=1255322,fd=6))                                                                                                                          
+LISTEN 0      511          0.0.0.0:5004       0.0.0.0:*    users:(("node /var/www/m",pid=1068731,fd=19))                                                                                                                
+LISTEN 0      511          0.0.0.0:5005       0.0.0.0:*    users:(("node /var/www/o",pid=1453288,fd=22))                                                                                                                
+LISTEN 0      2048         0.0.0.0:8008       0.0.0.0:*    users:(("gunicorn",pid=1242005,fd=5),("gunicorn",pid=1242004,fd=5),("gunicorn",pid=1242001,fd=5),("gunicorn",pid=1242000,fd=5),("gunicorn",pid=1241978,fd=5))
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=1425115,fd=15))                                                                                                                
+LISTEN 0      200            [::1]:5432          [::]:*    users:(("postgres",pid=1428839,fd=6))                                                                                                                        
+LISTEN 0      511             [::]:443           [::]:*    users:(("nginx",pid=1482820,fd=7),("nginx",pid=1482819,fd=7),("nginx",pid=1482818,fd=7),("nginx",pid=1482817,fd=7),("nginx",pid=1452481,fd=7))               
+LISTEN 0      511             [::]:80            [::]:*    users:(("nginx",pid=1482820,fd=8),("nginx",pid=1482819,fd=8),("nginx",pid=1482818,fd=8),("nginx",pid=1482817,fd=8),("nginx",pid=1452481,fd=8))               
+LISTEN 0      4096            [::]:22            [::]:*    users:(("sshd",pid=1282254,fd=4),("systemd",pid=1,fd=226))                                                                                                   
+LISTEN 0      511                *:3010             *:*    users:(("node /opt/sinja",pid=1348383,fd=20))                                                                                                                
+LISTEN 0      511                *:4111             *:*    users:(("node /var/www/s",pid=1392684,fd=20))                                                                                                                
+LISTEN 0      511                *:8099             *:*    users:(("node",pid=1452695,fd=20))                                                                                                                           
+LISTEN 0      4096               *:7880             *:*    users:(("livekit-server",pid=1445508,fd=6))                                                                                                                  
+LISTEN 0      4096               *:7881             *:*    users:(("livekit-server",pid=1445508,fd=3))                                                                                                                  
+root@srv1087935:~# pm2 show sinjapanai
+ Describing process with id 25 - name sinjapanai 
+┌───────────────────┬─────────────────────────────────────────────────────┐
+│ status            │ online                                              │
+│ name              │ sinjapanai                                          │
+│ namespace         │ default                                             │
+│ version           │ 0.0.0                                               │
+│ restarts          │ 0                                                   │
+│ uptime            │ 10D                                                 │
+│ script path       │ /opt/sinjapanai/artifacts/api-server/dist/index.cjs │
+│ script args       │ N/A                                                 │
+│ error log path    │ /root/.pm2/logs/sinjapanai-error.log                │
+│ out log path      │ /root/.pm2/logs/sinjapanai-out.log                  │
+│ pid path          │ /root/.pm2/pids/sinjapanai-25.pid                   │
+│ interpreter       │ /root/.nvm/versions/node/v20.20.0/bin/node          │
+│ interpreter args  │ N/A                                                 │
+│ script id         │ 25                                                  │
+│ exec cwd          │ /opt/sinjapanai                                     │
+│ exec mode         │ fork_mode                                           │
+│ node.js version   │ 20.20.0                                             │
+│ node env          │ production                                          │
+│ watch & reload    │ ✘                                                   │
+│ unstable restarts │ 0                                                   │
+│ created at        │ 2026-03-18T06:06:00.511Z                            │
+└───────────────────┴─────────────────────────────────────────────────────┘
+ Actions available 
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger sinjapanai <action_name>
+
+ Code metrics value 
+┌────────────────────────┬───────────┐
+│ Used Heap Size         │ 32.68 MiB │
+│ Heap Usage             │ 90.47 %   │
+│ Heap Size              │ 36.13 MiB │
+│ Event Loop Latency p95 │ 1.52 ms   │
+│ Event Loop Latency     │ 0.55 ms   │
+│ Active handles         │ 4         │
+│ Active requests        │ 0         │
+│ HTTP                   │ 0 req/min │
+│ HTTP P95 Latency       │ 11 ms     │
+│ HTTP Mean Latency      │ 2 ms      │
+└────────────────────────┴───────────┘
+ Divergent env variables from local env 
+┌────────────────┬──────────────────────┐
+│ PWD            │ /opt/sinjapanai      │
+│ SSH_CONNECTION │ 182.249.40.177 56584 │
+│ XDG_SESSION_ID │ 18058                │
+│ SSH_CLIENT     │ 182.249.40.177 56584 │
+└────────────────┴──────────────────────┘
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs sinjapanai [--lines 1000]` to display logs
+ Use `pm2 env 25` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage sinjapanai
+root@srv1087935:~# ls /etc/nginx/sites-enabled/ && cat /etc/nginx/sites-enabled/*
+ad-aiagent       shortmovie-aiagent         sinjapanailive    youtube-ai
+keimatch         sinjapan-manager           sinjapancrm.site
+menz-esthe-town  sinjapan-onlineschool.com  tramatch
+onlyu            sinjapanai                 worknow
+server {
+    listen 80;
+    server_name ad-aiagent.site www.ad-aiagent.site;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/letsencrypt;
+    }
+
+    location / {
+        return 301 https://ad-aiagent.site$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name ad-aiagent.site www.ad-aiagent.site;
+
+    ssl_certificate /etc/letsencrypt/live/ad-aiagent.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/ad-aiagent.site/privkey.pem;
+
+    client_max_body_size 50M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3009;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 120s;
+        proxy_send_timeout 120s;
+    }
+}
+server {
+    server_name keimatch-sinjapan.com www.keimatch-sinjapan.com;
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        client_max_body_size 10M;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/keimatch-sinjapan.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/keimatch-sinjapan.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.keimatch-sinjapan.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = keimatch-sinjapan.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name keimatch-sinjapan.com www.keimatch-sinjapan.com;
+    return 404; # managed by Certbot
+
+
+
+
+}server {
+    listen 443 ssl;
+    server_name menz-esthe-town.com 212.85.24.206;
+
+    client_max_body_size 10M;
+
+    ssl_certificate /etc/letsencrypt/live/menz-esthe-town.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/menz-esthe-town.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        allow all;
+    }
+
+    location /uploads/ {
+        alias /var/www/menz-esthe-town/uploads/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location / {
+        proxy_pass http://localhost:25000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+server {
+    listen 80;
+    server_name menz-esthe-town.com ;
+
+    if ($host = menz-esthe-town.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    return 404;
+}
+server {
+    listen 80;
+    server_name only-u.fun www.only-u.fun;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name only-u.fun www.only-u.fun;
+
+    ssl_certificate /etc/letsencrypt/live/only-u.fun/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/only-u.fun/privkey.pem;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    client_max_body_size 500M;
+
+    location /rtc {
+        proxy_pass http://127.0.0.1:7880;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_read_timeout 86400;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:5005;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_connect_timeout 600;
+        proxy_send_timeout 600;
+        proxy_read_timeout 600;
+        send_timeout 600;
+    }
+}
+server {
+    server_name shortmovie-aiagent-sinjapan.site;
+
+    client_max_body_size 500M;
+
+    location / {
+        proxy_pass http://127.0.0.1:5006;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;
+        proxy_connect_timeout 300s;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/shortmovie-aiagent-sinjapan.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/shortmovie-aiagent-sinjapan.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = shortmovie-aiagent-sinjapan.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name shortmovie-aiagent-sinjapan.site;
+    return 404; # managed by Certbot
+
+
+}server {
+server_name *.sinjapan-manager.com sinjapan-manager.com www.sinjapan-manager.com;
+    root /var/www/sinjapan-manager/dist/public;
+    index index.html;
+    add_header Cache-Control "no-cache, no-store, must-revalidate";
+    add_header Pragma "no-cache";
+    add_header Expires "0";
+
+    location /uploads {
+        alias /var/www/sinjapan-manager/uploads;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /api {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /articles {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /sitemap.xml {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /rss.xml {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location = /robots.txt {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    listen [::]:443 ssl;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/sinjapan-manager.com-0001/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/sinjapan-manager.com-0001/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name *.sinjapan-manager.com sinjapan-manager.com www.sinjapan-manager.com;
+    return 301 https://$host$request_uri;
+}
+server {
+    listen 80;
+    server_name sinjapan-onlineschool.com www.sinjapan-onlineschool.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name sinjapan-onlineschool.com www.sinjapan-onlineschool.com;
+
+    ssl_certificate /etc/letsencrypt/live/sinjapan-onlineschool.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/sinjapan-onlineschool.com/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:5003;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+server {
+    server_name sinjapanai.com www.sinjapanai.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3010;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+        client_max_body_size 50m;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sinjapanai.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sinjapanai.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.sinjapanai.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = sinjapanai.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name sinjapanai.com www.sinjapanai.com;
+    return 404; # managed by Certbot
+
+
+
+
+}server {
+    server_name sinjapanailive.site www.sinjapanailive.site;
+
+    root /var/www/sinjapanailive/artifacts/lp/dist/public;
+    index index.html;
+
+    location /api/ {
+        client_max_body_size 200m;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_pass         http://127.0.0.1:4111/api/;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection "upgrade";
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_buffering    off;
+        proxy_cache        off;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/javascript;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sinjapanailive.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sinjapanailive.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+server {
+    server_name app.sinjapanailive.site;
+
+    root /var/www/sinjapanailive/artifacts/ai-live/dist/public;
+    index index.html;
+
+    location /api/ {
+        client_max_body_size 200m;
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_pass         http://127.0.0.1:4111/api/;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection "upgrade";
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+        proxy_buffering    off;
+        proxy_cache        off;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/javascript;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app.sinjapanailive.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app.sinjapanailive.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = www.sinjapanailive.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = sinjapanailive.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name sinjapanailive.site www.sinjapanailive.site;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+server {
+    if ($host = app.sinjapanailive.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name app.sinjapanailive.site;
+    return 404; # managed by Certbot
+
+
+}server {
+    server_name sinjapancrm.site www.sinjapancrm.site;
+
+    root /var/www/sinjapancrm/artifacts/line-crm/dist/public;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://localhost:8099;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location /webhook {
+        proxy_pass http://localhost:8099;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sinjapancrm.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sinjapancrm.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.sinjapancrm.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = sinjapancrm.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name sinjapancrm.site www.sinjapancrm.site;
+    return 404; # managed by Certbot
+
+
+
+
+}server {
+    server_name tramatch-sinjapan.com www.tramatch-sinjapan.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:5050;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        client_max_body_size 10M;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/tramatch-sinjapan.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/tramatch-sinjapan.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.tramatch-sinjapan.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = tramatch-sinjapan.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name tramatch-sinjapan.com www.tramatch-sinjapan.com;
+    return 404; # managed by Certbot
+
+
+
+
+}server {
+    listen 80;
+    server_name sinjapan-worknow.com www.sinjapan-worknow.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name sinjapan-worknow.com www.sinjapan-worknow.com;
+
+    ssl_certificate /etc/letsencrypt/live/sinjapan-worknow.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/sinjapan-worknow.com/privkey.pem;
+
+    root /var/www/worknow/frontend/dist;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~ ^/(auth|jobs|applications|assignments|payments|reviews|notifications|admin|client|files|phone|favorites|job-notifications|qr|penalties|workers|activities|messages|health) {
+        proxy_pass http://localhost:8008;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    client_max_body_size 20M;
+}
+server {
+    server_name youtube-aiagent-sinjapan.fun;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 300s;
+        proxy_connect_timeout 300s;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/youtube-aiagent-sinjapan.fun/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/youtube-aiagent-sinjapan.fun/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = youtube-aiagent-sinjapan.fun) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name youtube-aiagent-sinjapan.fun;
+    return 404; # managed by Certbot
+
+
+root@srv1087935:~# cat /etc/nginx/sites-enabled/sinjapanai.site 2>/dev/null || cat /etc/nginx/sites-enabled/sinjapanaisite 2>/dev/null || ls /etc/nginx/sites-enabled/
+ad-aiagent       shortmovie-aiagent         sinjapanailive    youtube-ai
+keimatch         sinjapan-manager           sinjapancrm.site
+menz-esthe-town  sinjapan-onlineschool.com  tramatch
+onlyu            sinjapanai                 worknow
+root@srv1087935:~# 
