@@ -83,9 +83,9 @@ export function Hero() {
                   <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
                   <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
                 </svg>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-5xl md:text-6xl font-black text-gray-900">500</span>
-                  <span className="text-xl font-bold text-gray-900">社以上</span>
+                <div style={{ display: 'inline-flex', alignItems: 'flex-end', gap: '2px' }}>
+                  <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827' }}>500</span>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 700, lineHeight: 1, color: '#111827', marginBottom: '3px' }}>社以上</span>
                 </div>
                 {/* Laurel Right */}
                 <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
@@ -116,9 +116,9 @@ export function Hero() {
                   <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
                   <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
                 </svg>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-5xl md:text-6xl font-black text-gray-900">100</span>
-                  <span className="text-xl font-bold text-gray-900">%</span>
+                <div style={{ display: 'inline-flex', alignItems: 'flex-end', gap: '2px' }}>
+                  <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827' }}>100</span>
+                  <span style={{ fontSize: '1.25rem', fontWeight: 700, lineHeight: 1, color: '#111827', marginBottom: '3px' }}>%</span>
                 </div>
                 {/* Laurel Right */}
                 <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
