@@ -17,12 +17,11 @@ export function Hero() {
             className="max-w-2xl"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-4 leading-[1.2] tracking-tight text-foreground">
-              AIで持続可能な<br />
-              未来の社会を創る
+              AIを組織に実装し、<br />持続可能な社会を創る
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 font-medium tracking-wider">
-              GenerativeAI deployment company
+            <p className="text-lg md:text-xl text-muted-foreground mb-10 font-medium leading-relaxed">
+              SIN JAPAN AIは、AIコンサルティング、AIシステム開発まで、企業のAI実装を一気通貫で伴走支援します。
             </p>
 
             <div className="flex flex-col gap-4 w-full max-w-md">
