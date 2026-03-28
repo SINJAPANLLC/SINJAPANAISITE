@@ -1,8 +1,42 @@
 import { motion } from "framer-motion";
 import { Download, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+
+function useCountUp(target: number, duration: number = 1500) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStarted(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [started, target, duration]);
+
+  return { count, ref };
+}
 
 export function Hero() {
+  const stat1 = useCountUp(500, 1800);
+  const stat2 = useCountUp(100, 1400);
+
   return (
     <section className="relative pt-28 pb-10 md:pt-36 md:pb-16 bg-[#f8f9fa] min-h-screen flex flex-col justify-center overflow-hidden">
       
@@ -49,11 +83,11 @@ export function Hero() {
             </div>
           </motion.div>
 
-
         </div>
 
         {/* Stats Bar */}
         <motion.div
+          ref={stat1.ref as React.RefObject<HTMLDivElement>}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8 }}
@@ -73,29 +107,11 @@ export function Hero() {
             {/* Stat 1 */}
             <div className="md:flex-1 flex flex-col items-center gap-1 md:px-10">
               <p className="text-xs text-gray-500 font-medium tracking-wide">導入企業数 *</p>
-              <div className="flex items-center gap-3">
-                {/* Laurel Left */}
-                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
-                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
-                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
-                </svg>
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827', display: 'block' }}>500</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', position: 'absolute', left: '100%', bottom: 0, whiteSpace: 'nowrap', paddingLeft: '3px' }}>社以上</span>
-                </div>
-                {/* Laurel Right */}
-                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
-                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
-                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
-                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
-                </svg>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827', display: 'block' }}>
+                  {stat1.count}
+                </span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', position: 'absolute', left: '100%', bottom: 0, whiteSpace: 'nowrap', paddingLeft: '3px' }}>社以上</span>
               </div>
               <p className="text-[10px] text-gray-400 mt-1">※2026年2月時点</p>
             </div>
@@ -104,31 +120,13 @@ export function Hero() {
             <div className="hidden md:block w-px h-20 bg-gray-200" />
 
             {/* Stat 2 */}
-            <div className="md:flex-1 flex flex-col items-center gap-1 md:px-10">
+            <div ref={stat2.ref as React.RefObject<HTMLDivElement>} className="md:flex-1 flex flex-col items-center gap-1 md:px-10">
               <p className="text-xs text-gray-500 font-medium tracking-wide">利用企業満足度 *</p>
-              <div className="flex items-center gap-3">
-                {/* Laurel Left */}
-                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
-                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
-                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
-                </svg>
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827', display: 'block' }}>100</span>
-                  <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', position: 'absolute', left: '100%', bottom: 0, whiteSpace: 'nowrap', paddingLeft: '3px' }}>%</span>
-                </div>
-                {/* Laurel Right */}
-                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
-                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
-                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
-                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
-                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
-                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
-                </svg>
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <span style={{ fontSize: '3.75rem', fontWeight: 900, lineHeight: 1, color: '#111827', display: 'block' }}>
+                  {stat2.count}
+                </span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', position: 'absolute', left: '100%', bottom: 0, whiteSpace: 'nowrap', paddingLeft: '3px' }}>%</span>
               </div>
               <p className="text-[10px] text-gray-400 mt-1">利用企業へのアンケート調査より</p>
             </div>
