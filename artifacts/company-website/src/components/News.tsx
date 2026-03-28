@@ -3,24 +3,9 @@ import { ArrowRight } from "lucide-react";
 
 const NEWS_ITEMS = [
   {
-    date: "2026.03.15",
-    category: "プレスリリース",
-    title: "SIN JAPAN AI、シリーズAラウンドにて5億円の資金調達を実施",
-  },
-  {
-    date: "2026.02.28",
-    category: "サービス",
-    title: "AI導入支援パッケージ「AI QUICK START」の提供を開始",
-  },
-  {
-    date: "2026.02.10",
-    category: "受賞",
-    title: "「AI PRODUCTS NEXT AI TREND 2026」AIエージェント部門を受賞",
-  },
-  {
-    date: "2026.01.20",
-    category: "導入事例",
-    title: "大手製造メーカーへの生産ライン異常検知AI導入事例を公開",
+    date: "2026.03.28",
+    category: "お知らせ",
+    title: "ホームページをリニューアルしました",
   },
 ];
 
