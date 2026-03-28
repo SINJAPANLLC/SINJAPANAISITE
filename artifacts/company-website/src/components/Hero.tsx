@@ -52,6 +52,89 @@ export function Hero() {
 
         </div>
 
+        {/* Stats Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="border-t border-gray-200 mt-16 pt-10 pb-4"
+        >
+          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-0">
+            {/* Left Text */}
+            <div className="md:w-1/3 md:pr-12">
+              <p className="text-xl md:text-2xl font-black text-gray-900 leading-snug">
+                業種・規模を問わず、<br />全国の法人が導入中
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden md:block w-px h-20 bg-gray-200" />
+
+            {/* Stat 1 */}
+            <div className="md:flex-1 flex flex-col items-center gap-1 md:px-10">
+              <p className="text-xs text-gray-500 font-medium tracking-wide">導入企業数 *</p>
+              <div className="flex items-center gap-3">
+                {/* Laurel Left */}
+                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
+                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
+                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
+                </svg>
+                <div className="text-center">
+                  <span className="text-5xl md:text-6xl font-black text-gray-900">500</span>
+                  <span className="text-xl font-bold text-gray-900">社以上</span>
+                </div>
+                {/* Laurel Right */}
+                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
+                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
+                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
+                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
+                </svg>
+              </div>
+              <p className="text-[10px] text-gray-400 mt-1">※2026年2月時点</p>
+            </div>
+
+            {/* Divider */}
+            <div className="hidden md:block w-px h-20 bg-gray-200" />
+
+            {/* Stat 2 */}
+            <div className="md:flex-1 flex flex-col items-center gap-1 md:px-10">
+              <p className="text-xs text-gray-500 font-medium tracking-wide">利用企業満足度 *</p>
+              <div className="flex items-center gap-3">
+                {/* Laurel Left */}
+                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
+                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
+                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
+                </svg>
+                <div className="text-center">
+                  <span className="text-5xl md:text-6xl font-black text-gray-900">100</span>
+                  <span className="text-xl font-bold text-gray-900">%</span>
+                </div>
+                {/* Laurel Right */}
+                <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg" style={{transform: 'scaleX(-1)'}}>
+                  <path d="M16 44 C8 36 4 26 6 16 C8 8 12 4 16 4" stroke="#C9A84C" strokeWidth="1.5" fill="none"/>
+                  <ellipse cx="8" cy="12" rx="5" ry="3" transform="rotate(-30 8 12)" fill="#C9A84C" opacity="0.8"/>
+                  <ellipse cx="6" cy="20" rx="5" ry="3" transform="rotate(-20 6 20)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="6" cy="28" rx="5" ry="3" transform="rotate(-10 6 28)" fill="#C9A84C" opacity="0.9"/>
+                  <ellipse cx="8" cy="36" rx="5" ry="3" transform="rotate(5 8 36)" fill="#C9A84C" opacity="0.85"/>
+                  <ellipse cx="12" cy="42" rx="5" ry="3" transform="rotate(20 12 42)" fill="#C9A84C" opacity="0.8"/>
+                </svg>
+              </div>
+              <p className="text-[10px] text-gray-400 mt-1">利用企業へのアンケート調査より</p>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );
