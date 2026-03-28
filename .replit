@@ -30,3 +30,6 @@ timeoutMs = 20000
 [userenv.shared]
 VITE_ADMIN_EMAIL = "info@sinjapan.jp"
 VITE_ADMIN_PASSWORD = "Kazuya8008"
+PRODUCTION_DOMAIN = "sinjapanai.site"
+VITE_PRODUCTION_DOMAIN = "sinjapanai.site"
+NODE_ENV = "development"
