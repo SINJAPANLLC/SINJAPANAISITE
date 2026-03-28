@@ -52,22 +52,22 @@ function StatItem({ target, suffix, label, note, delay, noComma }: {
       className="flex flex-col items-center justify-center text-center px-4 py-8"
     >
       <div className="flex items-baseline mb-3 gap-1">
-        <span className="text-5xl md:text-6xl font-black tracking-tighter text-gray-800 tabular-nums">
+        <span className="text-5xl md:text-6xl font-black tracking-tighter tabular-nums" style={{ color: '#b0b8c1' }}>
           {noComma ? count.toString() : count.toLocaleString()}
         </span>
         <span className="text-2xl font-bold text-gray-400">{suffix}</span>
       </div>
-      <span className="text-sm font-bold text-gray-500 tracking-wider mb-1">{label}</span>
-      <span className="text-[10px] text-gray-400">{note}</span>
+      <span className="text-sm font-bold text-gray-400 tracking-wider mb-1">{label}</span>
+      <span className="text-[10px] text-gray-600">{note}</span>
     </motion.div>
   );
 }
 
 export function Stats() {
   return (
-    <section id="stats" className="py-24 bg-gray-100 border-t border-gray-200">
+    <section id="stats" className="py-24 bg-gray-950 border-t border-white/5">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-300">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
           {STATS.map((stat, i) => (
             <StatItem key={i} {...stat} delay={i} />
           ))}
