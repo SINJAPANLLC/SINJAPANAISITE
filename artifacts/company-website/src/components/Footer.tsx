@@ -9,7 +9,7 @@ export function Footer() {
           {/* Logo & tagline */}
           <div className="md:col-span-5">
             <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-              AIを組織に実装し、<br />持続可能な社会を創る。
+              AIを組織に実装し、持続可能な社会を創る。
             </p>
           </div>
 
