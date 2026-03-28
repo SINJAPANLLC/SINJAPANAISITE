@@ -49,8 +49,20 @@ export function Footer() {
                 <span>神奈川県愛甲郡愛川町中津7287</span>
               </li>
               <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">Tel</span>
+                <span>050-5526-9906 / 046-212-2325</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">Fax</span>
+                <span>046-212-2326</span>
+              </li>
+              <li className="flex gap-4">
                 <span className="text-gray-600 flex-shrink-0 w-12">Mail</span>
                 <span>info@sinjapan.jp</span>
+              </li>
+              <li className="flex gap-4">
+                <span className="text-gray-600 flex-shrink-0 w-12">許認可</span>
+                <span>関自貨第560号 / 14-ユ-302475</span>
               </li>
             </ul>
           </div>

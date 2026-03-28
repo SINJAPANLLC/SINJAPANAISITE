@@ -63,6 +63,15 @@ export function Contact() {
 
             <div className="flex flex-col gap-6">
               <div className="border-l-2 border-gray-200 pl-4">
+                <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Tel</p>
+                <p className="text-sm font-bold text-gray-800">050-5526-9906</p>
+                <p className="text-sm font-bold text-gray-800">046-212-2325</p>
+              </div>
+              <div className="border-l-2 border-gray-200 pl-4">
+                <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Fax</p>
+                <p className="text-sm font-bold text-gray-800">046-212-2326</p>
+              </div>
+              <div className="border-l-2 border-gray-200 pl-4">
                 <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Email</p>
                 <p className="text-sm font-bold text-gray-800">info@sinjapan.jp</p>
               </div>
