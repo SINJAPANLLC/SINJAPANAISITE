@@ -91,6 +91,25 @@ Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used b
 
 Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
 
+### `artifacts/company-website` (`@workspace/company-website`)
+
+Vite + React SPA — 合同会社SIN JAPAN コーポレートサイト + 管理ダッシュボード。
+
+- **公開ページ**: /, /privacy, /terms, /download (資料DL), /brochure (会社案内), /column (AIコラム一覧), /column/:slug (個別記事)
+- **管理ダッシュボード**: /admin (認証要) — 10セクション
+  1. 収益管理 (localStorage)
+  2. 顧客管理 (localStorage)
+  3. 見積もり — HTMLプレビュー + メール送信
+  4. 請求書 — HTMLプレビュー + メール送信
+  5. SEOコラム — AI自動生成 (毎日7時JST) + 手動生成 + 管理
+  6. メール営業 — テンプレート選択 + AIリライト + HTMLプレビュー + 送信
+  7. ユーザーログ — IP位置情報付きアクセス解析
+  8. お知らせ管理 — DB連動、HP即時反映
+  9. お問い合わせ — Neon DB + 返信モーダル (HTMLプレビュー + 送信)
+  10. 資料DLリード — Neon DB + フォローアップメール
+- **VisitorTracker**: ページ訪問時に /api/track を呼び出し、IPジオロケーション付きで記録
+- Admin認証: VITE_ADMIN_PASSWORD (Kazuya8008), ログインメール: info@sinjapan.jp
+
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.

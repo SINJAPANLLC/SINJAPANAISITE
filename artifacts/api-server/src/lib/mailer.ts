@@ -106,7 +106,7 @@ export function contactAutoReplyHtml(name: string) {
       <p style="font-size:11px;color:#9ca3af;margin:0;line-height:1.8;">
         Tel: 050-5526-9906<br>
         Mail: info@sinjapanai.site<br>
-        Web: sinjapan.work
+        Web: sinjapanai.site
       </p>
     </div>
     <p style="font-size:11px;color:#9ca3af;margin:0;">© 2026 合同会社SIN JAPAN. All rights reserved.</p>
