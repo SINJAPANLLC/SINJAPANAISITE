@@ -45,6 +45,37 @@ function filterEmails(raw: string[]): string[] {
   });
 }
 
+function extractCompanyName(html: string, siteUrl: string): string {
+  // Try <title> tag first
+  const titleM = html.match(/<title[^>]*>([^<]{2,80})<\/title>/i);
+  if (titleM) {
+    let t = titleM[1]
+      .replace(/\s*[\|｜\-–—:：]\s*.*/u, "")  // strip "– Company Site" suffixes
+      .replace(/\s*(株式会社|合同会社|有限会社|一般社団法人|特定非営利活動法人|NPO法人)/g, (_, s) => s)
+      .replace(/^(株式会社|合同会社|有限会社)\s*/, (m) => m)
+      .replace(/\s+/g, " ")
+      .trim();
+    // Remove obvious generic titles
+    if (t.length >= 2 && !/(top|home|index|ホーム|トップ|official|公式)/i.test(t)) {
+      return t.slice(0, 40);
+    }
+  }
+
+  // Fall back to og:site_name
+  const ogSite = html.match(/property=["']og:site_name["'][^>]*content=["']([^"']{2,60})["']/i)
+    || html.match(/content=["']([^"']{2,60})["'][^>]*property=["']og:site_name["']/i);
+  if (ogSite) return ogSite[1].trim().slice(0, 40);
+
+  // Fall back to domain (e.g. example.co.jp → example)
+  try {
+    const hostname = new URL(siteUrl).hostname.replace(/^www\./, "");
+    const parts = hostname.split(".");
+    return parts[0].slice(0, 40);
+  } catch {
+    return "";
+  }
+}
+
 function extractEmailsFromHtml(html: string): string[] {
   const decoded = html
     .replace(/&amp;/g, "&")
@@ -181,7 +212,7 @@ router.post("/crawl-google", async (req, res) => {
 
     // Crawl each site and contact pages concurrently (max 12 sites)
     const targetUrls = siteUrls.slice(0, 12);
-    const allEmails: { email: string; source: string }[] = [];
+    const allLeads: { email: string; company: string; source: string }[] = [];
     const sources: string[] = [];
 
     await Promise.allSettled(
@@ -191,10 +222,11 @@ router.post("/crawl-google", async (req, res) => {
           if (!pageHtml) return;
 
           sources.push(siteUrl);
+          const company = extractCompanyName(pageHtml, siteUrl);
 
           // Extract from main page
           const mainEmails = extractEmailsFromHtml(pageHtml);
-          mainEmails.forEach(e => allEmails.push({ email: e, source: siteUrl }));
+          mainEmails.forEach(e => allLeads.push({ email: e, company, source: siteUrl }));
 
           // If no emails found on main page, try contact subpages
           if (mainEmails.length === 0) {
@@ -204,7 +236,7 @@ router.post("/crawl-google", async (req, res) => {
                 const cHtml = await fetchPage(cUrl, 6000);
                 if (!cHtml) return;
                 const cEmails = extractEmailsFromHtml(cHtml);
-                cEmails.forEach(e => allEmails.push({ email: e, source: cUrl }));
+                cEmails.forEach(e => allLeads.push({ email: e, company, source: cUrl }));
               })
             );
           }
@@ -214,20 +246,22 @@ router.post("/crawl-google", async (req, res) => {
       })
     );
 
-    // Deduplicate emails
+    // Deduplicate by email
     const seenEmails = new Set<string>();
-    const uniqueResults = allEmails.filter(({ email }) => {
+    const uniqueLeads = allLeads.filter(({ email }) => {
       const lower = email.toLowerCase();
       if (seenEmails.has(lower)) return false;
       seenEmails.add(lower);
       return true;
     });
 
-    const emails = uniqueResults.map(r => r.email);
+    const emails = uniqueLeads.map(r => r.email);
+    const leads = uniqueLeads.map(r => ({ email: r.email, company: r.company }));
 
     logger.info({ query: query.trim(), emailCount: emails.length, sitesScanned: sources.length }, "Google crawl complete");
     res.json({
       emails,
+      leads,
       count: emails.length,
       sitesScanned: sources.length,
       sources: sources.slice(0, 10),

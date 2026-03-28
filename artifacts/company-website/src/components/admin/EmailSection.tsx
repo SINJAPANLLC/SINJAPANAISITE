@@ -204,7 +204,7 @@ export function EmailSection() {
   // Google crawl
   const [googleQuery, setGoogleQuery] = useState("");
   const [googleCrawling, setGoogleCrawling] = useState(false);
-  const [googleResult, setGoogleResult] = useState<string[]>([]);
+  const [googleResult, setGoogleResult] = useState<{ email: string; company: string }[]>([]);
   const [googleError, setGoogleError] = useState("");
   const [googleSitesScanned, setGoogleSitesScanned] = useState(0);
   const [googleMessage, setGoogleMessage] = useState("");
@@ -299,17 +299,24 @@ export function EmailSection() {
     finally { setCrawling(false); }
   };
 
-  const addCrawledEmail = (email: string, source: string) => {
+  const addCrawledEmail = (email: string, company: string) => {
     if (crawlContacts.some(c => c.email === email)) return;
-    setCrawlContacts(prev => [...prev, { name: "担当者", company: source, email }]);
+    setCrawlContacts(prev => [...prev, { name: "担当者", company: company || email, email }]);
     setRecipientTab("crawl");
   };
 
-  const addAllCrawled = (emails: string[], source: string) => {
+  const addAllCrawled = (leads: { email: string; company: string }[], fallbackSource: string) => {
     const existing = new Set(crawlContacts.map(c => c.email));
-    const newOnes = emails.filter(e => !existing.has(e)).map(email => ({ name: "担当者", company: source, email } as ContactEntry));
+    const newOnes = leads
+      .filter(l => !existing.has(l.email))
+      .map(l => ({ name: "担当者", company: l.company || fallbackSource, email: l.email } as ContactEntry));
     setCrawlContacts(prev => [...prev, ...newOnes]);
     setRecipientTab("crawl");
+  };
+
+  // URL crawl helpers (string[]-based, keep separate)
+  const addAllCrawledUrls = (emails: string[], source: string) => {
+    addAllCrawled(emails.map(e => ({ email: e, company: source })), source);
   };
 
   // Google crawl
@@ -324,7 +331,8 @@ export function EmailSection() {
       });
       const data = await res.json();
       if (!res.ok) { setGoogleError(data.error || "エラー"); return; }
-      setGoogleResult(data.emails || []);
+      const leads = data.leads as { email: string; company: string }[] | undefined;
+      setGoogleResult(leads || (data.emails || []).map((e: string) => ({ email: e, company: "" })));
       setGoogleSitesScanned(data.sitesScanned || 0);
       setGoogleMessage(data.message || "");
     } catch { setGoogleError("ネットワークエラー"); }
@@ -377,7 +385,7 @@ export function EmailSection() {
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <p className="text-[10px] text-gray-400">{crawlResult.length}件検出</p>
-                    <button onClick={() => addAllCrawled(crawlResult, crawlSourceLabel)}
+                    <button onClick={() => addAllCrawledUrls(crawlResult, crawlSourceLabel)}
                       className="text-[10px] text-white hover:text-gray-300 flex items-center gap-1 border border-white/20 px-2 py-0.5">
                       <Plus className="w-3 h-3" />全て追加
                     </button>
@@ -433,13 +441,16 @@ export function EmailSection() {
                     </button>
                   </div>
                   <div className="max-h-48 overflow-y-auto border border-white/10 divide-y divide-white/5">
-                    {googleResult.map(email => {
+                    {googleResult.map(({ email, company }) => {
                       const added = crawlContacts.some(c => c.email === email);
                       return (
-                        <div key={email} className="flex items-center justify-between px-3 py-1.5">
-                          <span className="text-xs text-gray-300 font-mono truncate flex-1">{email}</span>
-                          <button onClick={() => addCrawledEmail(email, googleQuery.trim())} disabled={added}
-                            className={`text-[10px] px-2 py-0.5 ml-2 flex-shrink-0 border transition-colors ${added ? "border-white/10 text-gray-600 cursor-default" : "border-white/20 text-white hover:bg-white/5"}`}>
+                        <div key={email} className="flex items-center justify-between px-3 py-1.5 gap-2">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <span className="text-[10px] text-gray-400 truncate">{company || "—"}</span>
+                            <span className="text-xs text-gray-300 font-mono truncate">{email}</span>
+                          </div>
+                          <button onClick={() => addCrawledEmail(email, company)} disabled={added}
+                            className={`text-[10px] px-2 py-0.5 flex-shrink-0 border transition-colors ${added ? "border-white/10 text-gray-600 cursor-default" : "border-white/20 text-white hover:bg-white/5"}`}>
                             {added ? "追加済" : "追加"}
                           </button>
                         </div>
