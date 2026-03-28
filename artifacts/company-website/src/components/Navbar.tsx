@@ -16,7 +16,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -25,7 +25,7 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "glass-panel py-3" : "bg-transparent py-5"
+        isScrolled ? "bg-white/95 backdrop-blur-md border-b border-gray-200 py-3 shadow-sm" : "bg-white py-5 border-b border-transparent"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,26 +41,26 @@ export function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            <ul className="flex items-center gap-6">
+            <ul className="flex items-center gap-8">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-sm font-medium text-foreground hover:text-primary transition-colors hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+                    className="text-sm font-medium text-gray-700 hover:text-black transition-colors"
                   >
                     {link.label}
                   </a>
                 </li>
               ))}
             </ul>
-            <Button asChild className="rounded-full px-6 bg-transparent border border-primary text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] transition-all">
+            <Button asChild className="rounded-full px-6 bg-black text-white hover:bg-gray-800 transition-all">
               <a href="#contact">お問い合わせ</a>
             </Button>
           </nav>
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2 text-gray-800"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -75,24 +75,26 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-panel border-t border-white/10 overflow-hidden"
+            className="md:hidden bg-white border-b border-gray-200 overflow-hidden shadow-lg"
           >
-            <div className="px-4 py-6 flex flex-col gap-4">
+            <div className="px-4 py-6 flex flex-col gap-2">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-medium py-2 border-b border-white/5 text-foreground hover:text-primary hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+                  className="text-base font-medium py-3 px-2 rounded-lg text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
-              <Button asChild className="mt-4 w-full rounded-full bg-transparent border border-primary text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
-                  お問い合わせ
-                </a>
-              </Button>
+              <div className="pt-4 pb-2 px-2">
+                <Button asChild className="w-full rounded-full bg-black text-white hover:bg-gray-800 transition-all py-6">
+                  <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                    お問い合わせ
+                  </a>
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
