@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [[artifacts]]
 id = "artifacts/api-server"
@@ -37,3 +37,6 @@ SMTP_HOST = "smtp.hostinger.com"
 SMTP_PORT = "465"
 SMTP_USER = "info@sinjapanai.site"
 SMTP_FROM = "info@sinjapanai.site"
+
+[nix]
+channel = "stable-25_05"

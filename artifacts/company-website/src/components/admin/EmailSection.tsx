@@ -28,18 +28,68 @@ const TEMPLATES = [
 type ContactEntry = { name: string; company: string; email: string };
 
 function buildHtml(name: string, company: string, subject: string, body: string) {
-  return `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"></head>
-<body style="font-family:'Noto Sans JP',Arial,sans-serif;background:#f8f9fa;margin:0;padding:24px;">
-<div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;padding:40px;">
-<p style="font-size:11px;font-weight:bold;letter-spacing:.15em;color:#9ca3af;text-transform:uppercase;margin:0 0 24px;">合同会社SIN JAPAN</p>
-<h1 style="font-size:18px;font-weight:900;color:#111827;margin:0 0 24px;">${subject}</h1>
-<p style="font-size:14px;color:#374151;margin:0 0 4px;">${company}</p>
-<p style="font-size:14px;color:#374151;margin:0 0 16px;">${name} 様</p>
-<div style="font-size:14px;color:#374151;line-height:1.8;white-space:pre-wrap;margin:0 0 32px;">${body.replace(/^.*\n.*\n/, "")}</div>
-<div style="background:#111827;color:#fff;padding:20px;">
-<p style="font-size:12px;font-weight:900;margin:0 0 8px;">合同会社SIN JAPAN</p>
-<p style="font-size:11px;color:#9ca3af;margin:0;line-height:1.8;">Tel: 050-5526-9906 / info@sinjapanai.site</p>
-</div></div></body></html>`;
+  // Strip the first 2 lines (company + name header) from the body for the greeting section
+  const bodyLines = body.split("\n");
+  const bodyMain = bodyLines.slice(2).join("\n").trim();
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;">
+<div style="max-width:600px;margin:0 auto;padding:24px 16px;">
+
+  <!-- Top accent bar -->
+  <div style="height:4px;background:linear-gradient(90deg,#111827 0%,#374151 100%);"></div>
+
+  <!-- Header -->
+  <div style="background:#111827;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.2em;color:#6b7280;text-transform:uppercase;">合同会社 SIN JAPAN</p>
+      <p style="margin:4px 0 0;font-size:13px;font-weight:700;color:#9ca3af;">AI導入支援・AI開発</p>
+    </div>
+    <div style="width:36px;height:36px;background:#374151;display:flex;align-items:center;justify-content:center;">
+      <span style="font-size:16px;font-weight:900;color:#fff;">S</span>
+    </div>
+  </div>
+
+  <!-- White card -->
+  <div style="background:#fff;padding:32px 28px;">
+    <!-- Subject line -->
+    <p style="margin:0 0 24px;font-size:11px;font-weight:700;letter-spacing:.15em;color:#9ca3af;text-transform:uppercase;padding-bottom:16px;border-bottom:1px solid #f3f4f6;">Message</p>
+    <h1 style="margin:0 0 20px;font-size:18px;font-weight:900;color:#111827;line-height:1.4;">${subject}</h1>
+
+    <!-- Recipient -->
+    <div style="background:#f9fafb;border-left:3px solid #111827;padding:12px 16px;margin-bottom:24px;">
+      <p style="margin:0;font-size:13px;color:#374151;font-weight:700;">${company}</p>
+      <p style="margin:2px 0 0;font-size:14px;font-weight:700;color:#111827;">${name}&nbsp;様</p>
+    </div>
+
+    <!-- Body -->
+    <div style="font-size:14px;color:#374151;line-height:1.9;white-space:pre-wrap;">${bodyMain}</div>
+
+    <!-- CTA -->
+    <div style="margin-top:32px;text-align:center;">
+      <a href="mailto:info@sinjapanai.site" style="display:inline-block;background:#111827;color:#fff;font-size:13px;font-weight:700;padding:12px 28px;text-decoration:none;letter-spacing:.05em;">お問い合わせはこちら</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:#1f2937;padding:20px 28px;">
+    <p style="margin:0 0 2px;font-size:12px;font-weight:900;color:#fff;">合同会社SIN JAPAN</p>
+    <p style="margin:0;font-size:11px;color:#6b7280;line-height:1.9;">
+      〒241-0105 神奈川県愛甲郡愛川町中津7287<br>
+      Tel: 050-5526-9906&nbsp;|&nbsp;Fax: 046-212-2326<br>
+      info@sinjapanai.site&nbsp;|&nbsp;sinjapanai.site
+    </p>
+  </div>
+  <p style="margin:12px 0 0;font-size:10px;color:#9ca3af;text-align:center;">このメールは合同会社SIN JAPANより送信されています。</p>
+
+</div>
+</body>
+</html>`;
 }
 
 export function EmailSection() {
