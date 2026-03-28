@@ -21,7 +21,7 @@ export function Navbar() {
       <div className="border-b border-gray-100 hidden md:block">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-end h-8 text-[11px] text-muted-foreground gap-8">
-            <a href="/login" className="hover:text-foreground transition-colors flex items-center gap-1">
+            <a href="/admin" className="hover:text-foreground transition-colors flex items-center gap-1">
               ログイン <ExternalLink className="w-3 h-3" />
             </a>
           </div>

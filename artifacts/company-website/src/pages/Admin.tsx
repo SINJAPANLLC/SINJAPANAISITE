@@ -1,172 +1,145 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { isAuthenticated, logout } from "@/hooks/use-auth";
-import { getContacts } from "@/hooks/use-contact";
-import { LogOut, Mail, Building2, User, MessageSquare, Clock } from "lucide-react";
+import { isAuthenticated, logout, login } from "@/hooks/use-auth";
+import { RevenueSection } from "@/components/admin/RevenueSection";
+import { CustomerSection } from "@/components/admin/CustomerSection";
+import { EstimateSection } from "@/components/admin/EstimateSection";
+import { InvoiceSection } from "@/components/admin/InvoiceSection";
+import { SeoSection } from "@/components/admin/SeoSection";
+import { EmailSection } from "@/components/admin/EmailSection";
+import { UserLogSection } from "@/components/admin/UserLogSection";
+import { NewsSection } from "@/components/admin/NewsSection";
+import { ContactSection } from "@/components/admin/ContactSection";
+import { Loader2, LogOut, TrendingUp, Users, FileText, Receipt, Search, Mail, Activity, Bell, MessageSquare } from "lucide-react";
 
-type Contact = {
-  id: string;
-  name: string;
-  company: string;
-  email: string;
-  message: string;
-  createdAt: string;
-};
+const NAV = [
+  { key: "revenue",   label: "収益",          Icon: TrendingUp },
+  { key: "customers", label: "顧客管理",       Icon: Users },
+  { key: "estimates", label: "見積もり",       Icon: FileText },
+  { key: "invoices",  label: "請求書発行",     Icon: Receipt },
+  { key: "seo",       label: "SEO記事生成",    Icon: Search },
+  { key: "email",     label: "メール営業",     Icon: Mail },
+  { key: "userlog",   label: "ユーザーログ",   Icon: Activity },
+  { key: "news",      label: "お知らせ",       Icon: Bell },
+  { key: "contact",   label: "お問い合わせ",   Icon: MessageSquare },
+] as const;
 
-export default function Admin() {
+type NavKey = typeof NAV[number]["key"];
+
+// ── Login Form ──────────────────────────────────────────────────
+function LoginForm() {
   const [, setLocation] = useLocation();
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [selected, setSelected] = useState<Contact | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      setLocation("/login");
-      return;
-    }
-    setContacts(getContacts());
-  }, [setLocation]);
-
-  const handleLogout = () => {
-    logout();
-    setLocation("/login");
-  };
-
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString("ja-JP", {
-      year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit",
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 600));
+    const ok = login(email, password);
+    setLoading(false);
+    if (ok) setLocation("/admin");
+    else setError("メールアドレスまたはパスワードが正しくありません。");
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col">
-
-      {/* Header */}
-      <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between flex-shrink-0">
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase">Admin</span>
-          <span className="text-sm font-black">SIN JAPAN 管理画面</span>
+    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-10 text-center">
+          <p className="text-[10px] font-bold tracking-[0.25em] text-gray-500 uppercase mb-3">Admin</p>
+          <h1 className="text-2xl font-black text-white">管理者ログイン</h1>
         </div>
-        <div className="flex items-center gap-4">
-          <a href="/" className="text-xs text-gray-500 hover:text-white transition-colors">サイトを見る</a>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-xs text-gray-500 hover:text-white transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            ログアウト
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">メールアドレス</label>
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="info@sinjapan.jp" required
+              className="h-11 bg-white/5 border border-white/10 text-white text-sm px-4 outline-none focus:border-white/30 transition-colors placeholder:text-gray-600" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">パスワード</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required
+              className="h-11 bg-white/5 border border-white/10 text-white text-sm px-4 outline-none focus:border-white/30 transition-colors placeholder:text-gray-600" />
+          </div>
+          {error && <p className="text-xs text-red-400 text-center">{error}</p>}
+          <button type="submit" disabled={loading}
+            className="h-11 mt-2 bg-white text-gray-900 text-sm font-bold hover:bg-gray-100 transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
+            {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> ログイン中...</> : "ログイン"}
           </button>
-        </div>
-      </header>
-
-      {/* Stats bar */}
-      <div className="border-b border-white/10 px-6 py-4 flex gap-8">
-        <div>
-          <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-1">お問い合わせ件数</p>
-          <p className="text-2xl font-black">{contacts.length}</p>
-        </div>
-      </div>
-
-      {/* Main */}
-      <div className="flex flex-1 overflow-hidden">
-
-        {/* List */}
-        <div className="w-full md:w-96 border-r border-white/10 flex flex-col overflow-hidden flex-shrink-0">
-          <div className="px-4 py-3 border-b border-white/10">
-            <p className="text-xs font-bold text-gray-400 tracking-wider">お問い合わせ一覧</p>
-          </div>
-          <div className="flex-1 overflow-y-auto">
-            {contacts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-40 gap-2">
-                <Mail className="w-8 h-8 text-gray-700" />
-                <p className="text-xs text-gray-600">まだお問い合わせはありません</p>
-              </div>
-            ) : (
-              contacts.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => setSelected(c)}
-                  className={`w-full text-left px-4 py-4 border-b border-white/5 hover:bg-white/5 transition-colors ${selected?.id === c.id ? "bg-white/10" : ""}`}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <span className="text-sm font-bold truncate">{c.name}</span>
-                    <span className="text-[10px] text-gray-600 flex-shrink-0">{formatDate(c.createdAt)}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 truncate">{c.company}</p>
-                  <p className="text-xs text-gray-600 truncate mt-1">{c.message}</p>
-                </button>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Detail */}
-        <div className="flex-1 overflow-y-auto p-8">
-          {selected ? (
-            <div className="max-w-xl flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-black">お問い合わせ詳細</h2>
-                <span className="text-[10px] text-gray-500 font-mono">{formatDate(selected.createdAt)}</span>
-              </div>
-
-              <div className="flex flex-col gap-4 bg-white/5 border border-white/10 p-6">
-                <div className="flex items-start gap-3">
-                  <User className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-0.5">お名前</p>
-                    <p className="text-sm font-bold">{selected.name}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Building2 className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-0.5">会社名</p>
-                    <p className="text-sm font-bold">{selected.company}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-0.5">メールアドレス</p>
-                    <a href={`mailto:${selected.email}`} className="text-sm font-bold hover:text-gray-300 transition-colors">
-                      {selected.email}
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MessageSquare className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-0.5">お問い合わせ内容</p>
-                    <p className="text-sm leading-relaxed text-gray-200 whitespace-pre-wrap">{selected.message}</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-0.5">受信日時</p>
-                    <p className="text-sm font-bold">{formatDate(selected.createdAt)}</p>
-                  </div>
-                </div>
-              </div>
-
-              <a
-                href={`mailto:${selected.email}?subject=Re: お問い合わせいただきありがとうございます&body=`}
-                className="inline-flex items-center gap-2 h-10 px-5 bg-white text-gray-900 text-xs font-bold hover:bg-gray-100 transition-colors self-start"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                返信する
-              </a>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-              <MessageSquare className="w-10 h-10 text-gray-700" />
-              <p className="text-sm text-gray-600">左のリストからお問い合わせを選択してください</p>
-            </div>
-          )}
-        </div>
-
+        </form>
+        <p className="text-center mt-8">
+          <a href="/" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">← サイトに戻る</a>
+        </p>
       </div>
     </div>
   );
+}
+
+// ── Dashboard ───────────────────────────────────────────────────
+function Dashboard() {
+  const [, setLocation] = useLocation();
+  const [active, setActive] = useState<NavKey>("revenue");
+
+  const handleLogout = () => { logout(); setLocation("/admin"); };
+
+  const renderSection = () => {
+    switch (active) {
+      case "revenue":   return <RevenueSection />;
+      case "customers": return <CustomerSection />;
+      case "estimates": return <EstimateSection />;
+      case "invoices":  return <InvoiceSection />;
+      case "seo":       return <SeoSection />;
+      case "email":     return <EmailSection />;
+      case "userlog":   return <UserLogSection />;
+      case "news":      return <NewsSection />;
+      case "contact":   return <ContactSection />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white flex">
+      {/* Sidebar */}
+      <aside className="w-52 border-r border-white/10 flex flex-col flex-shrink-0">
+        <div className="px-5 py-5 border-b border-white/10">
+          <p className="text-[9px] font-bold tracking-[0.25em] text-gray-600 uppercase mb-0.5">Admin</p>
+          <p className="text-sm font-black text-white">SIN JAPAN</p>
+        </div>
+        <nav className="flex-1 py-3 overflow-y-auto">
+          {NAV.map(({ key, label, Icon }) => (
+            <button key={key} onClick={() => setActive(key)}
+              className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-bold transition-colors ${active === key ? "bg-white/10 text-white" : "text-gray-500 hover:text-white hover:bg-white/5"}`}>
+              <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+              {label}
+            </button>
+          ))}
+        </nav>
+        <div className="px-5 py-4 border-t border-white/10 flex flex-col gap-2">
+          <a href="/" className="text-[10px] text-gray-600 hover:text-gray-400 transition-colors">← サイトを見る</a>
+          <button onClick={handleLogout} className="flex items-center gap-2 text-[10px] text-gray-600 hover:text-red-400 transition-colors">
+            <LogOut className="w-3 h-3" /> ログアウト
+          </button>
+        </div>
+      </aside>
+
+      {/* Content */}
+      <main className="flex-1 overflow-y-auto p-8">
+        {renderSection()}
+      </main>
+    </div>
+  );
+}
+
+// ── Main export ─────────────────────────────────────────────────
+export default function Admin() {
+  const [auth, setAuth] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setAuth(isAuthenticated());
+  }, []);
+
+  if (auth === null) return null;
+  if (!auth) return <LoginForm />;
+  return <Dashboard />;
 }
