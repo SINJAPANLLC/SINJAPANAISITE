@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, ExternalLink } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const MAIN_NAV_LINKS = [
@@ -17,18 +17,6 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 transition-all duration-300">
-      {/* Top Row */}
-      <div className="border-b border-gray-100 hidden md:block">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-end h-8 text-[11px] text-muted-foreground gap-8">
-            <a href="/admin" className="hover:text-foreground transition-colors flex items-center gap-1">
-              ログイン <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Row */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -95,9 +83,6 @@ export function Navbar() {
                   {link.hasDropdown && <ChevronDown className="w-4 h-4" />}
                 </a>
               ))}
-              <div className="flex flex-col gap-2 mt-4">
-                <a href="#" className="text-sm py-2 hover:text-accent flex items-center gap-1">ログイン <ExternalLink className="w-3 h-3" /></a>
-              </div>
               <Button asChild className="mt-2 w-full rounded-none h-12 tracking-wide font-medium bg-primary">
                 <a href="#download" onClick={() => setIsMobileMenuOpen(false)}>
                   資料ダウンロード
