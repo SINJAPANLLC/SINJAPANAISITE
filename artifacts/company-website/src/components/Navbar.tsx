@@ -47,7 +47,7 @@ export function Navbar() {
           {/* Right CTA */}
           <div className="hidden md:flex items-center flex-shrink-0">
             <Button asChild className="rounded-none px-6 h-12 text-sm font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground">
-              <a href="#download">{t("nav.download")}</a>
+              <a href="/download">{t("nav.download")}</a>
             </Button>
           </div>
 
@@ -75,7 +75,7 @@ export function Navbar() {
                 </a>
               ))}
               <Button asChild className="mt-2 w-full rounded-none h-12 tracking-wide font-medium bg-primary">
-                <a href="#download" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.download")}</a>
+                <a href="/download" onClick={() => setIsMobileMenuOpen(false)}>{t("nav.download")}</a>
               </Button>
             </div>
           </motion.div>

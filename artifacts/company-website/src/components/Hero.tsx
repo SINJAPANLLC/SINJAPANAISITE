@@ -66,7 +66,7 @@ export function Hero() {
                 size="lg"
                 className="w-full text-base rounded-full h-14 bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] font-medium tracking-wider"
               >
-                <a href="#download" className="flex items-center justify-center gap-2">
+                <a href="/download" className="flex items-center justify-center gap-2">
                   資料ダウンロードする <Download className="w-5 h-5 ml-1" />
                 </a>
               </Button>

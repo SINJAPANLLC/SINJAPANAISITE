@@ -10,6 +10,8 @@ import Home from "@/pages/Home";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Admin from "@/pages/Admin";
+import Download from "@/pages/Download";
+import Brochure from "@/pages/Brochure";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient({
@@ -38,6 +40,8 @@ function Router() {
       <Route path="/privacy" component={Privacy} />
       <Route path="/terms" component={Terms} />
       <Route path="/admin" component={Admin} />
+      <Route path="/download" component={Download} />
+      <Route path="/brochure" component={Brochure} />
       <Route component={NotFound} />
     </Switch>
   );
