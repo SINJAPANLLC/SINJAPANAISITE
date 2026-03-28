@@ -176,7 +176,17 @@ type CrawlMode = "url" | "google";
 export function EmailSection() {
   const [contacts, setContacts] = useState<ContactEntry[]>([]);
   const [dlLeads, setDlLeads] = useState<ContactEntry[]>([]);
-  const [crawlContacts, setCrawlContacts] = useState<ContactEntry[]>([]);
+  const LS_KEY = "sj_crawl_leads";
+  const [crawlContacts, setCrawlContactsRaw] = useState<ContactEntry[]>(() => {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch { return []; }
+  });
+  const setCrawlContacts = (updater: ContactEntry[] | ((prev: ContactEntry[]) => ContactEntry[])) => {
+    setCrawlContactsRaw(prev => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      try { localStorage.setItem(LS_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
   const [loadingContacts, setLoadingContacts] = useState(true);
 
   const [templateIdx, setTemplateIdx] = useState(0);
@@ -505,6 +515,12 @@ export function EmailSection() {
                 {selected.size > 0 && <span className="text-white font-bold">{selected.size}件選択中</span>}
               </p>
               <div className="flex gap-2 items-center">
+                {recipientTab === "crawl" && crawlContacts.length > 0 && (
+                  <button onClick={() => { if (confirm("クロールリードを全削除しますか？")) setCrawlContacts([]); }}
+                    className="flex items-center gap-1 text-[10px] text-gray-600 hover:text-red-400 transition-colors">
+                    <Trash2 className="w-3 h-3" /> 全クリア
+                  </button>
+                )}
                 {selected.size > 0 && (
                   <button onClick={sendSelected} disabled={!!sending}
                     className="flex items-center gap-1 text-[10px] font-bold bg-white text-gray-900 px-2 py-1 hover:bg-gray-100 disabled:opacity-60 transition-colors">
