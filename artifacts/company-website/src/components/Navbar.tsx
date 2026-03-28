@@ -33,8 +33,8 @@ export function Navbar() {
           {/* Logo */}
           <a href="#" className="flex items-center group">
             <img
-              src={`${import.meta.env.BASE_URL}images/logo-sinjapan-live.png`}
-              alt="SIN JAPAN AI LIVE"
+              src={`${import.meta.env.BASE_URL}images/logo-sinjapan-ai.png`}
+              alt="SIN JAPAN AI"
               className="h-10 w-auto object-contain rounded"
             />
           </a>

@@ -7,8 +7,8 @@ export function Footer() {
           <div className="md:col-span-2">
             <a href="#" className="inline-flex mb-6">
               <img
-                src={`${import.meta.env.BASE_URL}images/logo-sinjapan-live.png`}
-                alt="SIN JAPAN AI LIVE"
+                src={`${import.meta.env.BASE_URL}images/logo-sinjapan-ai.png`}
+                alt="SIN JAPAN AI"
                 className="h-10 w-auto object-contain rounded"
               />
             </a>
