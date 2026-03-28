@@ -38,7 +38,7 @@ export function Footer() {
             <ul className="flex flex-col gap-3 text-sm text-gray-400">
               <li className="flex gap-4">
                 <span className="text-gray-600 flex-shrink-0 w-12">社名</span>
-                <span>SIN JAPAN AI株式会社</span>
+                <span>合同会社SIN JAPAN</span>
               </li>
               <li className="flex gap-4">
                 <span className="text-gray-600 flex-shrink-0 w-12">設立</span>
@@ -46,11 +46,11 @@ export function Footer() {
               </li>
               <li className="flex gap-4">
                 <span className="text-gray-600 flex-shrink-0 w-12">所在地</span>
-                <span>東京都港区</span>
+                <span>神奈川県愛甲郡愛川町中津7287</span>
               </li>
               <li className="flex gap-4">
                 <span className="text-gray-600 flex-shrink-0 w-12">Mail</span>
-                <span>info@sinjapanai.com</span>
+                <span>info@sinjapan.jp</span>
               </li>
             </ul>
           </div>
@@ -59,7 +59,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 text-xs text-gray-600">
-          <p>© {new Date().getFullYear()} SIN JAPAN AI, Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} 合同会社SIN JAPAN. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-gray-400 transition-colors">プライバシーポリシー</a>
             <a href="#" className="hover:text-gray-400 transition-colors">利用規約</a>

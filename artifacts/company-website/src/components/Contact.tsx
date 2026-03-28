@@ -64,11 +64,11 @@ export function Contact() {
             <div className="flex flex-col gap-6">
               <div className="border-l-2 border-gray-200 pl-4">
                 <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Email</p>
-                <p className="text-sm font-bold text-gray-800">info@sinjapanai.com</p>
+                <p className="text-sm font-bold text-gray-800">info@sinjapan.jp</p>
               </div>
               <div className="border-l-2 border-gray-200 pl-4">
                 <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">受付時間</p>
-                <p className="text-sm font-bold text-gray-800">平日 10:00 〜 18:00</p>
+                <p className="text-sm font-bold text-gray-800">9:00 〜 21:00</p>
               </div>
             </div>
           </motion.div>
