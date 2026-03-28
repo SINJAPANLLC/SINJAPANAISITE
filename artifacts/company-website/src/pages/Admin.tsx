@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
 import { isAuthenticated, logout, login } from "@/hooks/use-auth";
 import { RevenueSection } from "@/components/admin/RevenueSection";
 import { CustomerSection } from "@/components/admin/CustomerSection";
@@ -31,8 +30,7 @@ const NAV = [
 type NavKey = typeof NAV[number]["key"];
 
 // ── Login Form ──────────────────────────────────────────────────
-function LoginForm() {
-  const [, setLocation] = useLocation();
+function LoginForm({ onLogin }: { onLogin: () => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -42,10 +40,9 @@ function LoginForm() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    await new Promise(r => setTimeout(r, 600));
     const ok = login(email, password);
     setLoading(false);
-    if (ok) setLocation("/admin");
+    if (ok) onLogin();
     else setError("メールアドレスまたはパスワードが正しくありません。");
   };
 
@@ -82,11 +79,10 @@ function LoginForm() {
 }
 
 // ── Dashboard ───────────────────────────────────────────────────
-function Dashboard() {
-  const [, setLocation] = useLocation();
+function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [active, setActive] = useState<NavKey>("revenue");
 
-  const handleLogout = () => { logout(); setLocation("/admin"); };
+  const handleLogout = () => { logout(); onLogout(); };
 
   const renderSection = () => {
     switch (active) {
@@ -146,6 +142,6 @@ export default function Admin() {
   }, []);
 
   if (auth === null) return null;
-  if (!auth) return <LoginForm />;
-  return <Dashboard />;
+  if (!auth) return <LoginForm onLogin={() => setAuth(true)} />;
+  return <Dashboard onLogout={() => setAuth(false)} />;
 }
