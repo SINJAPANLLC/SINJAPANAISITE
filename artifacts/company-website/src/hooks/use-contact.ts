@@ -12,7 +12,7 @@ export type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 const STORAGE_KEY = "sin_japan_contacts";
 
-export function saveContact(data: ContactFormValues) {
+export function saveContactLocal(data: ContactFormValues) {
   const existing = getContacts();
   const newEntry = {
     ...data,
@@ -34,8 +34,16 @@ export function getContacts() {
 export function useSubmitContact() {
   return useMutation({
     mutationFn: async (data: ContactFormValues) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return saveContact(data);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        throw new Error("Contact submission failed");
+      }
+      saveContactLocal(data);
+      return res.json();
     },
   });
 }

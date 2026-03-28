@@ -19,11 +19,18 @@ export default function Download() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Save lead info to localStorage
+    try {
+      await fetch("/api/download-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+    } catch {
+      // continue to brochure even if notification fails
+    }
     const leads = JSON.parse(localStorage.getItem("sj_download_leads") || "[]");
     leads.unshift({ ...form, id: Date.now().toString(36), createdAt: new Date().toISOString() });
     localStorage.setItem("sj_download_leads", JSON.stringify(leads));
-    await new Promise(r => setTimeout(r, 800));
     navigate("/brochure");
   };
 

@@ -73,7 +73,7 @@ export function Contact() {
               </div>
               <div className="border-l-2 border-gray-200 pl-4">
                 <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">Email</p>
-                <p className="text-sm font-bold text-gray-800">info@sinjapan.jp</p>
+                <p className="text-sm font-bold text-gray-800">info@sinjapanai.site</p>
               </div>
               <div className="border-l-2 border-gray-200 pl-4">
                 <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-1">受付時間</p>
