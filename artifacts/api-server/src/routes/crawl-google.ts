@@ -28,6 +28,9 @@ const SKIP_URL_PATTERNS = [
   "wikipedia", "facebook", "twitter", "instagram", "linkedin",
   "youtube", "amazon", "rakuten", "yahoo", "naver", "google",
   "appstore", "play.google", "maps.google", "translate.google",
+  "duckduckgo", "bing", "microsoft", "lycorp", "mlit.go.jp",
+  "pref.", "city.", "town.", "go.jp", "yimg", "s.yimg", "baseconnect",
+  "hakopro", "houjin.goo", "mapion", "freelance.web-box",
 ];
 
 const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
@@ -46,25 +49,34 @@ function filterEmails(raw: string[]): string[] {
 }
 
 function extractCompanyName(html: string, siteUrl: string): string {
-  // Try <title> tag first
-  const titleM = html.match(/<title[^>]*>([^<]{2,80})<\/title>/i);
+  // Try og:site_name first (most reliable)
+  const ogSite = html.match(/property=["']og:site_name["'][^>]*content=["']([^"']{2,60})["']/i)
+    || html.match(/content=["']([^"']{2,60})["'][^>]*property=["']og:site_name["']/i);
+  if (ogSite) {
+    const name = ogSite[1].trim().slice(0, 40);
+    if (name.length >= 2) return name;
+  }
+
+  // Try <title> tag
+  const titleM = html.match(/<title[^>]*>([^<]{2,100})<\/title>/i);
   if (titleM) {
     let t = titleM[1]
-      .replace(/\s*[\|｜\-–—:：]\s*.*/u, "")  // strip "– Company Site" suffixes
-      .replace(/\s*(株式会社|合同会社|有限会社|一般社団法人|特定非営利活動法人|NPO法人)/g, (_, s) => s)
-      .replace(/^(株式会社|合同会社|有限会社)\s*/, (m) => m)
+      // Decode HTML entities
+      .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#?\w+;/g, "")
+      // Strip everything after separators (keep the LAST meaningful segment which is often the company name)
+      // Pattern: "Page title | Company Name" → keep "Company Name"
+      .replace(/^.*[\|｜│\-–—]\s*/u, "")
       .replace(/\s+/g, " ")
       .trim();
-    // Remove obvious generic titles
-    if (t.length >= 2 && !/(top|home|index|ホーム|トップ|official|公式)/i.test(t)) {
+    // If company-type words are in original, try to extract them
+    if (t.length < 2 && titleM[1]) {
+      // Try first segment before separator
+      t = titleM[1].split(/[\|｜│\-–—]/u)[0].trim().replace(/\s+/g, " ");
+    }
+    if (t.length >= 2 && !/(top|home|index|ホーム|トップ|公式サイト|official|サービス紹介|フォーム|contact|お問い合わせ)/i.test(t)) {
       return t.slice(0, 40);
     }
   }
-
-  // Fall back to og:site_name
-  const ogSite = html.match(/property=["']og:site_name["'][^>]*content=["']([^"']{2,60})["']/i)
-    || html.match(/content=["']([^"']{2,60})["'][^>]*property=["']og:site_name["']/i);
-  if (ogSite) return ogSite[1].trim().slice(0, 40);
 
   // Fall back to domain (e.g. example.co.jp → example)
   try {
@@ -114,33 +126,20 @@ async function fetchPage(url: string, timeout = 10000): Promise<string | null> {
   }
 }
 
-function extractUrlsFromDdg(html: string): string[] {
+function extractUrlsFromYahoo(html: string): string[] {
   const urls: string[] = [];
 
-  // Pattern 1: uddg= parameter (DuckDuckGo redirect URLs)
-  const uddgRe = /uddg=(https?[^&"'\s]+)/g;
+  // Extract all href="https://..." links from Yahoo Japan search HTML
+  // Yahoo Japan returns direct company URLs (no tracking redirects for organic results)
+  const hrefRe = /href="(https?:\/\/[^"#?]{8,})"/gi;
   let m;
-  while ((m = uddgRe.exec(html)) !== null) {
-    try { urls.push(decodeURIComponent(m[1])); } catch {}
+  while ((m = hrefRe.exec(html)) !== null) {
+    urls.push(m[1]);
   }
 
-  // Pattern 2: result__url class anchor tags
-  const resultUrlRe = /<a[^>]+class="result__url"[^>]*href="([^"]+)"/gi;
-  while ((m = resultUrlRe.exec(html)) !== null) {
-    const u = m[1].startsWith("//") ? `https:${m[1]}` : m[1];
-    if (/^https?:\/\//.test(u)) urls.push(u);
-  }
-
-  // Pattern 3: result__a class (main result links)
-  const resultARe = /<a[^>]+class="result__a"[^>]*href="([^"]+)"/gi;
-  while ((m = resultARe.exec(html)) !== null) {
-    const u = m[1].startsWith("//") ? `https:${m[1]}` : m[1];
-    if (/^https?:\/\//.test(u)) urls.push(u);
-  }
-
-  // Pattern 4: any https link in result sections
-  const anyLinkRe = /href="(https?:\/\/[^"#?]+)"/g;
-  while ((m = anyLinkRe.exec(html)) !== null) {
+  // Also extract http:// links (some old Japanese sites use http)
+  const httpRe = /href="(http:\/\/[^"#?]{8,})"/gi;
+  while ((m = httpRe.exec(html)) !== null) {
     urls.push(m[1]);
   }
 
@@ -151,6 +150,11 @@ function extractUrlsFromDdg(html: string): string[] {
     if (seen.has(lower)) return false;
     if (SKIP_URL_PATTERNS.some(p => lower.includes(p))) return false;
     if (!lower.includes(".")) return false;
+    // Keep only proper domain URLs
+    try {
+      const hostname = new URL(u).hostname;
+      if (hostname.split(".").length < 2) return false;
+    } catch { return false; }
     seen.add(lower);
     return true;
   }).slice(0, 20);
@@ -191,19 +195,19 @@ router.post("/crawl-google", async (req, res) => {
   if (!query?.trim()) { res.status(400).json({ error: "query is required" }); return; }
 
   try {
-    const searchQ = `${query.trim()} 中小企業 会社 お問い合わせ`;
-    const ddgUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(searchQ)}&kl=jp-jp&ia=web`;
+    const searchQ = `${query.trim()} お問い合わせ`;
+    const yahooUrl = `https://search.yahoo.co.jp/search?p=${encodeURIComponent(searchQ)}&n=20`;
 
-    logger.info({ query: searchQ }, "DuckDuckGo search start");
+    logger.info({ query: searchQ }, "Yahoo Japan search start");
 
-    const ddgHtml = await fetchPage(ddgUrl, 15000);
-    if (!ddgHtml) {
+    const yahooHtml = await fetchPage(yahooUrl, 15000);
+    if (!yahooHtml) {
       res.status(422).json({ error: "検索エンジンへの接続に失敗しました。しばらく後に再試行してください。" });
       return;
     }
 
-    const siteUrls = extractUrlsFromDdg(ddgHtml);
-    logger.info({ count: siteUrls.length, urls: siteUrls.slice(0, 5) }, "Extracted site URLs");
+    const siteUrls = extractUrlsFromYahoo(yahooHtml);
+    logger.info({ count: siteUrls.length, urls: siteUrls.slice(0, 5) }, "Extracted site URLs from Yahoo");
 
     if (siteUrls.length === 0) {
       res.json({ emails: [], count: 0, sources: [], message: "検索結果からURLを取得できませんでした。検索キーワードを変更してみてください。" });

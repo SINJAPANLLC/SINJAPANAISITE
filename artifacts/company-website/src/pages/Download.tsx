@@ -9,6 +9,7 @@ const PURPOSES = ["AI導入を検討している", "競合調査・情報収集"
 export default function Download() {
   const [, navigate] = useLocation();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "", company: "", email: "", phone: "", department: "", purpose: "",
   });
@@ -19,18 +20,22 @@ export default function Download() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
     try {
-      await fetch("/api/download-lead", {
+      const res = await fetch("/api/download-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "送信に失敗しました。入力内容をご確認ください。");
+        setLoading(false);
+        return;
+      }
     } catch {
-      // continue to brochure even if notification fails
+      // Network error - still allow access but don't save lead
     }
-    const leads = JSON.parse(localStorage.getItem("sj_download_leads") || "[]");
-    leads.unshift({ ...form, id: Date.now().toString(36), createdAt: new Date().toISOString() });
-    localStorage.setItem("sj_download_leads", JSON.stringify(leads));
     navigate("/brochure");
   };
 
@@ -95,6 +100,12 @@ export default function Download() {
             <p className="text-[10px] text-gray-400 leading-relaxed border-t border-gray-100 pt-4">
               送信をもって<a href="/privacy" className="underline">プライバシーポリシー</a>に同意したものとみなします。
             </p>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                {error}
+              </div>
+            )}
 
             <button type="submit" disabled={loading}
               className="w-full h-12 bg-gray-900 text-white font-bold text-sm hover:bg-gray-700 transition-colors disabled:opacity-60 flex items-center justify-center gap-2">
