@@ -235,10 +235,10 @@ export default function Brochure() {
         <div className="print-page bg-gray-950 text-white min-h-screen flex flex-col relative overflow-hidden">
           <div className="absolute inset-0 opacity-[0.025]"
             style={{ backgroundImage: "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)", backgroundSize: "64px 64px" }} />
-          <div className="relative flex-1 flex flex-col justify-between p-16 md:p-24">
+          <div className="relative flex-1 flex flex-col justify-between p-8 sm:p-16 md:p-24">
             <div>
-              <p className="text-[10px] font-bold tracking-[0.35em] text-gray-600 uppercase mb-16">Company & Service Brochure 2026</p>
-              <h1 className="text-5xl md:text-7xl font-black leading-[1.05] mb-8">
+              <p className="text-[10px] font-bold tracking-[0.35em] text-gray-600 uppercase mb-8 sm:mb-16">Company & Service Brochure 2026</p>
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black leading-[1.05] mb-6 sm:mb-8">
                 AIを組織に実装し<br />
                 <span className="text-gray-400">持続可能な</span><br />
                 <span className="text-gray-400">社会を創る。</span>
@@ -264,8 +264,8 @@ export default function Brochure() {
         </div>
 
         {/* ── P2: TOC + Company Overview ────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
-          <div className="grid grid-cols-2 gap-16">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
             {/* TOC */}
             <div>
               <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-8">Contents</p>
@@ -324,13 +324,13 @@ export default function Brochure() {
         </div>
 
         {/* ── P3: Market Context ────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 02</p>
           <h2 className="text-3xl font-black mb-3">AI市場動向・DX推進の背景</h2>
-          <p className="text-sm text-gray-400 mb-12">なぜ今、AIへの投資が急務なのか</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">なぜ今、AIへの投資が急務なのか</p>
 
           {/* Market stats */}
-          <div className="grid grid-cols-3 gap-px bg-gray-100 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-gray-100 mb-10 sm:mb-12">
             {[
               { num: "¥8.9兆", unit: "", label: "2030年 国内AI市場規模予測", src: "出所：IDC Japan" },
               { num: "78", unit: "%", label: "AI活用企業の競合との差を感じている割合", src: "出所：McKinsey Global Survey" },
@@ -347,7 +347,7 @@ export default function Brochure() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-8 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             <div className="border border-gray-100 p-8">
               <p className="text-[9px] font-bold tracking-widest text-gray-400 uppercase mb-4">AI導入が急務な背景</p>
               <ul className="flex flex-col gap-4">
@@ -396,14 +396,14 @@ export default function Brochure() {
         </div>
 
         {/* ── P4: Service 01 AI導入 ─────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 03</p>
           <h2 className="text-3xl font-black mb-1">事業内容</h2>
-          <p className="text-sm text-gray-400 mb-12">Service Overview</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">Service Overview</p>
 
           {SERVICES.map((s) => (
-            <div key={s.number} className="border border-gray-100 p-10 mb-8 last:mb-0">
-              <div className="grid grid-cols-2 gap-12">
+            <div key={s.number} className="border border-gray-100 p-5 sm:p-10 mb-8 last:mb-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 <div>
                   <div className="flex items-start justify-between mb-6">
                     <span className="text-7xl font-black text-gray-100 leading-none">{s.number}</span>
@@ -459,7 +459,7 @@ export default function Brochure() {
         </div>
 
         {/* ── P5: Technology Stack ──────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 05</p>
           <h2 className="text-3xl font-black mb-3">活用技術・テクノロジースタック</h2>
           <p className="text-sm text-gray-400 mb-12">Technology Stack — 最先端技術を実務レベルで提供します</p>
@@ -474,7 +474,7 @@ export default function Brochure() {
                     <h3 className="text-xl font-black">{cat.category}</h3>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {cat.items.map(item => (
                     <div key={item.name} className="flex gap-4 p-5 bg-gray-50">
                       <div>
@@ -490,7 +490,7 @@ export default function Brochure() {
 
           <div className="mt-8 bg-gray-950 text-white p-8">
             <p className="text-[9px] font-bold tracking-widest text-gray-500 uppercase mb-3">セキュリティへの取り組み</p>
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
                 ["暗号化通信", "すべての通信はTLS/SSLで暗号化"],
                 ["アクセス制御", "最小権限原則・多要素認証を標準適用"],
@@ -507,12 +507,12 @@ export default function Brochure() {
         </div>
 
         {/* ── P6: Why Choose Us + Stats ─────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 06</p>
           <h2 className="text-3xl font-black mb-3">SIN JAPAN AIが選ばれる理由</h2>
-          <p className="text-sm text-gray-400 mb-12">Why Choose Us</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">Why Choose Us</p>
 
-          <div className="grid grid-cols-3 gap-px bg-gray-200 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-gray-200 mb-8">
             {FEATURES.map(f => (
               <div key={f.num} className="bg-white p-10 flex flex-col gap-5">
                 <span className="text-xs font-bold tracking-[0.2em] text-gray-400">{f.num}</span>
@@ -525,7 +525,7 @@ export default function Brochure() {
           </div>
 
           {/* Stats */}
-          <div className="bg-gray-950 text-white grid grid-cols-3 divide-x divide-white/10 mb-8">
+          <div className="bg-gray-950 text-white grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-white/10 mb-8">
             {[
               { n: "500社+", l: "導入実績企業数", sub: "※2026年2月時点" },
               { n: "100%", l: "顧客満足度", sub: "※社内アンケート調査より" },
@@ -540,7 +540,8 @@ export default function Brochure() {
           </div>
 
           {/* Competitive comparison */}
-          <div className="border border-gray-100 overflow-hidden">
+          <div className="border border-gray-100 overflow-x-auto">
+            <div className="min-w-[520px]">
             <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-100">
               <div className="p-4 text-xs font-bold text-gray-400">比較項目</div>
               <div className="p-4 text-xs font-black text-gray-900 text-center border-l border-gray-100">SIN JAPAN AI</div>
@@ -561,16 +562,17 @@ export default function Brochure() {
                 <div className="p-3.5 text-xs text-gray-400 text-center border-l border-gray-100">{free}</div>
               </div>
             ))}
+            </div>
           </div>
         </div>
 
         {/* ── P7: Case Studies ──────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 07</p>
           <h2 className="text-3xl font-black mb-3">導入事例</h2>
-          <p className="text-sm text-gray-400 mb-12">Case Studies — 多様な業界での実績</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">Case Studies — 多様な業界での実績</p>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {CASES.map(c => (
               <div key={c.title} className="border border-gray-100 p-8 flex flex-col gap-4">
                 <div className="flex items-center justify-between">
@@ -600,12 +602,12 @@ export default function Brochure() {
         </div>
 
         {/* ── P8: ROI ───────────────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 08</p>
           <h2 className="text-3xl font-black mb-3">導入効果・ROI試算</h2>
-          <p className="text-sm text-gray-400 mb-12">代表的なROI試算例（目安）</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">代表的なROI試算例（目安）</p>
 
-          <div className="grid grid-cols-2 gap-8 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
             {[
               {
                 title: "AI業務自動化（書類処理・入力）",
@@ -658,7 +660,7 @@ export default function Brochure() {
         </div>
 
         {/* ── P9: Flow ──────────────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 09</p>
           <h2 className="text-3xl font-black mb-12">ご支援の流れ</h2>
 
@@ -678,7 +680,7 @@ export default function Brochure() {
             ))}
           </div>
 
-          <div className="border border-gray-900 p-8 flex items-center justify-between gap-8">
+          <div className="border border-gray-900 p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 sm:gap-8">
             <div>
               <p className="font-black text-base mb-1">まずは無料相談から</p>
               <p className="text-sm text-gray-500">お気軽にご連絡ください。ご状況に合わせた最適なプランをご提案します。初回のご相談は完全無料です。</p>
@@ -693,12 +695,12 @@ export default function Brochure() {
         </div>
 
         {/* ── P10: FAQ ──────────────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 10</p>
           <h2 className="text-3xl font-black mb-3">よくある質問</h2>
-          <p className="text-sm text-gray-400 mb-12">FAQ — Frequently Asked Questions</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">FAQ — Frequently Asked Questions</p>
 
-          <div className="grid grid-cols-2 gap-px bg-gray-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-100">
             {FAQ.map((item, i) => (
               <div key={i} className="bg-white p-8 flex flex-col gap-4">
                 <div className="flex items-start gap-4">
@@ -715,12 +717,12 @@ export default function Brochure() {
         </div>
 
         {/* ── P11: Partners ─────────────────────────────── */}
-        <div className="print-page px-16 md:px-24 py-16 border-b border-gray-100">
+        <div className="print-page px-5 sm:px-12 md:px-24 py-10 sm:py-16 border-b border-gray-100">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase mb-2">Section 11</p>
           <h2 className="text-3xl font-black mb-3">パートナープログラム</h2>
-          <p className="text-sm text-gray-400 mb-12">SIN JAPAN AIでは、共にAI普及を推進するパートナー企業を募集しています。ビジネスモデルに合わせた2つのプログラムをご用意しています。</p>
+          <p className="text-sm text-gray-400 mb-10 sm:mb-12">SIN JAPAN AIでは、共にAI普及を推進するパートナー企業を募集しています。ビジネスモデルに合わせた2つのプログラムをご用意しています。</p>
 
-          <div className="grid grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {PARTNER_TYPES.map(p => (
               <div key={p.type} className="border border-gray-100 p-10 flex flex-col gap-6">
                 <div>
@@ -749,7 +751,7 @@ export default function Brochure() {
           {/* Partner flow */}
           <div className="bg-gray-50 p-8">
             <p className="text-[9px] font-bold tracking-widest text-gray-400 uppercase mb-6">パートナー登録の流れ</p>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 ["01", "お問い合わせ", "フォームまたはメールでご連絡ください"],
                 ["02", "個別面談", "オンラインにてパートナーシップの詳細をご説明"],
@@ -767,10 +769,10 @@ export default function Brochure() {
         </div>
 
         {/* ── P12: Contact ──────────────────────────────── */}
-        <div className="print-page bg-gray-950 text-white px-16 md:px-24 py-16">
+        <div className="print-page bg-gray-950 text-white px-5 sm:px-12 md:px-24 py-10 sm:py-16">
           <p className="text-[10px] font-bold tracking-[0.3em] text-gray-500 uppercase mb-2">Section 12</p>
-          <h2 className="text-3xl font-black mb-12">お問い合わせ</h2>
-          <div className="grid grid-cols-2 gap-16">
+          <h2 className="text-3xl font-black mb-10 sm:mb-12">お問い合わせ</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
             <div>
               <p className="text-gray-400 text-sm leading-relaxed mb-10">
                 AI導入のご相談・本資料に関するお問い合わせは、<br />
