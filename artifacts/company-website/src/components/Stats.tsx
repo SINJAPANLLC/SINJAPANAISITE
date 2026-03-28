@@ -9,23 +9,25 @@ const STATS = [
 
 export function Stats() {
   return (
-    <section id="stats" className="py-20 bg-white border-t border-border">
+    <section id="stats" className="py-24 bg-[#0a0a0a] text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-8 divide-x divide-transparent md:divide-white/10">
           {STATS.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.5 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1, type: "spring", stiffness: 200 }}
-              className="flex flex-col items-center justify-center text-center p-6 bg-[#f8f9fa] rounded-2xl border border-border"
+              transition={{ delay: index * 0.1, duration: 0.6 }}
+              className="flex flex-col items-center justify-center text-center px-4"
             >
-              <div className="flex items-baseline mb-2 text-primary">
-                <span className="text-4xl md:text-5xl font-black tracking-tighter">{stat.value}</span>
-                <span className="text-xl font-bold ml-1">{stat.suffix}</span>
+              <div className="flex items-baseline mb-3">
+                <span className="text-5xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                  {stat.value}
+                </span>
+                <span className="text-2xl font-bold ml-1 text-gray-400">{stat.suffix}</span>
               </div>
-              <span className="text-sm font-bold text-muted-foreground">{stat.label}</span>
+              <span className="text-sm font-bold text-gray-400 tracking-wider">{stat.label}</span>
             </motion.div>
           ))}
         </div>

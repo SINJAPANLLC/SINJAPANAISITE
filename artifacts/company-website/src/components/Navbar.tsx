@@ -16,17 +16,17 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border transition-all duration-300">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 transition-all duration-300">
       {/* Top Row */}
-      <div className="border-b border-border hidden md:block">
+      <div className="border-b border-gray-100 hidden md:block">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-end h-8 text-xs text-muted-foreground gap-6">
+          <div className="flex items-center justify-end h-8 text-[11px] text-muted-foreground gap-8">
             <a href="#" className="hover:text-foreground transition-colors">会社概要</a>
             <a href="#" className="hover:text-foreground transition-colors">パートナープログラム</a>
             <a href="#" className="hover:text-foreground transition-colors flex items-center gap-1">
               ログイン <ExternalLink className="w-3 h-3" />
             </a>
-            <a href="#" className="bg-destructive text-destructive-foreground px-3 py-1 font-medium hover:bg-destructive/90 transition-colors">
+            <a href="#" className="bg-destructive text-destructive-foreground px-3 py-1 font-medium rounded-sm hover:bg-destructive/90 transition-colors">
               採用情報
             </a>
           </div>
@@ -41,7 +41,7 @@ export function Navbar() {
             <img
               src={`${import.meta.env.BASE_URL}images/logo.jpg`}
               alt="SIN JAPAN AI"
-              className="h-9 w-auto object-contain"
+              className="h-10 w-auto object-contain"
             />
           </a>
 
@@ -52,7 +52,7 @@ export function Navbar() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm font-bold text-foreground hover:text-accent transition-colors flex items-center gap-1"
+                    className="text-sm font-medium text-foreground hover:text-accent transition-colors flex items-center gap-1"
                   >
                     {link.label}
                     {link.hasDropdown && <ChevronDown className="w-4 h-4" />}
@@ -64,7 +64,7 @@ export function Navbar() {
 
           {/* Right CTA */}
           <div className="hidden md:flex items-center flex-shrink-0">
-            <Button asChild className="rounded-none px-6 h-12 text-sm font-bold bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button asChild className="rounded-none px-6 h-12 text-sm font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground">
               <a href="#contact">製品紹介資料</a>
             </Button>
           </div>
@@ -94,7 +94,7 @@ export function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-base font-bold py-2 border-b border-border text-foreground hover:text-accent flex items-center justify-between"
+                  className="text-base font-medium py-2 border-b border-border text-foreground hover:text-accent flex items-center justify-between"
                 >
                   {link.label}
                   {link.hasDropdown && <ChevronDown className="w-4 h-4" />}
@@ -106,7 +106,7 @@ export function Navbar() {
                 <a href="#" className="text-sm py-2 hover:text-accent flex items-center gap-1">ログイン <ExternalLink className="w-3 h-3" /></a>
                 <a href="#" className="text-sm py-2 text-destructive font-bold">採用情報</a>
               </div>
-              <Button asChild className="mt-2 w-full rounded-none h-12 bg-primary">
+              <Button asChild className="mt-2 w-full rounded-none h-12 tracking-wide font-medium bg-primary">
                 <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
                   製品紹介資料
                 </a>

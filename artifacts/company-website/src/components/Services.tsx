@@ -8,28 +8,36 @@ const SERVICES = [
     title: "生成AI導入支援",
     description: "ChatGPT等をはじめとする最新のLLMを活用し、社内業務の自動化・効率化を実現するシステムを構築します。",
     icon: Bot,
-    image: "service-1.png",
+    color: "bg-blue-500",
+    gradient: "from-blue-50 to-indigo-50/50",
+    iconColor: "text-blue-600"
   },
   {
     id: "system-dev",
     title: "AIシステム開発",
     description: "お客様の課題に合わせた独自のAIモデルの開発から、既存システムへのAI組み込みまで、一気通貫でサポートします。",
     icon: Code,
-    image: "service-2.png",
+    color: "bg-indigo-500",
+    gradient: "from-indigo-50 to-purple-50/50",
+    iconColor: "text-indigo-600"
   },
   {
     id: "data-analytics",
     title: "データ分析・活用",
     description: "社内に眠る膨大なデータを可視化・分析。機械学習を用いた予測モデルにより、データドリブンな意思決定を支援します。",
     icon: LineChart,
-    image: "service-3.png",
+    color: "bg-purple-500",
+    gradient: "from-purple-50 to-pink-50/50",
+    iconColor: "text-purple-600"
   },
   {
     id: "consulting",
     title: "AI戦略コンサルティング",
     description: "AIを経営戦略にどう組み込むか。ロードマップの策定から組織のAIリテラシー向上まで、専門家が伴走します。",
     icon: Target,
-    image: "service-4.png",
+    color: "bg-rose-500",
+    gradient: "from-rose-50 to-orange-50/50",
+    iconColor: "text-rose-600"
   }
 ];
 
@@ -67,30 +75,23 @@ export function Services() {
         >
           {SERVICES.map((service) => (
             <motion.div key={service.id} variants={itemVariants}>
-              <Card className="group overflow-hidden border border-border bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <div className="relative h-64 overflow-hidden bg-muted">
-                  <img
-                    src={`${import.meta.env.BASE_URL}images/${service.image}`}
-                    alt={service.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
-                    onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop";
-                    }}
-                  />
-                  <div className="absolute top-4 left-4 z-20 w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                    <service.icon className="w-6 h-6 text-primary" />
+              <Card className="group overflow-hidden border border-gray-100 bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative h-full">
+                <div className={`absolute top-0 left-0 w-full h-1 ${service.color}`} />
+                <CardContent className={`p-10 bg-gradient-to-br ${service.gradient} h-full flex flex-col`}>
+                  <div className="mb-8">
+                    <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm border border-gray-100/50">
+                      <service.icon className={`w-8 h-8 ${service.iconColor}`} />
+                    </div>
                   </div>
-                </div>
-                <CardContent className="p-8">
-                  <h4 className="text-2xl font-bold mb-3">
+                  <h4 className="text-2xl font-bold mb-4 text-gray-900">
                     {service.title}
                   </h4>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-gray-600 mb-8 leading-relaxed font-medium flex-1">
                     {service.description}
                   </p>
                   <a
                     href="#contact"
-                    className="inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors"
+                    className="inline-flex items-center text-sm font-bold text-gray-900 hover:text-gray-600 transition-colors mt-auto"
                   >
                     詳しく見る
                     <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
