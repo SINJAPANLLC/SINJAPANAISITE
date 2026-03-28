@@ -75,9 +75,7 @@ function buildHtml(name: string, company: string, subject: string, body: string)
             <p style="margin:0;font-size:9px;font-weight:700;letter-spacing:.3em;color:#999;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">合同会社 SIN JAPAN</p>
             <p style="margin:4px 0 0;font-size:9px;letter-spacing:.15em;color:#ccc;font-family:Helvetica,Arial,sans-serif;">AI INTEGRATION &amp; DEVELOPMENT</p>
           </td>
-          <td align="right" style="vertical-align:middle;">
-            <p style="margin:0;font-size:24px;font-weight:900;color:#000;letter-spacing:-.02em;font-family:Helvetica,Arial,sans-serif;line-height:1;">SIN</p>
-          </td>
+          <td></td>
         </tr>
       </table>
     </td>
@@ -138,8 +136,8 @@ function buildHtml(name: string, company: string, subject: string, body: string)
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td>
-            <p style="margin:0;font-size:11px;font-weight:900;color:#000;font-family:Helvetica,Arial,sans-serif;">合同会社SIN JAPAN　代表社員 大谷 和哉</p>
-            <p style="margin:6px 0 0;font-size:10px;color:#999;line-height:1.9;font-family:Helvetica,Arial,sans-serif;">〒241-0105 神奈川県愛甲郡愛川町中津7287<br>Tel 050-5526-9906　Fax 046-212-2326<br>info@sinjapanai.site　sinjapanai.site</p>
+            <p style="margin:0;font-size:11px;font-weight:900;color:#000;font-family:Helvetica,Arial,sans-serif;">合同会社SIN JAPAN</p>
+            <p style="margin:6px 0 0;font-size:10px;color:#999;line-height:1.9;font-family:Helvetica,Arial,sans-serif;">〒243-0303 神奈川県愛甲郡愛川町中津7287<br>Tel 050-5526-9906　Fax 046-212-2326<br>info@sinjapanai.site　sinjapanai.site</p>
           </td>
         </tr>
       </table>

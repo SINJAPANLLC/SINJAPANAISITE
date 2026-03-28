@@ -19,111 +19,185 @@ function buildInvoiceHtml(inv: Invoice): string {
   const sub = calcTotal(inv.items);
   const tax = Math.floor(sub * TAX);
   const total = sub + tax;
-  const rows = inv.items.map((l, i) =>
-    `<tr style="background:${i % 2 === 0 ? "#fff" : "#fafafa"}">
-      <td style="padding:14px 20px;font-size:14px;color:#1f2937;border-bottom:1px solid #f3f4f6;">${l.description}</td>
-      <td style="padding:14px 16px;font-size:14px;color:#6b7280;text-align:center;border-bottom:1px solid #f3f4f6;">${l.qty}</td>
-      <td style="padding:14px 16px;font-size:14px;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6;">¥${fmt(l.unitPrice)}</td>
-      <td style="padding:14px 20px;font-size:14px;font-weight:700;color:#111827;text-align:right;border-bottom:1px solid #f3f4f6;">¥${fmt(l.qty * l.unitPrice)}</td>
+  const rows = inv.items.map(l =>
+    `<tr>
+      <td style="padding:12px 20px;font-size:13px;color:#222;border-bottom:1px solid #ebebeb;font-family:Helvetica,Arial,sans-serif;">${l.description}</td>
+      <td style="padding:12px 16px;font-size:13px;color:#888;text-align:center;border-bottom:1px solid #ebebeb;font-family:Helvetica,Arial,sans-serif;">${l.qty}</td>
+      <td style="padding:12px 16px;font-size:13px;color:#888;text-align:right;border-bottom:1px solid #ebebeb;font-family:Helvetica,Arial,sans-serif;">¥${fmt(l.unitPrice)}</td>
+      <td style="padding:12px 20px;font-size:13px;font-weight:700;color:#000;text-align:right;border-bottom:1px solid #ebebeb;font-family:Helvetica,Arial,sans-serif;">¥${fmt(l.qty * l.unitPrice)}</td>
     </tr>`
   ).join("");
   return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>請求書 ${inv.invoiceNo}</title>
 </head>
-<body style="margin:0;padding:0;background:#f3f4f6;font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP',Arial,sans-serif;">
-<div style="max-width:700px;margin:0 auto;padding:24px 16px;">
+<body style="margin:0;padding:0;background:#f0f0f0;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f0f0f0;">
+<tr><td align="center" style="padding:40px 16px;">
+<table width="680" cellpadding="0" cellspacing="0" border="0" style="max-width:680px;width:100%;background:#fff;">
 
-  <!-- Header bar -->
-  <div style="background:#111827;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-    <div>
-      <p style="margin:0;font-size:10px;font-weight:700;letter-spacing:.2em;color:#6b7280;text-transform:uppercase;">合同会社 SIN JAPAN</p>
-      <p style="margin:4px 0 0;font-size:22px;font-weight:900;color:#fff;letter-spacing:.05em;">請&nbsp;求&nbsp;書</p>
-    </div>
-    <div style="text-align:right;">
-      <p style="margin:0;font-size:11px;color:#9ca3af;">請求書番号</p>
-      <p style="margin:2px 0 0;font-size:16px;font-weight:700;color:#fff;">${inv.invoiceNo}</p>
-    </div>
-  </div>
+  <!-- 3px top rule -->
+  <tr><td style="background:#000;height:3px;font-size:0;">&nbsp;</td></tr>
 
-  <!-- White card -->
-  <div style="background:#fff;padding:28px;">
-
-    <!-- Meta info -->
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;padding-bottom:24px;border-bottom:2px solid #f3f4f6;">
-      <div>
-        <p style="margin:0;font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">請求先</p>
-        <p style="margin:0;font-size:15px;font-weight:700;color:#1f2937;">${inv.company}</p>
-        <p style="margin:2px 0 0;font-size:14px;color:#374151;">${inv.client}&nbsp;様</p>
-      </div>
-      <div style="text-align:right;">
-        <div style="display:inline-block;">
-          <table style="font-size:13px;border-collapse:collapse;">
-            <tr><td style="padding:3px 12px 3px 0;color:#9ca3af;">請求日</td><td style="padding:3px 0;color:#1f2937;font-weight:600;">${inv.date}</td></tr>
-            <tr><td style="padding:3px 12px 3px 0;color:#ef4444;font-weight:700;">お支払期限</td><td style="padding:3px 0;color:#ef4444;font-weight:700;">${inv.dueDate}</td></tr>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Amount highlight -->
-    <div style="background:#111827;padding:20px 24px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-      <p style="margin:0;font-size:13px;color:#9ca3af;font-weight:600;">ご請求金額（税込）</p>
-      <p style="margin:0;font-size:28px;font-weight:900;color:#fff;letter-spacing:.02em;">¥${fmt(total)}</p>
-    </div>
-
-    <!-- Line items -->
-    <table style="width:100%;border-collapse:collapse;margin-bottom:0;">
-      <thead>
-        <tr style="background:#f9fafb;">
-          <th style="padding:11px 20px;text-align:left;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #e5e7eb;">内容</th>
-          <th style="padding:11px 16px;text-align:center;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #e5e7eb;width:60px;">数量</th>
-          <th style="padding:11px 16px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #e5e7eb;width:110px;">単価</th>
-          <th style="padding:11px 20px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid #e5e7eb;width:120px;">小計</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-
-    <!-- Subtotals -->
-    <div style="border-top:2px solid #e5e7eb;padding:20px 20px 0;display:flex;justify-content:flex-end;">
-      <table style="min-width:240px;font-size:13px;border-collapse:collapse;">
-        <tr><td style="padding:6px 20px 6px 0;color:#6b7280;">小計</td><td style="padding:6px 0;text-align:right;color:#374151;font-weight:600;">¥${fmt(sub)}</td></tr>
-        <tr><td style="padding:6px 20px 6px 0;color:#6b7280;">消費税（10%）</td><td style="padding:6px 0;text-align:right;color:#374151;font-weight:600;">¥${fmt(tax)}</td></tr>
-        <tr><td colspan="2" style="padding:0;"><div style="height:1px;background:#e5e7eb;margin:8px 0;"></div></td></tr>
+  <!-- Header -->
+  <tr>
+    <td style="padding:24px 40px 20px;border-bottom:1px solid #e8e8e8;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td style="padding:8px 20px 8px 0;font-size:15px;font-weight:700;color:#111827;">合計（税込）</td>
-          <td style="padding:8px 0;text-align:right;font-size:20px;font-weight:900;color:#111827;">¥${fmt(total)}</td>
+          <td style="vertical-align:middle;">
+            <p style="margin:0;font-size:9px;font-weight:700;letter-spacing:.3em;color:#999;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">合同会社 SIN JAPAN</p>
+            <p style="margin:4px 0 0;font-size:9px;letter-spacing:.15em;color:#ccc;font-family:Helvetica,Arial,sans-serif;">AI INTEGRATION &amp; DEVELOPMENT</p>
+          </td>
+          <td align="right" style="vertical-align:middle;">
+            <p style="margin:0;font-size:9px;font-weight:700;letter-spacing:.3em;color:#bbb;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">INVOICE</p>
+            <p style="margin:4px 0 0;font-size:20px;font-weight:900;color:#000;font-family:Helvetica,Arial,sans-serif;letter-spacing:-.01em;">請求書</p>
+          </td>
         </tr>
       </table>
-    </div>
+    </td>
+  </tr>
 
-    ${inv.notes ? `
-    <div style="margin-top:24px;padding:16px 20px;background:#f9fafb;border-left:3px solid #111827;">
-      <p style="margin:0 0 6px;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.1em;">備考</p>
-      <p style="margin:0;font-size:13px;color:#374151;line-height:1.7;">${inv.notes}</p>
-    </div>` : ""}
+  <!-- Doc no + dates -->
+  <tr>
+    <td style="padding:20px 40px;background:#fafafa;border-bottom:1px solid #ebebeb;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="vertical-align:top;">
+            <p style="margin:0;font-size:9px;font-weight:700;letter-spacing:.2em;color:#aaa;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">請求先</p>
+            <table cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
+              <tr>
+                <td style="width:2px;background:#000;padding:0;">&nbsp;</td>
+                <td style="padding:0 0 0 14px;">
+                  <p style="margin:0;font-size:13px;font-weight:700;color:#555;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${inv.company}</p>
+                  <p style="margin:3px 0 0;font-size:15px;font-weight:900;color:#000;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${inv.client}&nbsp;<span style="font-size:12px;font-weight:400;color:#666;">様</span></p>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td align="right" style="vertical-align:top;">
+            <table cellpadding="0" cellspacing="0" border="0" style="font-size:12px;border-collapse:collapse;">
+              <tr><td style="padding:3px 16px 3px 0;color:#aaa;font-family:Helvetica,Arial,sans-serif;">請求書番号</td><td style="padding:3px 0;color:#000;font-weight:700;font-family:Helvetica,Arial,sans-serif;">${inv.invoiceNo}</td></tr>
+              <tr><td style="padding:3px 16px 3px 0;color:#aaa;font-family:Helvetica,Arial,sans-serif;">請求日</td><td style="padding:3px 0;color:#333;font-family:Helvetica,Arial,sans-serif;">${inv.date}</td></tr>
+              <tr><td style="padding:3px 16px 3px 0;font-weight:700;color:#000;font-family:Helvetica,Arial,sans-serif;">お支払期限</td><td style="padding:3px 0;font-weight:700;color:#000;font-family:Helvetica,Arial,sans-serif;">${inv.dueDate}</td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
-    <!-- Bank info placeholder -->
-    <div style="margin-top:24px;padding:16px 20px;background:#fffbeb;border:1px solid #fde68a;">
-      <p style="margin:0 0 4px;font-size:11px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.1em;">お振込先</p>
-      <p style="margin:0;font-size:13px;color:#78350f;line-height:1.7;">担当者よりお振込先をご案内いたします。</p>
-    </div>
-  </div>
+  <!-- Amount block -->
+  <tr>
+    <td style="padding:0 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#000;margin:24px 0 0;">
+        <tr>
+          <td style="padding:16px 24px;">
+            <p style="margin:0;font-size:9px;font-weight:700;letter-spacing:.2em;color:#888;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">ご請求金額（税込）</p>
+          </td>
+          <td align="right" style="padding:16px 24px;">
+            <p style="margin:0;font-size:26px;font-weight:900;color:#fff;font-family:Helvetica,Arial,sans-serif;letter-spacing:-.01em;">¥${fmt(total)}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Line items -->
+  <tr>
+    <td style="padding:0 40px 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;border-top:2px solid #000;">
+        <tr style="background:#f5f5f5;">
+          <th style="padding:10px 20px;text-align:left;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;font-family:Helvetica,Arial,sans-serif;border-bottom:1px solid #ddd;">内容</th>
+          <th style="padding:10px 12px;text-align:center;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;font-family:Helvetica,Arial,sans-serif;border-bottom:1px solid #ddd;width:60px;">数量</th>
+          <th style="padding:10px 12px;text-align:right;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;font-family:Helvetica,Arial,sans-serif;border-bottom:1px solid #ddd;width:110px;">単価</th>
+          <th style="padding:10px 20px;text-align:right;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.1em;font-family:Helvetica,Arial,sans-serif;border-bottom:1px solid #ddd;width:110px;">小計</th>
+        </tr>
+        ${rows}
+      </table>
+    </td>
+  </tr>
+
+  <!-- Subtotals -->
+  <tr>
+    <td style="padding:0 40px 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:0;border-top:2px solid #000;">
+        <tr>
+          <td style="padding:8px 0;">&nbsp;</td>
+          <td align="right" style="padding:8px 20px 4px;">
+            <table cellpadding="0" cellspacing="0" border="0" style="font-size:12px;border-collapse:collapse;">
+              <tr><td style="padding:4px 24px 4px 0;color:#aaa;font-family:Helvetica,Arial,sans-serif;">小計</td><td style="padding:4px 0;text-align:right;color:#333;font-family:Helvetica,Arial,sans-serif;">¥${fmt(sub)}</td></tr>
+              <tr><td style="padding:4px 24px 4px 0;color:#aaa;font-family:Helvetica,Arial,sans-serif;">消費税（10%）</td><td style="padding:4px 0;text-align:right;color:#333;font-family:Helvetica,Arial,sans-serif;">¥${fmt(tax)}</td></tr>
+              <tr><td colspan="2" style="padding:0;height:1px;background:#ddd;font-size:0;">&nbsp;</td></tr>
+              <tr><td style="padding:8px 24px 4px 0;font-size:14px;font-weight:700;color:#000;font-family:Helvetica,Arial,sans-serif;">合計（税込）</td><td style="padding:8px 0 4px;text-align:right;font-size:18px;font-weight:900;color:#000;font-family:Helvetica,Arial,sans-serif;">¥${fmt(total)}</td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  ${inv.notes ? `
+  <!-- Notes -->
+  <tr>
+    <td style="padding:16px 40px 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="border-left:2px solid #000;padding-left:14px;">
+            <p style="margin:0 0 4px;font-size:9px;font-weight:700;letter-spacing:.2em;color:#aaa;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">備考</p>
+            <p style="margin:0;font-size:12px;color:#444;line-height:1.7;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">${inv.notes}</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>` : ""}
+
+  <!-- Bank info -->
+  <tr>
+    <td style="padding:16px 40px 0;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="border-left:2px solid #000;padding-left:14px;">
+            <p style="margin:0 0 4px;font-size:9px;font-weight:700;letter-spacing:.2em;color:#aaa;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">お振込先</p>
+            <p style="margin:0;font-size:12px;color:#444;line-height:1.7;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">担当者よりお振込先をご案内いたします。</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- Sender -->
+  <tr>
+    <td style="padding:24px 40px 20px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #ebebeb;">
+        <tr><td style="height:20px;">&nbsp;</td></tr>
+        <tr>
+          <td>
+            <p style="margin:0;font-size:11px;font-weight:900;color:#000;font-family:Helvetica,Arial,sans-serif;">合同会社SIN JAPAN</p>
+            <p style="margin:6px 0 0;font-size:10px;color:#aaa;line-height:1.9;font-family:Helvetica,Arial,sans-serif;">〒243-0303 神奈川県愛甲郡愛川町中津7287<br>Tel 050-5526-9906　Fax 046-212-2326　info@sinjapanai.site</p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
   <!-- Footer -->
-  <div style="background:#1f2937;padding:20px 28px;">
-    <p style="margin:0 0 2px;font-size:12px;font-weight:900;color:#fff;">合同会社SIN JAPAN</p>
-    <p style="margin:0;font-size:11px;color:#6b7280;line-height:1.9;">
-      〒241-0105 神奈川県愛甲郡愛川町中津7287<br>
-      Tel: 050-5526-9906&nbsp;&nbsp;|&nbsp;&nbsp;info@sinjapanai.site
-    </p>
-  </div>
+  <tr>
+    <td style="background:#000;padding:14px 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><p style="margin:0;font-size:9px;color:#555;font-family:Helvetica,Arial,sans-serif;">このメールは合同会社SIN JAPANより送信されています。</p></td>
+          <td align="right"><p style="margin:0;font-size:10px;font-weight:700;color:#333;font-family:Helvetica,Arial,sans-serif;letter-spacing:.1em;">SIN JAPAN</p></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 
-</div>
+</table>
+</td></tr>
+</table>
 </body>
 </html>`;
 }
