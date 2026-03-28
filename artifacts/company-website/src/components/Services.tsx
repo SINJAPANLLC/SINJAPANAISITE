@@ -9,7 +9,6 @@ const SERVICES = [
     description: "ChatGPT等をはじめとする最新のLLMを活用し、社内業務の自動化・効率化を実現するシステムを構築します。",
     icon: Bot,
     image: "service-1.png",
-    color: "from-blue-500/20 to-cyan-500/20",
   },
   {
     id: "system-dev",
@@ -17,7 +16,6 @@ const SERVICES = [
     description: "お客様の課題に合わせた独自のAIモデルの開発から、既存システムへのAI組み込みまで、一気通貫でサポートします。",
     icon: Code,
     image: "service-2.png",
-    color: "from-purple-500/20 to-pink-500/20",
   },
   {
     id: "data-analytics",
@@ -25,7 +23,6 @@ const SERVICES = [
     description: "社内に眠る膨大なデータを可視化・分析。機械学習を用いた予測モデルにより、データドリブンな意思決定を支援します。",
     icon: LineChart,
     image: "service-3.png",
-    color: "from-cyan-500/20 to-emerald-500/20",
   },
   {
     id: "consulting",
@@ -33,7 +30,6 @@ const SERVICES = [
     description: "AIを経営戦略にどう組み込むか。ロードマップの策定から組織のAIリテラシー向上まで、専門家が伴走します。",
     icon: Target,
     image: "service-4.png",
-    color: "from-orange-500/20 to-red-500/20",
   }
 ];
 
@@ -52,7 +48,7 @@ const itemVariants = {
 
 export function Services() {
   return (
-    <section id="services" className="py-24 relative overflow-hidden bg-muted/30">
+    <section id="services" className="py-24 bg-white border-t border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-sm font-bold tracking-widest text-primary uppercase mb-3">Our Services</h2>
@@ -71,20 +67,22 @@ export function Services() {
         >
           {SERVICES.map((service) => (
             <motion.div key={service.id} variants={itemVariants}>
-              <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1">
-                <div className="relative h-64 overflow-hidden">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${service.color} mix-blend-overlay z-10`} />
+              <Card className="group overflow-hidden border border-border bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div className="relative h-64 overflow-hidden bg-muted">
                   <img
                     src={`${import.meta.env.BASE_URL}images/${service.image}`}
                     alt={service.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=1000&auto=format&fit=crop";
+                    }}
                   />
-                  <div className="absolute top-4 left-4 z-20 w-12 h-12 rounded-2xl glass-panel flex items-center justify-center">
-                    <service.icon className="w-6 h-6 text-foreground" />
+                  <div className="absolute top-4 left-4 z-20 w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                    <service.icon className="w-6 h-6 text-primary" />
                   </div>
                 </div>
                 <CardContent className="p-8">
-                  <h4 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  <h4 className="text-2xl font-bold mb-3">
                     {service.title}
                   </h4>
                   <p className="text-muted-foreground mb-6 leading-relaxed">
@@ -92,7 +90,7 @@ export function Services() {
                   </p>
                   <a
                     href="#contact"
-                    className="inline-flex items-center text-sm font-bold text-primary group-hover:text-accent transition-colors"
+                    className="inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors"
                   >
                     詳しく見る
                     <ArrowRight className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform" />

@@ -21,11 +21,11 @@ const FEATURES = [
 
 export function Features() {
   return (
-    <section id="features" className="py-24 bg-background">
+    <section id="features" className="py-24 bg-[#f8f9fa] border-t border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold tracking-widest text-accent uppercase mb-3">Why Choose Us</h2>
-          <h3 className="text-3xl md:text-4xl font-bold mb-6">NEXUS.AIが選ばれる理由</h3>
+          <h2 className="text-sm font-bold tracking-widest text-primary uppercase mb-3">Why Choose Us</h2>
+          <h3 className="text-3xl md:text-4xl font-bold mb-6">NEXUS AIが選ばれる理由</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -36,13 +36,13 @@ export function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ delay: index * 0.2, duration: 0.6 }}
-              className="flex flex-col items-center text-center group"
+              className="flex flex-col items-center text-center group bg-white p-8 rounded-2xl shadow-sm border border-border hover:shadow-md transition-shadow"
             >
-              <div className="w-20 h-20 rounded-3xl bg-secondary flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary transition-all duration-300 shadow-lg">
-                <feature.icon className="w-10 h-10 text-foreground group-hover:text-primary-foreground transition-colors duration-300" />
+              <div className="w-16 h-16 rounded-xl bg-[#f8f9fa] border border-border flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary transition-all duration-300">
+                <feature.icon className="w-8 h-8 text-primary group-hover:text-white transition-colors duration-300" />
               </div>
               <h4 className="text-xl font-bold mb-4">{feature.title}</h4>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed text-sm">
                 {feature.description}
               </p>
             </motion.div>
