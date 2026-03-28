@@ -4,12 +4,12 @@ import { Menu, X, ChevronDown, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const MAIN_NAV_LINKS = [
-  { label: "NEXUS AIとは", href: "#about" },
-  { label: "サービス", href: "#services", hasDropdown: true },
+  { label: "事業概要", href: "#services" },
+  { label: "会社概要", href: "#about" },
+  { label: "お知らせ", href: "#news" },
   { label: "導入事例", href: "#stats" },
-  { label: "お役立ち情報", href: "#features", hasDropdown: true },
-  { label: "セミナー", href: "#seminar" },
-  { label: "ニュース", href: "#news" },
+  { label: "パートナー", href: "#partner" },
+  { label: "お問い合わせ", href: "#contact" },
 ];
 
 export function Navbar() {
@@ -65,7 +65,7 @@ export function Navbar() {
           {/* Right CTA */}
           <div className="hidden md:flex items-center flex-shrink-0">
             <Button asChild className="rounded-none px-6 h-12 text-sm font-medium tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground">
-              <a href="#contact">製品紹介資料</a>
+              <a href="#download">資料ダウンロード</a>
             </Button>
           </div>
 
@@ -107,8 +107,8 @@ export function Navbar() {
                 <a href="#" className="text-sm py-2 text-destructive font-bold">採用情報</a>
               </div>
               <Button asChild className="mt-2 w-full rounded-none h-12 tracking-wide font-medium bg-primary">
-                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>
-                  製品紹介資料
+                <a href="#download" onClick={() => setIsMobileMenuOpen(false)}>
+                  資料ダウンロード
                 </a>
               </Button>
             </div>
