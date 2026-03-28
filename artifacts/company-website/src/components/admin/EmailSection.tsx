@@ -537,7 +537,7 @@ export function EmailSection() {
               <div className="flex gap-2">
                 <input value={googleQuery} onChange={e => setGoogleQuery(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && startDeepCrawl()}
-                  placeholder="例: 神奈川 運送業 / 東京 製造業 / 大阪 建設会社"
+                  placeholder="例: 神奈川 運送業 中小企業 / 東京 製造業 中小企業 / 大阪 建設会社"
                   disabled={crawlJobStatus === "running"}
                   className="flex-1 bg-white/5 border border-white/10 text-sm text-white px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600 disabled:opacity-50" />
                 <button onClick={startDeepCrawl}
