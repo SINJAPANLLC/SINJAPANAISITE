@@ -21,13 +21,8 @@ export function Navbar() {
       <div className="border-b border-gray-100 hidden md:block">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-end h-8 text-[11px] text-muted-foreground gap-8">
-            <a href="#" className="hover:text-foreground transition-colors">会社概要</a>
-            <a href="#" className="hover:text-foreground transition-colors">パートナープログラム</a>
             <a href="#" className="hover:text-foreground transition-colors flex items-center gap-1">
               ログイン <ExternalLink className="w-3 h-3" />
-            </a>
-            <a href="#" className="bg-destructive text-destructive-foreground px-3 py-1 font-medium rounded-sm hover:bg-destructive/90 transition-colors">
-              採用情報
             </a>
           </div>
         </div>
@@ -101,10 +96,7 @@ export function Navbar() {
                 </a>
               ))}
               <div className="flex flex-col gap-2 mt-4">
-                <a href="#" className="text-sm py-2 hover:text-accent">会社概要</a>
-                <a href="#" className="text-sm py-2 hover:text-accent">パートナープログラム</a>
                 <a href="#" className="text-sm py-2 hover:text-accent flex items-center gap-1">ログイン <ExternalLink className="w-3 h-3" /></a>
-                <a href="#" className="text-sm py-2 text-destructive font-bold">採用情報</a>
               </div>
               <Button asChild className="mt-2 w-full rounded-none h-12 tracking-wide font-medium bg-primary">
                 <a href="#download" onClick={() => setIsMobileMenuOpen(false)}>
