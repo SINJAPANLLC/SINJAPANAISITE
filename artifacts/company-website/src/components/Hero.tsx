@@ -89,9 +89,12 @@ export function Hero() {
             
             {/* Center Logo Overlay */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-48 h-48 bg-white/90 backdrop-blur-sm rounded-full shadow-2xl flex flex-col items-center justify-center border border-border">
-                <div className="w-12 h-12 border-4 border-primary rounded-full mb-2" />
-                <span className="font-black text-xl tracking-tight text-primary">NEXUS AI</span>
+              <div className="w-56 h-32 bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl flex items-center justify-center border border-border px-4">
+                <img
+                  src={`${import.meta.env.BASE_URL}images/logo.jpg`}
+                  alt="SIN JAPAN AI"
+                  className="w-full h-auto object-contain"
+                />
               </div>
             </div>
           </motion.div>
@@ -112,7 +115,7 @@ export function Hero() {
                 <Medal className="w-6 h-6 text-yellow-600" />
               </div>
               <div className="text-left">
-                <p className="text-xs font-bold text-muted-foreground">NEXUS AI AGENT</p>
+                <p className="text-xs font-bold text-muted-foreground">SIN JAPAN AI AGENT</p>
                 <p className="text-sm font-black text-foreground">業界主要アワード W受賞!</p>
               </div>
             </div>

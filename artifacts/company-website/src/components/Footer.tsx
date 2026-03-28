@@ -1,5 +1,3 @@
-import { Hexagon } from "lucide-react";
-
 export function Footer() {
   return (
     <footer id="about" className="bg-[#f8f9fa] border-t border-border pt-16 pb-8">
@@ -7,11 +5,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
           <div className="md:col-span-2">
-            <a href="#" className="flex items-center gap-2 group mb-6 inline-flex">
-              <Hexagon className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold tracking-tighter text-foreground">
-                NEXUS AI
-              </span>
+            <a href="#" className="flex items-center mb-6 inline-flex">
+              <img
+                src={`${import.meta.env.BASE_URL}images/logo.jpg`}
+                alt="SIN JAPAN AI"
+                className="h-8 w-auto object-contain"
+              />
             </a>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed font-medium">
               最先端のAI技術で、企業のデジタルトランスフォーメーションを推進し、新たな価値を創造します。
@@ -34,7 +33,7 @@ export function Footer() {
               <li>〒106-0032</li>
               <li>東京都港区六本木1-2-3</li>
               <li>ネクサスビル 20F</li>
-              <li>info@nexus-ai.example.com</li>
+              <li>info@sinjapanai.example.com</li>
             </ul>
           </div>
 
@@ -42,7 +41,7 @@ export function Footer() {
         
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground font-medium">
-            © {new Date().getFullYear()} NEXUS AI, Inc. All rights reserved.
+            © {new Date().getFullYear()} SIN JAPAN AI, Inc. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-muted-foreground font-medium">
             <a href="#" className="hover:text-primary transition-colors">プライバシーポリシー</a>
