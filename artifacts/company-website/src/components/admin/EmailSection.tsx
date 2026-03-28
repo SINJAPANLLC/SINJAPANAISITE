@@ -7,39 +7,39 @@ const TOKEN = () => import.meta.env.VITE_ADMIN_PASSWORD || "";
 const TEMPLATES = [
   {
     label: "初回アプローチ",
-    subject: "【合同会社SIN JAPAN】AI導入支援のご提案",
+    subject: "AIで業務を自動化｜最短3週間・月額3万円〜【SIN JAPAN AI】",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nはじめてご連絡させていただきます。\n合同会社SIN JAPANと申します。\n\n弊社は、AI導入支援・AI開発を専門とした会社です。\n貴社のビジネス課題をAIで解決するご提案が可能です。\n\n一度、オンラインにてご説明の機会をいただけますでしょうか。\n\nどうぞよろしくお願いいたします。`,
+      `${company}\n${name} 様\n\n突然のご連絡、失礼いたします。\n合同会社SIN JAPANと申します。\n\n「AIは気になるけど、何から始めればいいかわからない」\n「費用が高そう、専門知識がなければ使えない」\nそのようなお悩みをお持ちではないでしょうか？\n\n弊社は中小企業専門のAI導入支援会社です。\n3つのことを徹底してサービスを提供しています。\n\n✅ 安い　── 月額3万円〜。初期費用ゼロで始められます\n✅ 早い　── 最短3週間で現場稼働。スモールスタートで効果を確認\n✅ 簡単　── 社内にIT担当不要。使い方は丁寧に指導します\n\n実際にこんな変化が起きています：\n\n・見積書・請求書作成が80%時間短縮\n・問い合わせ対応を24時間自動化、営業機会を逃さない\n・スケジュール管理・在庫最適化でミスがゼロに\n\n初回のご相談・デモは完全無料です。\n「話だけ聞いてみたい」でも大歓迎です。\n\nまずは下記URLより詳細をご覧いただき、\nお気軽にお問い合わせください（所要30秒）：\nhttps://sinjapanai.site/\n\n来週15分ほどオンラインでお話しできれば幸いです。\n貴社のご状況に合わせた活用方法をご提案いたします。\n\nどうぞよろしくお願いいたします。`,
   },
   {
     label: "フォローアップ",
-    subject: "【合同会社SIN JAPAN】先日のご提案の件",
+    subject: "【SIN JAPAN AI】先日のAI導入ご提案について",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nお世話になっております。\n合同会社SIN JAPANです。\n\n先日ご提案させていただいた件について、\nご検討いただけましたでしょうか？\n\nご不明な点がございましたら、お気軽にご連絡ください。`,
+      `${company}\n${name} 様\n\nお世話になっております。\n合同会社SIN JAPANでございます。\n\n先日ご案内させていただいたAI導入支援について、\nその後いかがでしょうか？\n\n「まだ検討中」「もう少し詳しく聞きたい」という場合でも、\nぜひお気軽にご連絡ください。\n\n費用・期間・具体的な活用イメージなど、\n疑問点に何でもお答えします。\n\n▶ 詳細・お問い合わせはこちら：\nhttps://sinjapanai.site/\n\nご返信お待ちしております。`,
   },
   {
     label: "お礼メール",
-    subject: "【合同会社SIN JAPAN】お問い合わせいただきありがとうございます",
+    subject: "【SIN JAPAN AI】お問い合わせありがとうございます",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nこの度はお問い合わせいただき、誠にありがとうございます。\n合同会社SIN JAPANです。\n\n担当者より改めてご連絡させていただきます。\n今しばらくお待ちいただけますようお願い申し上げます。`,
+      `${company}\n${name} 様\n\nこの度はお問い合わせいただき、誠にありがとうございます。\n合同会社SIN JAPANでございます。\n\n内容を確認の上、担当者より1営業日以内にご連絡いたします。\n\nまた、サービス概要は下記よりご確認いただけます：\nhttps://sinjapanai.site/\n\n引き続きよろしくお願いいたします。`,
   },
   {
     label: "見積書送付",
-    subject: "【合同会社SIN JAPAN】お見積書のご送付",
+    subject: "【SIN JAPAN AI】お見積書のご送付",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nいつもお世話になっております。\n合同会社SIN JAPANでございます。\n\n先日お話しさせていただきました件につきまして、\nお見積書を作成いたしましたのでご送付申し上げます。\n\nご不明な点やご変更のご要望がございましたら、\nお気軽にお申し付けください。\n何卒よろしくお願いいたします。`,
+      `${company}\n${name} 様\n\nいつもお世話になっております。\n合同会社SIN JAPANでございます。\n\n先日ご相談いただいた件につきまして、\nお見積書を作成いたしましたのでご送付申し上げます。\n\nご不明な点・変更のご要望がございましたら、\nどうぞお気軽にお申し付けください。\nスコープ調整も柔軟に対応いたします。\n\n▶ サービス詳細：https://sinjapanai.site/\n\n何卒よろしくお願いいたします。`,
   },
   {
     label: "請求書送付",
-    subject: "【合同会社SIN JAPAN】ご請求書のご送付",
+    subject: "【SIN JAPAN AI】ご請求書のご送付",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nいつもお世話になっております。\n合同会社SIN JAPANでございます。\n\n今月分のご請求書を送付させていただきます。\nご確認の上、お振込みいただきますようお願いいたします。\n\nご不明な点がございましたら、何なりとお申し付けください。\n引き続きどうぞよろしくお願いいたします。`,
+      `${company}\n${name} 様\n\nいつもお世話になっております。\n合同会社SIN JAPANでございます。\n\n今月分のご請求書を送付させていただきます。\nご確認の上、お振込みいただきますようお願いいたします。\n\nご不明な点がございましたら、何なりとお申し付けください。\n引き続きよろしくお願いいたします。`,
   },
   {
     label: "代理店向け",
-    subject: "【合同会社SIN JAPAN】パートナー連絡",
+    subject: "【SIN JAPAN AI】パートナープログラムのご案内",
     body: (name: string, company: string) =>
-      `${company}\n${name} 様\n\nいつもご支援いただきありがとうございます。\n合同会社SIN JAPANでございます。\n\n新しいサービスのご案内とともに、最新の代理店資料をお届けいたします。\nパートナー様限定の優遇条件もご用意しておりますので、\nぜひご確認いただけますと幸いです。\n\n引き続きよろしくお願いいたします。`,
+      `${company}\n${name} 様\n\nいつもご支援いただきありがとうございます。\n合同会社SIN JAPANでございます。\n\n新しいパートナー向けサービスと、\n最新の代理店資料をお届けいたします。\n\nパートナー様限定の優遇条件（マージン・共同マーケティング支援）も\nご用意しておりますので、ぜひご確認ください。\n\n▶ パートナー詳細：https://sinjapanai.site/\n\n引き続きよろしくお願いいたします。`,
   },
 ];
 
@@ -120,7 +120,7 @@ function buildHtml(name: string, company: string, subject: string, body: string)
       <table cellpadding="0" cellspacing="0" border="0" align="center">
         <tr>
           <td style="background:#000;padding:0;">
-            <a href="mailto:info@sinjapanai.site" style="display:block;padding:14px 36px;font-size:11px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:.15em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">Contact Us &nbsp;&rsaquo;</a>
+            <a href="https://sinjapanai.site/" style="display:block;padding:14px 36px;font-size:12px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:.08em;font-family:Helvetica,Arial,'Hiragino Kaku Gothic ProN',sans-serif;">まずは無料相談する &nbsp;&rsaquo;&nbsp; sinjapanai.site</a>
           </td>
         </tr>
       </table>
@@ -206,6 +206,8 @@ export function EmailSection() {
   const [googleCrawling, setGoogleCrawling] = useState(false);
   const [googleResult, setGoogleResult] = useState<string[]>([]);
   const [googleError, setGoogleError] = useState("");
+  const [googleSitesScanned, setGoogleSitesScanned] = useState(0);
+  const [googleMessage, setGoogleMessage] = useState("");
 
   useEffect(() => {
     Promise.all([
@@ -313,7 +315,7 @@ export function EmailSection() {
   // Google crawl
   const doGoogleCrawl = async () => {
     if (!googleQuery.trim()) return;
-    setGoogleCrawling(true); setGoogleResult([]); setGoogleError("");
+    setGoogleCrawling(true); setGoogleResult([]); setGoogleError(""); setGoogleSitesScanned(0); setGoogleMessage("");
     try {
       const res = await fetch("/api/crawl-google", {
         method: "POST",
@@ -323,6 +325,8 @@ export function EmailSection() {
       const data = await res.json();
       if (!res.ok) { setGoogleError(data.error || "エラー"); return; }
       setGoogleResult(data.emails || []);
+      setGoogleSitesScanned(data.sitesScanned || 0);
+      setGoogleMessage(data.message || "");
     } catch { setGoogleError("ネットワークエラー"); }
     finally { setGoogleCrawling(false); }
   };
@@ -397,28 +401,38 @@ export function EmailSection() {
             </>
           ) : (
             <>
-              <p className="text-[10px] text-gray-500 tracking-widest uppercase font-bold">— Google検索からメールアドレスを抽出</p>
+              <p className="text-[10px] text-gray-500 tracking-widest uppercase font-bold">— 業種・地域を入力して中小法人のメールを自動収集</p>
+              <p className="text-[10px] text-gray-600">例: 「神奈川 運送業」「東京 製造業 中小企業」「大阪 建設会社」</p>
               <div className="flex gap-2">
                 <input value={googleQuery} onChange={e => setGoogleQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && doGoogleCrawl()}
-                  placeholder="会社名・業種・キーワードを入力"
+                  placeholder="例: 神奈川 運送業 / 東京 製造業 / 大阪 建設会社"
                   className="flex-1 bg-white/5 border border-white/10 text-sm text-white px-3 py-2 outline-none focus:border-white/30 placeholder-gray-600" />
                 <button onClick={doGoogleCrawl} disabled={googleCrawling || !googleQuery.trim()}
                   className="flex items-center gap-2 text-xs font-bold px-4 py-2 bg-white text-gray-900 hover:bg-gray-100 disabled:opacity-50 transition-colors">
                   {googleCrawling ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Search className="w-3.5 h-3.5" />}
-                  {googleCrawling ? "検索中…" : "検索"}
+                  {googleCrawling ? "収集中…" : "収集開始"}
                 </button>
               </div>
+              {googleCrawling && (
+                <p className="text-[10px] text-gray-500 animate-pulse">企業サイトを順次クロールしています（20〜40秒かかります）…</p>
+              )}
               {googleError && <p className="text-xs text-red-400">{googleError}</p>}
+              {googleMessage && !googleCrawling && (
+                <p className="text-[10px] text-yellow-500">{googleMessage}</p>
+              )}
+              {!googleCrawling && googleSitesScanned > 0 && (
+                <p className="text-[10px] text-gray-500">{googleSitesScanned}サイトをスキャン → {googleResult.length}件のメールアドレスを検出</p>
+              )}
               {googleResult.length > 0 && (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <p className="text-[10px] text-gray-400">{googleResult.length}件検出</p>
+                    <p className="text-[10px] text-green-400 font-bold">✓ {googleResult.length}件検出</p>
                     <button onClick={() => addAllCrawled(googleResult, googleQuery.trim())}
                       className="text-[10px] text-white hover:text-gray-300 flex items-center gap-1 border border-white/20 px-2 py-0.5">
                       <Plus className="w-3 h-3" />全て追加
                     </button>
                   </div>
-                  <div className="max-h-36 overflow-y-auto border border-white/10 divide-y divide-white/5">
+                  <div className="max-h-48 overflow-y-auto border border-white/10 divide-y divide-white/5">
                     {googleResult.map(email => {
                       const added = crawlContacts.some(c => c.email === email);
                       return (
@@ -434,8 +448,11 @@ export function EmailSection() {
                   </div>
                 </div>
               )}
-              {!googleCrawling && googleResult.length === 0 && !googleError && (
-                <p className="text-[10px] text-gray-600">※ Googleの検索結果にメールアドレスが含まれる場合に検出されます</p>
+              {!googleCrawling && googleResult.length === 0 && googleSitesScanned > 0 && !googleError && (
+                <p className="text-[10px] text-gray-600">メールアドレスが見つかりませんでした。別のキーワードで試してください。</p>
+              )}
+              {!googleCrawling && googleSitesScanned === 0 && !googleError && !googleMessage && (
+                <p className="text-[10px] text-gray-600">※ 業種・地域・会社名などのキーワードで検索。ヒットした企業サイトを自動クロールします</p>
               )}
             </>
           )}
