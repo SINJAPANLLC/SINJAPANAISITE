@@ -7,7 +7,7 @@ export function Hero() {
     <section className="relative pt-28 pb-10 md:pt-36 md:pb-16 bg-[#f8f9fa] min-h-screen flex flex-col justify-center overflow-hidden">
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 items-center flex-1">
+        <div className="flex items-center flex-1">
           
           {/* Left Column */}
           <motion.div
@@ -48,56 +48,6 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Right Column - Abstract Art */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="relative w-full aspect-square max-w-[700px] mx-auto lg:ml-auto"
-          >
-            <div className="absolute inset-0 flex items-center justify-center animate-spin-slow">
-              <svg viewBox="0 0 500 500" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="fiber1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#1a56db" />
-                    <stop offset="100%" stopColor="#a78bfa" />
-                  </linearGradient>
-                  <linearGradient id="fiber2" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#e02424" />
-                    <stop offset="100%" stopColor="#f472b6" />
-                  </linearGradient>
-                  <linearGradient id="fiber3" x1="50%" y1="100%" x2="50%" y2="0%">
-                    <stop offset="0%" stopColor="#a78bfa" />
-                    <stop offset="100%" stopColor="#06b6d4" />
-                  </linearGradient>
-                  <linearGradient id="fiber4" x1="0%" y1="50%" x2="100%" y2="50%">
-                    <stop offset="0%" stopColor="#f472b6" />
-                    <stop offset="100%" stopColor="#7c3aed" />
-                  </linearGradient>
-                  <linearGradient id="fiber5" x1="20%" y1="0%" x2="80%" y2="100%">
-                    <stop offset="0%" stopColor="#06b6d4" />
-                    <stop offset="100%" stopColor="#1a56db" />
-                  </linearGradient>
-                  <linearGradient id="fiber6" x1="80%" y1="100%" x2="20%" y2="0%">
-                    <stop offset="0%" stopColor="#7c3aed" />
-                    <stop offset="100%" stopColor="#e02424" />
-                  </linearGradient>
-                </defs>
-
-                <g transform="translate(250 250) rotate(0)">
-                  <path d="M -180 -80 C -80 -200 180 -80 180 80 C 80 200 -180 80 -180 -80" fill="none" stroke="url(#fiber1)" strokeWidth="8" opacity="0.6" />
-                  <path d="M -120 -120 C 0 -220 180 -120 120 80 C 80 250 -180 120 -120 -120" fill="none" stroke="url(#fiber2)" strokeWidth="12" opacity="0.5" />
-                  <path d="M -220 0 C -120 -220 120 -220 220 0 C 120 220 -120 220 -220 0" fill="none" stroke="url(#fiber3)" strokeWidth="6" opacity="0.7" />
-                  <path d="M -80 -180 C 180 -180 250 0 80 180 C -120 350 -300 80 -80 -180" fill="none" stroke="url(#fiber4)" strokeWidth="10" opacity="0.4" />
-                  <path d="M -150 -100 C 80 -250 220 0 100 150 C -80 300 -300 80 -150 -100" fill="none" stroke="url(#fiber5)" strokeWidth="4" opacity="0.6" />
-                  <path d="M -100 -150 Q 180 -180 150 100 T -100 -150" fill="none" stroke="url(#fiber6)" strokeWidth="2" opacity="0.8" />
-                  <path d="M -50 -200 C 100 -200 200 -50 50 200 C -100 200 -200 50 -50 -200" fill="none" stroke="url(#fiber1)" strokeWidth="1" opacity="0.9" />
-                  <path d="M -200 -50 C -200 100 -50 200 200 50 C 200 -100 50 -200 -200 -50" fill="none" stroke="url(#fiber3)" strokeWidth="3" opacity="0.7" />
-                </g>
-              </svg>
-            </div>
-            
-          </motion.div>
 
         </div>
 
