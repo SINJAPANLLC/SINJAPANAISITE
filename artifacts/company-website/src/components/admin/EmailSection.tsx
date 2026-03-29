@@ -221,6 +221,35 @@ export function EmailSection() {
   const [showScheduler, setShowScheduler] = useState(false);
   const [schedulerRunning, setSchedulerRunning] = useState(false);
 
+  // Bulk collect
+  const [bulkStatus, setBulkStatus] = useState<{
+    isRunning: boolean; target: number; collected: number; emailsSent: number;
+    startedAt: number | null; finishedAt: number | null; error: string | null;
+  } | null>(null);
+  const [bulkTarget, setBulkTarget] = useState(100);
+
+  const fetchBulkStatus = async () => {
+    try {
+      const r = await fetch("/api/crawl-scheduler/bulk-status", { headers: { "x-admin-token": TOKEN() } });
+      if (r.ok) setBulkStatus(await r.json());
+    } catch {}
+  };
+
+  const startBulkCollect = async () => {
+    await fetch("/api/crawl-scheduler/bulk-collect", {
+      method: "POST",
+      headers: { "x-admin-token": TOKEN(), "Content-Type": "application/json" },
+      body: JSON.stringify({ target: bulkTarget }),
+    });
+    await fetchBulkStatus();
+  };
+
+  useEffect(() => {
+    fetchBulkStatus();
+    const t = setInterval(() => { if (bulkStatus?.isRunning) fetchBulkStatus(); }, 5000);
+    return () => clearInterval(t);
+  }, [bulkStatus?.isRunning]);
+
   const fetchSchedulerStatus = async () => {
     try {
       const r = await fetch("/api/crawl-scheduler/status", { headers: { "x-admin-token": TOKEN() } });
@@ -668,6 +697,43 @@ export function EmailSection() {
               {schedulerRunning ? <Loader2 className="w-3 h-3 animate-spin" /> : <PlayCircle className="w-3 h-3" />}
               今すぐ実行
             </button>
+          </div>
+
+          {/* Bulk collect */}
+          <div className="border-t border-white/5 pt-3 mt-1">
+            <p className="text-[10px] text-gray-500 tracking-widest uppercase mb-2">一括収集</p>
+            {bulkStatus?.isRunning && (
+              <div className="mb-2 px-3 py-2 bg-blue-500/10 border border-blue-500/20 text-[10px] text-blue-300">
+                <span className="animate-pulse">● 実行中</span>
+                　{bulkStatus.collected} / {bulkStatus.target} 件収集済み　メール送信: {bulkStatus.emailsSent}件
+              </div>
+            )}
+            {bulkStatus?.finishedAt && !bulkStatus.isRunning && (
+              <div className="mb-2 px-3 py-2 bg-green-500/10 border border-green-500/20 text-[10px] text-green-300">
+                ✓ 完了　{bulkStatus.collected}件収集　メール{bulkStatus.emailsSent}件送信
+                {bulkStatus.error && <span className="text-red-400 ml-2">({bulkStatus.error})</span>}
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <input
+                type="number" min={10} max={500} step={10}
+                value={bulkTarget}
+                onChange={e => setBulkTarget(Number(e.target.value))}
+                className="w-20 bg-transparent border border-white/20 text-white text-[10px] px-2 py-1.5 text-center"
+              />
+              <span className="text-[10px] text-gray-500">件</span>
+              <button
+                onClick={startBulkCollect}
+                disabled={bulkStatus?.isRunning || schedulerStatus?.isRunning}
+                className="flex items-center gap-1.5 text-[10px] font-bold px-4 py-1.5 border border-blue-500/40 text-blue-300 hover:bg-blue-500/10 disabled:opacity-40 transition-colors whitespace-nowrap">
+                {bulkStatus?.isRunning ? <Loader2 className="w-3 h-3 animate-spin" /> : <PlayCircle className="w-3 h-3" />}
+                一括収集開始
+              </button>
+              {bulkStatus?.isRunning && (
+                <button onClick={fetchBulkStatus} className="text-[10px] text-gray-500 hover:text-white px-2">更新</button>
+              )}
+            </div>
+            <p className="text-[9px] text-gray-600 mt-1">指定件数のリードをGoogleクロールで収集し、全件に自動メール送信します（時間がかかる場合があります）</p>
           </div>
         </div>
       )}

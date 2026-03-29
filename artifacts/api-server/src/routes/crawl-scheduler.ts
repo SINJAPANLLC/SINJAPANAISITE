@@ -343,4 +343,88 @@ router.post("/crawl-scheduler/config", (req, res) => {
   res.json({ leadsPerRun: status.leadsPerRun });
 });
 
+// ============================================================
+// 一括収集: 指定件数のリードを収集してメール送信
+// ============================================================
+const bulkStatus = {
+  isRunning: false,
+  target: 0,
+  collected: 0,
+  emailsSent: 0,
+  startedAt: null as number | null,
+  finishedAt: null as number | null,
+  error: null as string | null,
+};
+
+async function runBulkCollect(target: number) {
+  bulkStatus.isRunning = true;
+  bulkStatus.target = target;
+  bulkStatus.collected = 0;
+  bulkStatus.emailsSent = 0;
+  bulkStatus.startedAt = Date.now();
+  bulkStatus.finishedAt = null;
+  bulkStatus.error = null;
+
+  const batchSize = 10;
+  let attempts = 0;
+  const maxAttempts = Math.ceil(target / batchSize) * 3;
+
+  logger.info({ target }, "Bulk collect started");
+
+  try {
+    while (bulkStatus.collected < target && attempts < maxAttempts) {
+      attempts++;
+      const query = QUERY_LIST[status.nextQueryIndex % QUERY_LIST.length];
+      status.nextQueryIndex = (status.nextQueryIndex + 1) % QUERY_LIST.length;
+
+      logger.info({ query, collected: bulkStatus.collected, target }, "Bulk collect batch");
+      const needed = Math.min(batchSize, target - bulkStatus.collected);
+      const leads = await runLimitedCrawl(query, needed);
+
+      for (const lead of leads) {
+        try {
+          const html = buildApproachHtml(lead.company || lead.email);
+          await sendMail({ to: lead.email, subject: AUTO_EMAIL_SUBJECT, html });
+          bulkStatus.emailsSent++;
+          await new Promise(r => setTimeout(r, 1500));
+        } catch (err) {
+          logger.warn({ err, email: lead.email }, "Bulk collect: email send failed");
+        }
+      }
+
+      bulkStatus.collected += leads.length;
+      status.totalEmailsSent += bulkStatus.emailsSent;
+      logger.info({ batchLeads: leads.length, total: bulkStatus.collected }, "Bulk collect batch done");
+
+      if (leads.length < needed) {
+        await new Promise(r => setTimeout(r, 3000));
+      }
+    }
+
+    logger.info({ collected: bulkStatus.collected, emailsSent: bulkStatus.emailsSent }, "Bulk collect finished");
+  } catch (err: any) {
+    bulkStatus.error = err?.message || "Unknown error";
+    logger.error({ err }, "Bulk collect error");
+  } finally {
+    bulkStatus.isRunning = false;
+    bulkStatus.finishedAt = Date.now();
+  }
+}
+
+router.post("/crawl-scheduler/bulk-collect", (req, res) => {
+  if (!adminAuth(req, res)) return;
+  if (bulkStatus.isRunning || status.isRunning) {
+    res.status(409).json({ error: "Already running" });
+    return;
+  }
+  const target = Math.min(Number(req.body?.target) || 100, 500);
+  runBulkCollect(target).catch(err => logger.error({ err }, "Bulk collect fatal error"));
+  res.json({ message: "started", target });
+});
+
+router.get("/crawl-scheduler/bulk-status", (req, res) => {
+  if (!adminAuth(req, res)) return;
+  res.json(bulkStatus);
+});
+
 export default router;
