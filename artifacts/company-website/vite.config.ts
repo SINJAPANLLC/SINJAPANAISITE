@@ -46,6 +46,10 @@ export default defineConfig({
         ]
       : []),
   ],
+  define: {
+    "import.meta.env.VITE_ADMIN_EMAIL": JSON.stringify(process.env.VITE_ADMIN_EMAIL || ""),
+    "import.meta.env.VITE_ADMIN_PASSWORD": JSON.stringify(process.env.VITE_ADMIN_PASSWORD || ""),
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
