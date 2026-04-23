@@ -269,14 +269,37 @@ async function runAutoSession(label: string) {
 // 昼12時 JST = 3:00 UTC
 // 17時   JST = 8:00 UTC
 // ============================================================
+// JST 8時 = UTC 23時（前日）
+cron.schedule("0 23 * * *", () => {
+  if (status.enabled) runAutoSession("朝8時").catch(err => logger.error({ err }, "Cron 8am error"));
+});
+// JST 9時 = UTC 0時
 cron.schedule("0 0 * * *", () => {
   if (status.enabled) runAutoSession("朝9時").catch(err => logger.error({ err }, "Cron 9am error"));
 });
+// JST 10時 = UTC 1時
+cron.schedule("0 1 * * *", () => {
+  if (status.enabled) runAutoSession("朝10時").catch(err => logger.error({ err }, "Cron 10am error"));
+});
+// JST 12時 = UTC 3時
 cron.schedule("0 3 * * *", () => {
   if (status.enabled) runAutoSession("昼12時").catch(err => logger.error({ err }, "Cron 12pm error"));
 });
+// JST 14時 = UTC 5時
+cron.schedule("0 5 * * *", () => {
+  if (status.enabled) runAutoSession("14時").catch(err => logger.error({ err }, "Cron 2pm error"));
+});
+// JST 16時 = UTC 7時
+cron.schedule("0 7 * * *", () => {
+  if (status.enabled) runAutoSession("16時").catch(err => logger.error({ err }, "Cron 4pm error"));
+});
+// JST 17時 = UTC 8時
 cron.schedule("0 8 * * *", () => {
   if (status.enabled) runAutoSession("17時").catch(err => logger.error({ err }, "Cron 5pm error"));
+});
+// JST 18時 = UTC 9時
+cron.schedule("0 9 * * *", () => {
+  if (status.enabled) runAutoSession("18時").catch(err => logger.error({ err }, "Cron 6pm error"));
 });
 
 // 毎日深夜（旧・バックグラウンドクロール用） — 大量収集
@@ -295,7 +318,8 @@ function computeNextRun(): number {
   const utcH = now.getUTCHours();
   const utcM = now.getUTCMinutes();
   const todayMinutes = utcH * 60 + utcM;
-  const slots = [0, 180, 480]; // 0:00, 3:00, 8:00 UTC in minutes
+  // UTC: 23:00, 0:00, 1:00, 3:00, 5:00, 7:00, 8:00, 9:00 = JST 8〜18時
+  const slots = [0, 60, 180, 300, 420, 480, 540]; // UTC minutes (23:00 handled by wrapping)
   let nextSlot = slots.find(s => s > todayMinutes);
   const next = new Date(now);
   if (nextSlot !== undefined) {
