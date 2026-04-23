@@ -4,6 +4,7 @@ import { logger } from "../lib/logger";
 import { adminAuth } from "./crawl-job";
 import { runSilentCrawl, runLimitedCrawl } from "./crawl-job";
 import { sendMail } from "../lib/mailer";
+import { db, crawlLeadsTable } from "@workspace/db";
 
 const router = Router();
 
@@ -425,6 +426,86 @@ router.post("/crawl-scheduler/bulk-collect", (req, res) => {
 router.get("/crawl-scheduler/bulk-status", (req, res) => {
   if (!adminAuth(req, res)) return;
   res.json(bulkStatus);
+});
+
+// ============================================================
+// 既存リスト全件にメール一括送信
+// ============================================================
+const sendAllStatus = {
+  isRunning: false,
+  total: 0,
+  sent: 0,
+  failed: 0,
+  skipped: 0,
+  startedAt: null as number | null,
+  finishedAt: null as number | null,
+  error: null as string | null,
+};
+
+const INVALID_EMAIL_PATTERNS = [
+  /xxxxx/i, /example\./i, /^test@/i, /noreply/i, /no-reply/i,
+  /@gmail\.com$/i, /@yahoo\.co\.jp$/i, /@hotmail/i, /@outlook/i,
+  /^contact@mail\.com$/i, /^info@mail\.com$/i, /^admin@mail\.com$/i,
+];
+
+function isValidBusinessEmail(email: string): boolean {
+  if (!email || !email.includes("@")) return false;
+  return !INVALID_EMAIL_PATTERNS.some(p => p.test(email));
+}
+
+async function runSendAllLeads() {
+  sendAllStatus.isRunning = true;
+  sendAllStatus.sent = 0;
+  sendAllStatus.failed = 0;
+  sendAllStatus.skipped = 0;
+  sendAllStatus.startedAt = Date.now();
+  sendAllStatus.finishedAt = null;
+  sendAllStatus.error = null;
+
+  try {
+    const leads = await db.select().from(crawlLeadsTable);
+    const valid = leads.filter(l => isValidBusinessEmail(l.email));
+    sendAllStatus.total = valid.length;
+    logger.info({ total: valid.length, skipped: leads.length - valid.length }, "Send-all started");
+
+    for (const lead of valid) {
+      try {
+        const html = buildApproachHtml(lead.company || lead.email);
+        await sendMail({ to: lead.email, subject: AUTO_EMAIL_SUBJECT, html });
+        sendAllStatus.sent++;
+        if (sendAllStatus.sent % 20 === 0) {
+          logger.info({ sent: sendAllStatus.sent, total: sendAllStatus.total }, "Send-all progress");
+        }
+      } catch (err: any) {
+        sendAllStatus.failed++;
+        logger.warn({ email: lead.email, err: err?.message }, "Send-all: email failed");
+      }
+      await new Promise(r => setTimeout(r, 2000));
+    }
+
+    logger.info({ sent: sendAllStatus.sent, failed: sendAllStatus.failed }, "Send-all finished");
+  } catch (err: any) {
+    sendAllStatus.error = err?.message || "Unknown error";
+    logger.error({ err }, "Send-all fatal error");
+  } finally {
+    sendAllStatus.isRunning = false;
+    sendAllStatus.finishedAt = Date.now();
+  }
+}
+
+router.post("/crawl-scheduler/send-all", (req, res) => {
+  if (!adminAuth(req, res)) return;
+  if (sendAllStatus.isRunning) {
+    res.status(409).json({ error: "Already running" });
+    return;
+  }
+  runSendAllLeads().catch(err => logger.error({ err }, "Send-all fatal"));
+  res.json({ message: "started" });
+});
+
+router.get("/crawl-scheduler/send-all-status", (req, res) => {
+  if (!adminAuth(req, res)) return;
+  res.json(sendAllStatus);
 });
 
 export default router;
